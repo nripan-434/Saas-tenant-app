@@ -1,0 +1,227 @@
+Ares – Multi-Tenant B2B SaaS Productivity Platform with AI Orchestration
+
+Ares is an advanced full-stack B2B SaaS productivity platform engineered to address one of the core challenges in modern SaaS systems: secure logical data isolation in a shared NoSQL environment. The platform enables multiple independent organizations to coexist on a single infrastructure while ensuring strict tenant-level separation, performance efficiency, and controlled AI resource usage.
+
+The system is built using the MERN stack, with a middleware-driven tenant isolation layer, real-time collaboration via Socket.io, and an AI orchestration module that enforces per-organization quotas. The architecture emphasizes security-first design, scalable MongoDB data modeling, and clean separation of concerns suitable for enterprise-grade SaaS applications.
+
+👥 User Roles & Features
+
+👤 Role 1: Tenant User (Organization Member)
+
+Authentication & Session Security
+
+Secure JWT-based authentication with tenantId embedded in the token payload
+
+Authorization enforced through middleware-driven request context
+
+Access restricted strictly to tenant-scoped resources
+
+Workspace Management
+
+Create and manage organization-specific workspaces
+
+Logical data partitioning to ensure zero cross-tenant data access
+
+Role-aware access within the tenant environment
+
+Task & Workflow Management
+
+Create, update, and track tasks within tenant workspaces
+
+Optimistic UI updates for low-latency user experience
+
+Conflict-aware state reconciliation between client and server
+
+Real-Time Collaboration
+
+Live task and workflow updates using Socket.io
+
+Namespace and room isolation to ensure tenant-level broadcast safety
+
+Real-time synchronization across multiple user sessions
+
+AI-Powered Productivity
+
+Generate AI-based task summaries and structured notes
+
+Context-aware AI responses enriched with tenant-specific data
+
+AI usage tracked and limited per organization
+
+Analytics & Insights
+
+Personal and workspace-level productivity dashboards
+
+Task completion velocity metrics
+
+Visibility into AI resource consumption
+
+🛠️ Role 2: Platform Admin (System Infrastructure)
+
+Tenant & System Monitoring
+
+View active organizations and platform-wide usage metrics
+
+Monitor cross-tenant resource consumption
+
+Observe real-time system health indicators
+
+AI Quota & Rate Limiting
+
+Enforce AI token limits per tenant
+
+Prevent abuse of third-party AI APIs
+
+Control operational costs at the organization level
+
+Feature & Infrastructure Control
+
+Enable or restrict high-compute features (AI, real-time sync)
+
+Manage subscription-tier-based feature availability
+
+Security & Audit Logging
+
+Access system-level audit logs
+
+Monitor request behavior for anomaly detection
+
+Ensure tenant isolation integrity across the database
+
+🧠 Role-Based System Design Summary
+
+Tenant User
+
+ ├── Authentication & Authorization
+ ├── Tenant-Isolated Workspace Management
+ ├── Task & Workflow Management
+ ├── AI Productivity Features
+ ├── Real-Time Collaboration
+ └── Productivity Analytics
+
+
+Platform Admin
+
+ ├── Tenant Observability
+ ├── AI Quota Enforcement
+ ├── Feature Control Plane
+ └── Security & Audit Monitoring
+
+
+🎯 Key Highlights
+
+Middleware-enforced multi-tenant data isolation (zero-leakage design)
+
+Scalable MongoDB modeling with compound indexing on tenantId
+
+Real-time collaboration with strict Socket.io room isolation
+
+AI orchestration with usage tracking and quota enforcement
+
+Clean, modular backend architecture suitable for SaaS scale-out
+
+Advanced system design complexity beyond standard CRUD applications
+
+
+our Flow — Validated (with corrections)
+✅ 1. Organization Admin registers
+
+Correct.
+
+This is the only public registration
+
+Creates the first admin user
+
+✅ 2. Organization is created automatically
+
+Correct.
+
+Org is created transactionally with admin
+
+If org creation fails → user must not exist
+
+✅ 3. Admin invites users by email
+
+Correct.
+
+Admin does not create users
+
+Admin creates invites
+
+✅ 4. User receives email invite
+
+Correct.
+
+Email contains:
+
+signed invite token
+
+org context
+
+role
+
+✅ 5. User sets password → account created
+
+Mostly correct, but important detail:
+
+User does not choose org
+
+User does not choose role
+
+User is created only after invite verification
+
+This is not “registration”, it is invite acceptance
+
+✅ 6. Admin creates Projects
+
+Correct.
+
+Projects belong to organization
+
+Only certain roles can create projects
+
+✅ 7. Admin assigns Tasks to Users
+
+Correct.
+
+Task must validate:
+
+user belongs to same org
+
+user has assignable role
+
+✅ 8. Users update task status
+
+Correct.
+
+Only:
+
+assigned user
+
+or privileged roles
+
+Backend must enforce this.
+
+✅ 9. Real-time updates via Socket.io
+
+Correct.
+
+Scoped by:
+
+organization
+
+project
+
+Never global
+
+✅ 10. AI summaries + subscription limits
+
+Correct — but this is advanced tier, not core.
+
+Requires:
+
+usage tracking
+
+org-level quotas
+
+plan enforcement middleware
