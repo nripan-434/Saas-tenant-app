@@ -30,6 +30,9 @@ export const OrgRegister = asyncHandler(async (req, res) => {
 
 export const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body
+     if ( !email || !password) {
+        return res.status(400).json({ message: "Fill All Fields" })
+    }
     const exist = await userModel.findOne({ email }).select("+password")
     if (!exist) {
         return res.status(400).json({ message: "Invalid Credentials" })

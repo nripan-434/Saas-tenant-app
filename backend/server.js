@@ -10,9 +10,10 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 app.use(cors())
-app.use(errorHandler)
 app.use('/auth',Authrouter)
 app.use('/project',Projectrouter)
+app.use(errorHandler)
+
 app.listen(process.env.PORT,()=>{
     console.log("server is running")
 })

@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import toast from 'react-hot-toast';
+import api from '../api/axios';
 const initialState = {
     projects: JSON.parse(localStorage.getItem('projects')) || null,
 }
@@ -8,15 +9,18 @@ export const createproject = createAsyncThunk('post/createproject', async (form,
         const res = await api.post('/project/createproject', form)
         return res.data
     } catch (error) {
+        console.error("API Error:", error.response?.data || error.message);
+
         return rejectWithValue(error)
 
     }
 })
 export const getallprojects = createAsyncThunk('get/getallprojects', async (orgId, { rejectWithValue }) => {
     try {
-        const res = await api.get(`/project/getallpeojects/${orgId}`)
+        const res = await api.get('/project/getallprojects?orgId=' + orgId)
         return res.data
     } catch (error) {
+        console.error("API Error:", error.response?.data || error.message);
         return rejectWithValue(error)
 
     }
@@ -49,7 +53,6 @@ export const ProjectSlice = createSlice({
                 state.status = 'success'
                 state.projects = action.payload.prj
                 localStorage.setItem('projects', JSON.stringify(action.payload.prj))
-                toast.success(action.payload.message)
 
             })
             .addCase(getallprojects.rejected, (state, action) => {

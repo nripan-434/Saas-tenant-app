@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
-import { asyncHandler } from "../middleware/asyncHandler"
-import projectModel from "../models/projectModel"
+import { asyncHandler } from "../middleware/asyncHandler.js"
+import projectModel from "../models/projectModel.js"
 
 
 

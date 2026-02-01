@@ -13,6 +13,8 @@ export const registeruser = createAsyncThunk('post/registeruser', async (form, {
         const res = await api.post('/auth/register', form)
         return res.data
     } catch (error) {
+        console.error("API Error:", error.response?.data || error.message);
+
         return rejectWithValue(error)
 
     }
@@ -22,6 +24,9 @@ export const login = createAsyncThunk('post/login',async(form,{rejectWithValue})
             const res = await api.post('/auth/login',form)
         return res.data
         } catch (error) {
+
+        console.error("API Error:", error.response?.data || error.message);
+
             return rejectWithValue(error)
         }
 })
