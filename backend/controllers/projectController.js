@@ -1,0 +1,40 @@
+import mongoose from "mongoose"
+import { asyncHandler } from "../middleware/asyncHandler"
+import projectModel from "../models/projectModel"
+
+
+
+export const createproject = asyncHandler(async (req, res) => {
+    const { name, description, organizationId } = req.body
+    if (!name || !description || !organizationId) {
+        return res.status(400).json({ message: 'Please provide name, description, and organizationId' })
+    }
+    if (!mongoose.Types.ObjectId.isValid(organizationId)) {
+        return res.status(400).json({ message: "Invalid Organization Id" })
+    }
+    const prjexist = await projectModel.findOne({ name, organizationId })
+    if (prjexist) {
+        return res.status(409).json({ message: "projectname already exist" })
+    }
+    const creator = req.user._id
+    const prj = await projectModel.create({
+        name, description, organizationId, createdBy: creator
+    })
+    return res.status(201).json({ message: `project ${prj.name} created successfully` })
+
+})
+
+
+
+
+export const getallprojects = asyncHandler(async (req, res) => {
+    const { orgId } = req.query
+    if (!orgId || !mongoose.Types.ObjectId.isValid(orgId)) {
+        return res.status(400).json({ message: "Invalid Organization Id" })
+    }
+    const prj = await projectModel.find({ organizationId:orgId })
+    if (prj.length === 0) {
+        return res.status(404).json({ message: 'no projects found' })
+    }
+    return res.status(200).json({ prj })
+})

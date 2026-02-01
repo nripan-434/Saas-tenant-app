@@ -2,7 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import { connectDB } from './db.js'
 import Authrouter from './routes/authRoute.js'
-import Taskrouter from './routes/taskRoute.js'
+import Projectrouter from './routes/projectRoute.js'
 
 import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler.js'
@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(cors())
 app.use(errorHandler)
 app.use('/auth',Authrouter)
-app.use('/task',Taskrouter)
+app.use('/project',Projectrouter)
 app.listen(process.env.PORT,()=>{
     console.log("server is running")
 })

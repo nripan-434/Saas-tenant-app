@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import api from '../api/axios';
-import axios from 'axios'
 
 const initialState = {
     user: JSON.parse(sessionStorage.getItem('user')) || null,
