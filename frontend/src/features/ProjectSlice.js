@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import api from '../api/axios';
 const initialState = {
     projects: JSON.parse(localStorage.getItem('projects')) || null,
+    count: null,
 }
 export const createproject = createAsyncThunk('post/createproject', async (form, { rejectWithValue }) => {
     try {
@@ -52,6 +53,7 @@ export const ProjectSlice = createSlice({
             .addCase(getallprojects.fulfilled, (state, action) => {
                 state.status = 'success'
                 state.projects = action.payload.prj
+                state.count = action.payload.count
                 localStorage.setItem('projects', JSON.stringify(action.payload.prj))
 
             })

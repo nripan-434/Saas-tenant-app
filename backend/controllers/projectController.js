@@ -36,5 +36,5 @@ export const getallprojects = asyncHandler(async (req, res) => {
     if (prj.length === 0) {
         return res.status(404).json({ message: 'no projects found' })
     }
-    return res.status(200).json({ prj })
+    return res.status(200).json({ prj,count:prj.length })
 })
