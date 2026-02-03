@@ -1,8 +1,10 @@
 import userModel from "../models/userModel.js";
 import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import OrganizationModel from "../models/OrganizationModel.js";
+import invitaionModel from "../models/invitaionModel.js";
 
 export const OrgRegister = asyncHandler(async (req, res) => {
 
@@ -63,3 +65,56 @@ export const getallusers = async (req, res) => {
     }
 
 }
+
+export const inviteMember =asyncHandler(async(req,res)=>{
+  const {email,role}=req.body
+  const orgId = req.user.organizationId
+    if(!email){
+        return res.status(400).json({message:"Email is required"})
+    }
+    const token = crypto.randomBytes(32).toString('hex')
+    const expiration = new Date(Date.now() + 24 * 60 * 60 * 1000)
+
+    await invitaionModel.create({
+        email,role:role||'user',token,organizationId:orgId,expiration
+    })
+    const invitelink=`http://localhost:5173/acceptinvite?token=${token}`
+
+    await sendEmail({
+        to:email,
+        subject:`Invitation `,
+        html:`<h2>You've been invited!</h2>
+               <p>Click below to join the organization:</p>
+               <a href="${invitelink}">Accept Invitation</a>`
+    })
+    res.status(200).json({message:'invitaion sent'})
+})
+
+export const acceptinvite =asyncHandler(async(req,res)=>{
+    const {token,name,password}=req.body
+    const exist = await invitaionModel.findOne(token)
+    if(!exist){
+        return res.status(403).json({message:"unauthorized"})
+
+    }
+    if(exist.expiration<new Date){
+        await invitaionModel.deleteOne(exist)
+        return res.status(400).json({message:'Invitaion Link Expired'})
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(password, salt);
+
+    await userModel.create({
+        name,
+        email: exist.email,
+        password: hashedPass,
+        organizationId: exist.organizationId,
+        role: exist.role
+    });
+
+    await invitaionModel.deleteOne({ exist });
+
+    res.status(201).json({ message: "Registration successful!" });
+});
+
+

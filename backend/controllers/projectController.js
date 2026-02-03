@@ -28,7 +28,7 @@ export const createproject = asyncHandler(async (req, res) => {
 
 
 export const getallprojects = asyncHandler(async (req, res) => {
-    const { orgId } = req.query
+    const orgId  = req.user.organizationId
     if (!orgId || !mongoose.Types.ObjectId.isValid(orgId)) {
         return res.status(400).json({ message: "Invalid Organization Id" })
     }

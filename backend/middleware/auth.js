@@ -7,6 +7,8 @@ export const authmiddleware = async (req,res,next) =>{
     const token = authheader.split(" ")[1]
     const decoded = jwt.verify(token,process.env.SECRET_KEY)
     const user = await userModel.findById(decoded.id)
+    console.log(user)
+
     if(!user){
         return res.status(401).json({message:"user not found"})
     }

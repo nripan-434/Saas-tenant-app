@@ -5,6 +5,6 @@ import { authmiddleware } from '../middleware/auth.js'
 export const Router = express.Router()
 
 Router.post('/createproject',authmiddleware,createproject)
-Router.get('/getallprojects',getallprojects)
+Router.get('/getallprojects',authmiddleware,getallprojects)
 
 export default Router

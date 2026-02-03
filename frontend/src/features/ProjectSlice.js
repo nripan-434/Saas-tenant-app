@@ -18,7 +18,7 @@ export const createproject = createAsyncThunk('post/createproject', async (form,
 })
 export const getallprojects = createAsyncThunk('get/getallprojects', async (orgId, { rejectWithValue }) => {
     try {
-        const res = await api.get('/project/getallprojects?orgId=' + orgId)
+        const res = await api.get('/project/getallprojects' )
         return res.data
     } catch (error) {
         console.error("API Error:", error.response?.data || error.message);
