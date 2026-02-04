@@ -5,7 +5,6 @@ const invitationSchema = mongoose.Schema({
     email:{
         type:String,
         required:true,
-        unique:true
     },
     organizationId:{
         type:mongoose.Schema.Types.ObjectId,

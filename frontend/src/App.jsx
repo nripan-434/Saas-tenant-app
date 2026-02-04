@@ -10,6 +10,7 @@ import ProtectedRoutes from './components/ProtectedRoutes'
 import Orgadmin from './pages/Orgadmin'
 import AddProject from './pages/AddProject'
 import Eachproject from './pages/Eachproject'
+import MemberRegister from './pages/MemberRegister'
 const App = () => {
   return (
     <div className='flex flex-col min-h-screen '>
@@ -23,6 +24,8 @@ const App = () => {
         <Route path='/adminhome' element={<ProtectedRoutes role='admin'><Orgadmin/></ProtectedRoutes>}/>
         <Route path='/addproject' element={<ProtectedRoutes role='admin'><AddProject/></ProtectedRoutes>}/>
         <Route path='/project/:id' element={<ProtectedRoutes role='admin'><Eachproject/></ProtectedRoutes>}/>
+        <Route path='/acceptinvite' element={<MemberRegister/>}/>
+
       </Routes>
       </div>
       

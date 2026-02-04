@@ -40,7 +40,7 @@ const Orgadmin = () => {
                 <h3 className="text-xl font-semibold">{prj.name}</h3>
                 <p className="text-gray-600 text-sm my-2">{prj.description || "No description provided."}</p>
                 <div className="mt-4 pt-4 border-t flex justify-between items-center text-xs">
-                  <span>By: {prj.createdBy?.name || 'Admin'}</span>
+                  <span>By: {prj.createdBy?.name || ''}</span>
                   <button className="text-blue-600 font-medium" onClick={()=>{navigate(`/project/${prj._id}`)}}>View →</button>
                 </div>
               </div>

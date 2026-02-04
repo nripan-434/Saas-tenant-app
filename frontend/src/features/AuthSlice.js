@@ -30,6 +30,17 @@ export const login = createAsyncThunk('post/login',async(form,{rejectWithValue})
             return rejectWithValue(error)
         }
 })
+export const inviteMember = createAsyncThunk('post/invitmember',async(form,{rejectWithValue})=>{
+   try {
+     const res =await  api.post('auth/invite',form)
+    return res.data
+   } catch (error) {
+     console.error("API Error:", error.response?.data || error.message);
+
+            return rejectWithValue(error)
+   }
+})
+
 
 export const AuthSlice = createSlice({
     name: 'auth',
@@ -75,6 +86,20 @@ export const AuthSlice = createSlice({
         .addCase(login.rejected,(state,action)=>{
             state.status='rejected'
             toast.error(action.payload.message)
+        })
+        .addCase(inviteMember.pending, (state) => {
+            state.status = 'pending'
+        })
+       .addCase(inviteMember.fulfilled, (state, action) => {
+            state.status = 'success'
+            toast.success(action.payload.message)
+
+
+        })
+        .addCase(inviteMember.rejected, (state, action) => {
+            state.status = 'rejected'
+            toast.error(action.payload.message)
+
         })
 
     }

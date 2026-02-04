@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     
       <div className='relative  '>
-      <div className='h-20 absolute m-3 shadow-xl  inset-x-4 fixed z-50 shadow rounded-4xl   top-0 bg-transparent backdrop-blur flex justify-between items-center p-6 '>
+      <div className='h-20 absolute m-3  shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0,0,0,0.4)] inset-x-4 fixed z-50 shadow rounded-4xl   top-0 bg-transparent backdrop-blur flex justify-between items-center p-6 '>
         <div>
            <h1 className='font-(--font-comic)'></h1> Home
         </div>

@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import { inviteMember } from '../features/AuthSlice'
 
 const ProjectDetails = () => {
+  const dispatch = useDispatch()
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
   
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
+  const [invitebox,setInvitebox] = useState(false)
+  const [form,setForm]=useState({
+    email:'',
+    role:'user'
+  })
+  const handleinput =(e)=>{
+    const {name,value} = e.target
+    setForm((prev)=>({...prev,[name]:value}))
+    console.log(form)
+  }
+  const handlesubmit =(e)=>{
+    e.preventDefault()
+    dispatch(inviteMember(form))
+
+  }
 
   const project = projects?.find(p => p._id === id)
 
   // Mock data (replace with real project data)
-  const progress = project?.progress || 20; 
-  const deadline = project?.deadline || "2024-12-31";
+  const progress = projects?.progress || 20; 
+  const deadline = projects?.deadline || "2024-12-31";
   const members = project?.members || [
     { id: 1, name: 'John Doe', role: 'Developer' },
     { id: 2, name: 'Jane Smith', role: 'Designer' }
@@ -130,12 +147,28 @@ const ProjectDetails = () => {
             </div>
           )}
         </section>
+        <div className="flex justify-between items-center mb-4">
+            <h2 className="text-sm font-bold text-gray-400 uppercase">Team Members</h2>
+            <button className="text-xs text-blue-600 font-bold hover:underline" onClick={()=>{setInvitebox(!invitebox)}}>{invitebox?'cancel':'+ Invite Member'}</button>
+          </div>
+          {
+            invitebox?<div className='absolute  bg-black/40 backdrop-blur-sm inset-0 z-50 flex justify-center items-center  ' onClick={()=>{setInvitebox(false)}}>
+              <div className='bg-white  relative h-90 w-140 rounded-xl shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0,0,0,0.4)] flex flex-col justify-center items-center' onClick={(e)=>{e.stopPropagation()}}>
+                <button onClick={()=>{setInvitebox(false)}} className='bg-red-600 text-white w-20 h-10  rounded-xl absolute top-6 right-5'>close</button>
+              <form action="" onSubmit={handlesubmit} className='flex flex-col h-50 w-90 justify-center p-3  rounded-xl gap-4 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0,0,0,0.4)]'>
+                <input type="text" name='email' onChange={handleinput} value={form.email} placeholder='email'/>
+                <button type='submit'>invite</button>
+              </form>
+
+              </div>
+            </div>:''
+          }
 
         {/* Team Section */}
-        <section className="pt-6 border-t">
+        {/* <section className="pt-6 border-t">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-sm font-bold text-gray-400 uppercase">Team Members</h2>
-            <button className="text-xs text-blue-600 font-bold hover:underline">+ INVITE</button>
+            <button className="text-xs text-blue-600 font-bold hover:underline" onClick={()=>{dispactch(inviteMember(form))}}>+ INVITE</button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {members.map((member) => (
@@ -150,7 +183,7 @@ const ProjectDetails = () => {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   )

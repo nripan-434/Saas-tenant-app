@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import OrganizationModel from "../models/OrganizationModel.js";
 import invitaionModel from "../models/invitaionModel.js";
+import sendEmail from '../utils/sendEmail.js'
 
 export const OrgRegister = asyncHandler(async (req, res) => {
 
@@ -72,12 +73,16 @@ export const inviteMember =asyncHandler(async(req,res)=>{
     if(!email){
         return res.status(400).json({message:"Email is required"})
     }
+// const  mailexist = await invitaionModel.findOne(email)
+// if(mailexist){
+//     return res.status(400).json({message:"invite already sent"})
+// }
     const token = crypto.randomBytes(32).toString('hex')
     const expiration = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
-    await invitaionModel.create({
-        email,role:role||'user',token,organizationId:orgId,expiration
-    })
+    await invitaionModel.findOneAndUpdate(
+       {email:email.toLowerCase()},{role:role||'user',token,organizationId:orgId,expiration}
+    ,{upsert:true,new:true})
     const invitelink=`http://localhost:5173/acceptinvite?token=${token}`
 
     await sendEmail({
@@ -92,13 +97,13 @@ export const inviteMember =asyncHandler(async(req,res)=>{
 
 export const acceptinvite =asyncHandler(async(req,res)=>{
     const {token,name,password}=req.body
-    const exist = await invitaionModel.findOne(token)
+    const exist = await invitaionModel.findOne({token})
     if(!exist){
         return res.status(403).json({message:"unauthorized"})
 
     }
     if(exist.expiration<new Date){
-        await invitaionModel.deleteOne(exist)
+        await invitaionModel.deleteOne({exist})
         return res.status(400).json({message:'Invitaion Link Expired'})
     }
     const salt = await bcrypt.genSalt(10);
