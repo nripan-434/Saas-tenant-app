@@ -1,10 +1,13 @@
 import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
+import { acceptinvite } from '../features/AuthSlice'
 
 const MemberRegister = () => {
     const dispatch = useDispatch()
-    
+    const [searchparams] =useSearchParams()
+    const token = searchparams.get('token')
     const [form,setForm]=useState({
         name:'',
         password:'',
@@ -15,7 +18,7 @@ const MemberRegister = () => {
     }
     const handlesubmit =(e)=>{
         e.preventDefault()
-        dispatch()
+        dispatch(acceptinvite({...form,token}))
     }
   return (
       <div className='flex min-h-[calc(100vh-160px)] justify-center items-center '>

@@ -41,6 +41,11 @@ export const inviteMember = createAsyncThunk('post/invitmember',async(form,{reje
    }
 })
 
+export const acceptinvite = createAsyncThunk('post/acceptinvite',async(form,{rejectWithValue})=>{
+    const res = await api.post('/auth/acceptinvite',form)
+    return res.data
+})
+
 
 export const AuthSlice = createSlice({
     name: 'auth',
