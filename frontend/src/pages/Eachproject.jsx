@@ -164,26 +164,10 @@ const ProjectDetails = () => {
             </div>:''
           }
 
-        {/* Team Section */}
-        {/* <section className="pt-6 border-t">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-sm font-bold text-gray-400 uppercase">Team Members</h2>
-            <button className="text-xs text-blue-600 font-bold hover:underline" onClick={()=>{dispactch(inviteMember(form))}}>+ INVITE</button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {members.map((member) => (
-              <div key={member.id} className="p-3 border rounded-full flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">
-                  {member.name.charAt(0)}
-                </div>
-                <div>
-                  <p className="text-sm font-bold">{member.name}</p>
-                  <p className="text-[10px] text-gray-500">{member.role}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section> */}
+        {/* members */}
+       {
+        
+       }
       </div>
     </div>
   )

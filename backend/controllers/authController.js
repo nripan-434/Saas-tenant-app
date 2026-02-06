@@ -106,9 +106,17 @@ export const acceptinvite =asyncHandler(async(req,res)=>{
         await invitaionModel.deleteOne({exist})
         return res.status(400).json({message:'Invitaion Link Expired'})
     }
+    if(!name || !password){
+        return res.status(400).json({message:'enter the fields'})
+    }
+    const userexist=await userModel.findOne({email:exist.email})
+    if(userexist){
+        return res.status(400).json({message:'An account with this email already exists'})
+
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(password, salt);
-
+    
     await userModel.create({
         name,
         email: exist.email,
