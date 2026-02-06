@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { inviteMember } from '../features/AuthSlice'
+import { inviteMember } from '../../features/AuthSlice'
 
 const ProjectDetails = () => {
   const dispatch = useDispatch()

@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
-import { acceptinvite } from '../features/AuthSlice'
+import { acceptinvite } from '../../features/AuthSlice'
 
 const MemberRegister = () => {
     const dispatch = useDispatch()

@@ -13,10 +13,14 @@ const Navbar = () => {
            <h1 className='font-(--font-comic)'></h1> Home
         </div>
       {
-        user?<div>
+        user?.role==='user'?<div>
             <Link onClick={()=>{dispatch(logout())}}>logout</Link>
 
-        </div> :<div className='flex gap-3'>
+        </div> :user?.role==='admin'?<div className='flex gap-3'>
+          <Link to={'/members'}>Members</Link>
+            <Link onClick={()=>{dispatch(logout())}}>Logout</Link>
+
+        </div>:<div className='flex gap-3'>
             <Link to={'/login'}>Sign in</Link>
             <Link to={'/register'}>Register</Link>
             

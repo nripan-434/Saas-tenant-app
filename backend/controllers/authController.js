@@ -73,10 +73,7 @@ export const inviteMember =asyncHandler(async(req,res)=>{
     if(!email){
         return res.status(400).json({message:"Email is required"})
     }
-// const  mailexist = await invitaionModel.findOne(email)
-// if(mailexist){
-//     return res.status(400).json({message:"invite already sent"})
-// }
+
     const token = crypto.randomBytes(32).toString('hex')
     const expiration = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
@@ -129,5 +126,14 @@ export const acceptinvite =asyncHandler(async(req,res)=>{
 
     res.status(201).json({ message: "Registration successful!" });
 });
+
+export const getallmembers =asyncHandler(async(req,res)=>{
+    const {orgId}=req.params
+    if(!orgId){
+        return res.status(400).json({message:"Organization Id Required!"})
+    }
+    const members = await userModel.find({organizationId:orgId,role:'user'})
+    return res.status(200).json({members})
+})
 
 

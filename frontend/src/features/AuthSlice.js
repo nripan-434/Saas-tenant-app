@@ -5,6 +5,7 @@ import api from '../api/axios';
 const initialState = {
     user: JSON.parse(sessionStorage.getItem('user')) || null,
     token: JSON.parse(sessionStorage.getItem('token')) || null,
+    members:[],
     status: 'success'
 
 }
@@ -35,13 +36,25 @@ export const inviteMember = createAsyncThunk('post/invitmember',async(form,{reje
      const res =await  api.post('auth/invite',form)
     return res.data
    } catch (error) {
-     console.error("API Error:", error.response?.data || error.message);
         console.error("API Error:", error.response?.data || error.message);
 
             return rejectWithValue(error)
    }
 })
 
+export const getAllMembers = createAsyncThunk(
+  'members/getAll',
+  async (orgId, { rejectWithValue }) => {
+    try {
+      const res = await api.get(`auth/getallmembers/${orgId}`);
+      return res.data;
+    } catch (error) {
+     console.error("API Error:", error.response?.data || error.message);
+
+            return rejectWithValue(error)
+    }
+  }
+);
 export const acceptinvite = createAsyncThunk('post/acceptinvite',async(form,{rejectWithValue})=>{
     try {
         const res = await api.post('/auth/acceptinvite',form)
@@ -125,6 +138,19 @@ export const AuthSlice = createSlice({
             toast.error(action.payload.message)
 
         })
+        .addCase(getAllMembers.pending, (state) => {
+        state.status = 'pending'
+    })
+    .addCase(getAllMembers.fulfilled, (state, action) => {
+        state.status = 'success'
+        state.members=action.payload.members
+        console.log(action.payload.members)
+        action.payload.message?toast.success(action.payload.message):''
+    })
+    .addCase(getAllMembers.rejected, (state, action) => {
+        state.status = 'rejected'
+        toast.error(action.payload.message)
+    })
 
     }
 

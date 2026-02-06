@@ -5,12 +5,13 @@ import Landing from './pages/Landing'
 import Footer from './components/Footer'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Userhome from './pages/Userhome'
+import Userhome from './pages/user/Userhome'
 import ProtectedRoutes from './components/ProtectedRoutes'
-import Orgadmin from './pages/Orgadmin'
-import AddProject from './pages/AddProject'
-import Eachproject from './pages/Eachproject'
-import MemberRegister from './pages/MemberRegister'
+import Orgadmin from './pages/admin/Orgadmin'
+import AddProject from './pages/admin/AddProject'
+import Eachproject from './pages/admin/Eachproject'
+import MemberRegister from './pages/user/MemberRegister'
+import Members from './pages/admin/Members'
 const App = () => {
   return (
     <div className='flex flex-col min-h-screen '>
@@ -25,6 +26,7 @@ const App = () => {
         <Route path='/addproject' element={<ProtectedRoutes role='admin'><AddProject/></ProtectedRoutes>}/>
         <Route path='/project/:id' element={<ProtectedRoutes role='admin'><Eachproject/></ProtectedRoutes>}/>
         <Route path='/acceptinvite' element={<MemberRegister/>}/>
+        <Route path='/members' element={<Members/>}/>
 
       </Routes>
       </div>
