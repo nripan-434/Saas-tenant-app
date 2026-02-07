@@ -151,18 +151,7 @@ const ProjectDetails = () => {
             <h2 className="text-sm font-bold text-gray-400 uppercase">Team Members</h2>
             <button className="text-xs text-blue-600 font-bold hover:underline" onClick={()=>{setInvitebox(!invitebox)}}>{invitebox?'cancel':'+ Invite Member'}</button>
           </div>
-          {
-            invitebox?<div className='absolute  bg-black/40 backdrop-blur-sm inset-0 z-50 flex justify-center items-center  ' onClick={()=>{setInvitebox(false)}}>
-              <div className='bg-white  relative h-90 w-140 rounded-xl shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0,0,0,0.4)] flex flex-col justify-center items-center' onClick={(e)=>{e.stopPropagation()}}>
-                <button onClick={()=>{setInvitebox(false)}} className='bg-red-600 text-white w-20 h-10  rounded-xl absolute top-6 right-5'>close</button>
-              <form action="" onSubmit={handlesubmit} className='flex flex-col h-50 w-90 justify-center p-3  rounded-xl gap-4 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0,0,0,0.4)]'>
-                <input type="text" name='email' onChange={handleinput} value={form.email} placeholder='email'/>
-                <button type='submit'>invite</button>
-              </form>
-
-              </div>
-            </div>:''
-          }
+         
 
         {/* members */}
        {
