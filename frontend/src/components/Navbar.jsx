@@ -22,7 +22,7 @@ const Navbar = () => {
 
         </div> :user?.role==='admin'?<div className='flex gap-3'>
           <Link to={'/members'}>Members</Link>
-         <Link className="  " onClick={()=>{setInvitebox(!invitebox)}}>{invitebox?'cancel':'+ Invite Member'}</Link>
+         <Link className="  " onClick={()=>{setInvitebox(!invitebox)}}>{invitebox?'cancel':' InviteMember'}</Link>
             <Link onClick={()=>{dispatch(logout())}}>Logout</Link>
         </div>
         

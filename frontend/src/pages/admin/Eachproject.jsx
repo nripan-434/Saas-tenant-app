@@ -1,41 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { inviteMember } from '../../features/AuthSlice'
+import { getAllMembers } from '../../features/AuthSlice'
 
 const ProjectDetails = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
+  const  { members }=useSelector(s=>s.auth)
   
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [invitebox,setInvitebox] = useState(false)
-  const [form,setForm]=useState({
-    email:'',
-    role:'user'
-  })
-  const handleinput =(e)=>{
-    const {name,value} = e.target
-    setForm((prev)=>({...prev,[name]:value}))
-    console.log(form)
-  }
-  const handlesubmit =(e)=>{
-    e.preventDefault()
-    dispatch(inviteMember(form))
-
-  }
-
   const project = projects?.find(p => p._id === id)
+ 
+ useEffect(() => {
+  if (!project?.organizationId) return
+   if (members?.length > 0) return  
+  dispatch(getAllMembers(project.organizationId))
+}, [project?.organizationId, dispatch])
 
   // Mock data (replace with real project data)
   const progress = projects?.progress || 20; 
   const deadline = projects?.deadline || "2024-12-31";
-  const members = project?.members || [
-    { id: 1, name: 'John Doe', role: 'Developer' },
-    { id: 2, name: 'Jane Smith', role: 'Designer' }
-  ];
+ 
   const tasks = project?.tasks || [
     { id: 1, title: "Initialize Repository", status: "Completed" },
     { id: 2, title: "Design System Setup", status: "In Progress" }
@@ -149,14 +138,32 @@ const ProjectDetails = () => {
         </section>
         <div className="flex justify-between items-center mb-4">
             <h2 className="text-sm font-bold text-gray-400 uppercase">Team Members</h2>
-            <button className="text-xs text-blue-600 font-bold hover:underline" onClick={()=>{setInvitebox(!invitebox)}}>{invitebox?'cancel':'+ Invite Member'}</button>
+            <button className="text-xs text-blue-600 font-bold hover:underline" onClick={()=>{setInvitebox(!invitebox)
+             
+            }}>{invitebox?'cancel':'+ Invite Member'}</button>
           </div>
          
 
         {/* members */}
-       {
+       
         
-       }
+        <div className={`${invitebox?'flex gap-4 p-3 h-40 overflow-y-auto bg-gray-300 rounded-xl':'h-0'} duration-300 `}>
+          {
+            invitebox?
+            
+              members?.map(x=>{
+                return <div className='w-30 hover:bg-gray-400 items-center duration-300 hover:scale-105 flex flex-col rounded-xl p-4 ' key={x._id}>
+                    <img src="https://images.pexels.com/photos/31162437/pexels-photo-31162437.jpeg" className=' h-24 w-24 object-cover rounded-full' alt="" />
+                    <h1>{x.name}</h1>
+                </div>
+              })
+            
+          
+            :''
+          }
+        </div>
+        
+       
       </div>
     </div>
   )

@@ -25,6 +25,10 @@ const userSchema = mongoose.Schema({
         default: 'user'
 
     },
+    projects:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'projects',
+    },
     organizationId: {
   type: mongoose.Schema.Types.ObjectId,
   ref: "Organization",
