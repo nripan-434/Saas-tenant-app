@@ -64,13 +64,12 @@ export const acceptinvite = createAsyncThunk('post/acceptinvite',async(form,{rej
     }
 })
 
-export const projectmember = createAsyncThunk('patch/projectmember',async({userId,projectId,confirm})=>{
+export const projectmember = createAsyncThunk('patch/projectmember',async({userId,projectId,isConfirm},{rejectWithValue})=>{
    try {
-     const res = api.patch(`/auth/projectmember/${userId}/${projectId}`,confirm)
+     const res = api.patch(`/auth/projectmember/${userId}/${projectId}`,{isConfirm})
     return res.data
    } catch (error) {
-    
-    
+    return rejectWithValue(error)    
    }
 })
 
@@ -158,6 +157,17 @@ export const AuthSlice = createSlice({
         action.payload.message?toast.success(action.payload.message):''
     })
     .addCase(getAllMembers.rejected, (state, action) => {
+        state.status = 'rejected'
+        toast.error(action.payload.message)
+    })
+    .addCase(projectmember.pending, (state) => {
+        state.status = 'pending'
+    })
+    .addCase(projectmember.fulfilled, (state, action) => {
+        state.status = 'success'
+        toast.success(action.payload.message)
+    })
+    .addCase(projectmember.rejected, (state, action) => {
         state.status = 'rejected'
         toast.error(action.payload.message)
     })

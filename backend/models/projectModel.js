@@ -15,13 +15,14 @@ import mongoose from 'mongoose'
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
       required: true,
     },
-    members:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
-    }
+   members: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'users'
+}]
+
 
  },{timestamps:true})
 

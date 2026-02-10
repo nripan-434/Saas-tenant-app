@@ -139,7 +139,7 @@ export const getallmembers =asyncHandler(async(req,res)=>{
 export const projectmember =asyncHandler( async(req,res)=>{
     const {userId,projectId}=req.params;
     const {confirm}= req.body
-    const member =await userModel.findById({userId})
+    const member =await userModel.findById(userId)
     if(!member){
         return res.status(409).json({message:'member not exist'})
     }

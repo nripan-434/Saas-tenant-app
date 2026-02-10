@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAllMembers } from '../../features/AuthSlice'
+import { getAllMembers, projectmember } from '../../features/AuthSlice'
 
 const ProjectDetails = () => {
   const dispatch = useDispatch()
@@ -14,6 +14,18 @@ const ProjectDetails = () => {
   const [newTask, setNewTask] = useState("");
   const [invitebox,setInvitebox] = useState(false)
   const project = projects?.find(p => p._id === id)
+  const [pending,setPending]=useState(false)
+  const handleAssigmMember = (userId,projectId,isConfirm=false)=>{
+      dispatch(projectmember({userId,projectId,isConfirm}))
+      .then((res)=>{
+        if(res.payload?.needsConfirmation){
+          setPending(true)
+        }
+        else{
+          setPending(false)
+        }
+      })
+  }
  
  useEffect(() => {
   if (!project?.organizationId) return
@@ -147,14 +159,27 @@ const ProjectDetails = () => {
         {/* members */}
        
         
-        <div className={`${invitebox?'flex gap-4 p-3 h-40 overflow-y-auto bg-gray-300 rounded-xl':'h-0'} duration-300 `}>
+        <div className={`${invitebox?'flex gap-4 p-3 h-40 overflow-x-auto bg-gray-300 rounded-xl':'h-0'} duration-300 `}>
           {
             invitebox?
             
               members?.map(x=>{
-                return <div className='w-30 hover:bg-gray-400 items-center duration-300 hover:scale-105 flex flex-col rounded-xl p-4 ' key={x._id}>
-                    <img src="https://images.pexels.com/photos/31162437/pexels-photo-31162437.jpeg" className=' h-24 w-24 object-cover rounded-full' alt="" />
-                    <h1>{x.name}</h1>
+                return <div className=' hover:bg-gray-400 items-center duration-300 hover:scale-105 flex flex-col  rounded-xl p-4 ' key={x._id} onClick={()=>{handleAssigmMember(userId=x._id,projectId=project._id)}}>
+                    <img src="https://images.pexels.com/photos/31162437/pexels-photo-31162437.jpeg" className=' h-18 w-18 object-cover rounded-full' alt="" />
+                    <div>
+                      <h1>{x.name}</h1>
+                    <h1>status:</h1>
+                    </div>
+                     {
+          pending? <div className='bg-2/black backdrop-blur-xl h-screen'>
+            <button onClick={()=>{handleAssigmMember(userId=x._id,projectId=project._id,isConfirm=true)}}>
+              Assign Anyway
+            </button>
+            <button className='bg-red-600' onClick={()=>{setPending(false)}}>
+              Cancel
+            </button>
+          </div>:''
+        }
                 </div>
               })
             
@@ -162,6 +187,7 @@ const ProjectDetails = () => {
             :''
           }
         </div>
+       
         
        
       </div>

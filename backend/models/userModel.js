@@ -25,15 +25,15 @@ const userSchema = mongoose.Schema({
         default: 'user'
 
     },
-    projects:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'projects',
-    },
+    projects: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'projects'
+    }],
     organizationId: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "Organization",
-  required: true
-}
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization",
+        required: true
+    }
 
 
 }, { timestamps: true })
