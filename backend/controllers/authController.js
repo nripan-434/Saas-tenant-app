@@ -136,5 +136,19 @@ export const getallmembers =asyncHandler(async(req,res)=>{
     return res.status(200).json({members})
 })
 
-
+export const projectmember =asyncHandler( async(req,res)=>{
+    const {userId,projectId}=req.params;
+    const {confirm}= req.body
+    const member =await userModel.findById({userId})
+    if(!member){
+        return res.status(409).json({message:'member not exist'})
+    }
+    if(member.projects.length>0 && !confirm){
+        
+        return res.status(400).json({needsConfirmation: true,message:`${member.name} already assigned in another project   `})
+    }
+const added = await userModel.findByIdAndUpdate(userId,{$addToSet:{projects:projectId}},{new:true})
+await projectModel.findByIdAndUpdate(projectId,{$addToSet:{members:userId}},{new:true})
+res.status(200).json({messsage:'Successfully assigned',added})
+})
 

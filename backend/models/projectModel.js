@@ -18,6 +18,10 @@ import mongoose from 'mongoose'
       ref: "User",
       required: true,
     },
+    members:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'
+    }
 
  },{timestamps:true})
 

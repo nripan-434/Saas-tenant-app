@@ -64,6 +64,16 @@ export const acceptinvite = createAsyncThunk('post/acceptinvite',async(form,{rej
     }
 })
 
+export const projectmember = createAsyncThunk('patch/projectmember',async({userId,projectId,confirm})=>{
+   try {
+     const res = api.patch(`/auth/projectmember/${userId}/${projectId}`,confirm)
+    return res.data
+   } catch (error) {
+    
+    
+   }
+})
+
 
 export const AuthSlice = createSlice({
     name: 'auth',
