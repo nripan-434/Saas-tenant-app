@@ -1,57 +1,55 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAllMembers, projectmember } from '../../features/AuthSlice'
+import { getAllMembers, projectmember, getallprojectmembers } from '../../features/AuthSlice'
 
-const ProjectDetails = () => {
+const Eachproject = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
-  const  { members }=useSelector(s=>s.auth)
-  
+  const { members, status, existmembers} = useSelector(s => s.auth)
+
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
-  const [invitebox,setInvitebox] = useState(false)
+  const [invitebox, setInvitebox] = useState(false)
   const project = projects?.find(p => p._id === id)
-  const [pending,setPending]=useState(null)
+  const [pending, setPending] = useState(null)
   const handleAssigmMember = async (userId, projectId) => {
-  try {
-    const data = await dispatch(
-      projectmember({ userId, projectId, isConfirm: false })
-    ).unwrap();
+    try {
+      const data = await dispatch(
+        projectmember({ userId, projectId, isConfirm: false })
+      ).unwrap();
 
-    if (data.needsConfirmation) {
-      const confirmAssign = window.confirm(data.message);
+      if (data.needsConfirmation) {
+        const confirmAssign = window.confirm(data.message);
 
-      if (confirmAssign) {
-        await dispatch(
-          projectmember({ userId, projectId, isConfirm: true })
-        ).unwrap();
+        if (confirmAssign) {
+          await dispatch(
+            projectmember({ userId, projectId, isConfirm: true })
+          ).unwrap();
+        }
       }
+
+    } catch (error) {
+      console.log(error);
     }
+  };
+  useEffect(() => {
+    if(status === 'pending')return
+     dispatch(getallprojectmembers(project._id))
+  }, [project?._id, dispatch])
 
-  } catch (error) {
-    console.log(error);
-  }
-};
-useEffect(() => {
-  console.log("PENDING STATE:", pending);
-}, [pending]);
- useEffect(() => {
-  console.log("COMPONENT MOUNTED");
-  return () => console.log("COMPONENT UNMOUNTED");
-}, []);
- useEffect(() => {
-  if (!project?.organizationId) return
-   if (members?.length > 0) return  
-  dispatch(getAllMembers(project.organizationId))
-}, [project?.organizationId, dispatch])
+  useEffect(() => {
+    if (!project?.organizationId) return
+    if (members?.length > 0) return
+   
+    dispatch(getAllMembers(project.organizationId))
+  }, [project?.organizationId, dispatch])
 
-  // Mock data (replace with real project data)
-  const progress = projects?.progress || 20; 
-  const deadline = projects?.deadline || "2024-12-31";
- 
+  const progress = 20;
+  const deadline = "2024-12-31";
+
   const tasks = project?.tasks || [
     { id: 1, title: "Initialize Repository", status: "Completed" },
     { id: 2, title: "Initialize Repository", status: "Completed" },
@@ -61,7 +59,7 @@ useEffect(() => {
   ];
 
   const handleAddTask = () => {
-    if(!newTask.trim()) return;
+    if (!newTask.trim()) return;
     alert(`Adding task: ${newTask}`);
     setNewTask("");
   };
@@ -78,8 +76,8 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-white text-gray-800 p-8 w-full">
       {/* Back Navigation */}
-      <button 
-        onClick={() => navigate(-1)} 
+      <button
+        onClick={() => navigate(-1)}
         className="mb-6 text-sm text-gray-500 hover:text-blue-600"
       >
         ← Back to Projects
@@ -124,27 +122,27 @@ useEffect(() => {
         </div>
 
         {/* Tasks Section with Toggle & Add Input */}
-        <section className={`${showTasks?'h-70':'h-15'} duration-300 mb-10 border rounded-xl overflow-hidden`}>
-          <button 
+        <section className={`${showTasks ? 'h-70' : 'h-15'} duration-300 mb-10 border rounded-xl overflow-hidden`}>
+          <button
             onClick={() => setShowTasks(!showTasks)}
             className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 font-semibold"
           >
             <span>Project Tasks ({tasks.length})</span>
             <span>{showTasks ? '−' : '+'}</span>
           </button>
-          
+
           {showTasks && (
             <div className="p-4">
               {/* Add Task Space */}
               <div className=" flex gap-2 mb-6">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={newTask}
                   onChange={(e) => setNewTask(e.target.value)}
-                  placeholder="Enter new task..." 
+                  placeholder="Enter new task..."
                   className="flex-1 border rounded px-3 py-2 text-sm focus:outline-blue-500"
                 />
-                <button 
+                <button
                   onClick={handleAddTask}
                   className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium"
                 >
@@ -167,63 +165,69 @@ useEffect(() => {
           )}
         </section>
         <div className="flex justify-between items-center mb-4">
-            <h2 className="text-sm font-bold text-gray-400 uppercase">Team Members</h2>
-            <button className="text-xs text-blue-600 font-bold hover:underline" onClick={()=>{setInvitebox(!invitebox)
-             
-            }}>{invitebox?'cancel':'+ Invite Member'}</button>
-          </div>
-         
+          <h2 className="text-sm font-bold text-gray-400 uppercase">Team Members</h2>
+          <button className="text-xs text-blue-600 font-bold hover:underline" onClick={() => {
+            setInvitebox(!invitebox)
+
+          }}>{invitebox ? 'cancel' : '+ Invite Member'}</button>
+        </div>
+
 
         {/* members */}
-       {
-  pending && (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl shadow-xl">
-        <p className="mb-4">{pending.message}</p>
-        <div className="flex gap-4">
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-            onClick={() => handleAssigmMember(pending.userId, project._id, true)}
-          >
-            Assign Anyway
-          </button>
-          <button
-            className="bg-red-600 text-white px-4 py-2 rounded"
-            onClick={() => setPending(null)}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-        
-        <div className={`${invitebox?'flex gap-4 p-3 h-40 overflow-x-auto bg-gray-300 rounded-xl':'h-0'} duration-300 `}>
+        {
+          pending && (
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-xl shadow-xl">
+                <p className="mb-4">{pending.message}</p>
+                <div className="flex gap-4">
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                    onClick={() => handleAssigmMember(pending.userId, project._id, true)}
+                  >
+                    Assign Anyway
+                  </button>
+                  <button
+                    className="bg-red-600 text-white px-4 py-2 rounded"
+                    onClick={() => setPending(null)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )
+        }
+
+        <div className={`${invitebox ? 'flex gap-4 p-3 h-40 overflow-x-auto bg-gray-300 rounded-xl' : 'h-0'} duration-300 `}>
           {
-            invitebox?
-            
-              members?.map(x=>{
-                return <div className=' hover:bg-gray-400 items-center duration-300 hover:scale-105 flex flex-col  rounded-xl p-4 ' key={x._id} onClick={()=>{handleAssigmMember(x._id,project._id)}}>
-                    <img src="https://images.pexels.com/photos/31162437/pexels-photo-31162437.jpeg" className=' h-18 w-18 object-cover rounded-full' alt="" />
-                    <div>
-                      <h1>{x.name}</h1>
+            invitebox ?
+
+              members?.map(x => {
+                return <div className=' hover:bg-gray-400 items-center duration-300 hover:scale-105 flex flex-col  rounded-xl p-4 ' key={x._id} onClick={() => { handleAssigmMember(x._id, project._id) }}>
+                  <img src="https://images.pexels.com/photos/31162437/pexels-photo-31162437.jpeg" className=' h-18 w-18 object-cover rounded-full' alt="" />
+                  <div>
+                    <h1>{x.name}</h1>
                     <h1>status:</h1>
-                    </div>
-                    
+                  </div>
+
                 </div>
               })
-            
-          
-            :''
+
+
+              : ''
           }
         </div>
-       
-        
-       
+
+
+
       </div>
+      {
+        existmembers?.map(x=>{
+          return <div key={x._id}>{x.name}</div>
+        })
+      }
     </div>
   )
 }
 
-export default ProjectDetails;
+export default Eachproject;

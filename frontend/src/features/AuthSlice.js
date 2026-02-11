@@ -6,6 +6,7 @@ const initialState = {
     user: JSON.parse(sessionStorage.getItem('user')) || null,
     token: JSON.parse(sessionStorage.getItem('token')) || null,
     members:[],
+    existmembers:[],
     status: 'success'
 
 }
@@ -71,6 +72,14 @@ export const projectmember = createAsyncThunk('patch/projectmember',async({userI
    } catch (error) {
          return rejectWithValue(error);} 
    
+})
+
+export const getallprojectmembers = createAsyncThunk('get/getallprojectmembers',async(projectId,{rejectWithValue})=>{
+    try {
+     const res =await api.get(`/auth/getallprojectmembers/${projectId}`)
+    return res.data
+   } catch (error) {
+         return rejectWithValue(error);} 
 })
 
 
@@ -171,6 +180,18 @@ export const AuthSlice = createSlice({
         state.status = 'rejected'
         toast.error(action.payload.message)
     })
+    .addCase(getallprojectmembers.pending, (state) => {
+        state.status = 'pending'
+    })
+    .addCase(getallprojectmembers.fulfilled, (state, action) => {
+        state.status = 'success'
+        state.existmembers=action.payload.m
+    })
+    .addCase(getallprojectmembers.rejected, (state, action) => {
+        state.status = 'rejected'
+        toast.error(action.payload.message)
+    })
+
 
     }
 

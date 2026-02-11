@@ -160,3 +160,11 @@ await projectModel.findByIdAndUpdate(projectId,{$addToSet:{members:userId}},{new
 res.status(200).json({message:'Successfully assigned',added})
 })
 
+export const getallprojectmembers = asyncHandler(async(req,res)=>{
+    const {projectId} = req.params
+    if (!projectId) {
+    return res.status(400).json({ message: "Project ID is required" })
+  }
+    const m = await userModel.find({projects:projectId})
+    return res.status(200).json({m})
+})
