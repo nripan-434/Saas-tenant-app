@@ -66,11 +66,11 @@ export const acceptinvite = createAsyncThunk('post/acceptinvite',async(form,{rej
 
 export const projectmember = createAsyncThunk('patch/projectmember',async({userId,projectId,isConfirm},{rejectWithValue})=>{
    try {
-     const res = api.patch(`/auth/projectmember/${userId}/${projectId}`,{isConfirm})
+     const res =await api.patch(`/auth/projectmember/${userId}/${projectId}`,{confirm:isConfirm})
     return res.data
    } catch (error) {
-    return rejectWithValue(error)    
-   }
+         return rejectWithValue(error);} 
+   
 })
 
 

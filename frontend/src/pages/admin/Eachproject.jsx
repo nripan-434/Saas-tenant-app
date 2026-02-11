@@ -14,19 +14,34 @@ const ProjectDetails = () => {
   const [newTask, setNewTask] = useState("");
   const [invitebox,setInvitebox] = useState(false)
   const project = projects?.find(p => p._id === id)
-  const [pending,setPending]=useState(false)
-  const handleAssigmMember = (userId,projectId,isConfirm=false)=>{
-      dispatch(projectmember({userId,projectId,isConfirm}))
-      .then((res)=>{
-        if(res.payload?.needsConfirmation){
-          setPending(true)
-        }
-        else{
-          setPending(false)
-        }
-      })
+  const [pending,setPending]=useState(null)
+  const handleAssigmMember = async (userId, projectId) => {
+  try {
+    const data = await dispatch(
+      projectmember({ userId, projectId, isConfirm: false })
+    ).unwrap();
+
+    if (data.needsConfirmation) {
+      const confirmAssign = window.confirm(data.message);
+
+      if (confirmAssign) {
+        await dispatch(
+          projectmember({ userId, projectId, isConfirm: true })
+        ).unwrap();
+      }
+    }
+
+  } catch (error) {
+    console.log(error);
   }
- 
+};
+useEffect(() => {
+  console.log("PENDING STATE:", pending);
+}, [pending]);
+ useEffect(() => {
+  console.log("COMPONENT MOUNTED");
+  return () => console.log("COMPONENT UNMOUNTED");
+}, []);
  useEffect(() => {
   if (!project?.organizationId) return
    if (members?.length > 0) return  
@@ -39,7 +54,10 @@ const ProjectDetails = () => {
  
   const tasks = project?.tasks || [
     { id: 1, title: "Initialize Repository", status: "Completed" },
-    { id: 2, title: "Design System Setup", status: "In Progress" }
+    { id: 2, title: "Initialize Repository", status: "Completed" },
+    { id: 3, title: "Initialize Repository", status: "Completed" },
+    { id: 4, title: "Initialize Repository", status: "Completed" },
+    { id: 5, title: "Design System Setup", status: "In Progress" }
   ];
 
   const handleAddTask = () => {
@@ -106,7 +124,7 @@ const ProjectDetails = () => {
         </div>
 
         {/* Tasks Section with Toggle & Add Input */}
-        <section className="mb-10 border rounded-md overflow-hidden">
+        <section className={`${showTasks?'h-70':'h-15'} duration-300 mb-10 border rounded-xl overflow-hidden`}>
           <button 
             onClick={() => setShowTasks(!showTasks)}
             className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 font-semibold"
@@ -118,7 +136,7 @@ const ProjectDetails = () => {
           {showTasks && (
             <div className="p-4">
               {/* Add Task Space */}
-              <div className="flex gap-2 mb-6">
+              <div className=" flex gap-2 mb-6">
                 <input 
                   type="text" 
                   value={newTask}
@@ -135,7 +153,7 @@ const ProjectDetails = () => {
               </div>
 
               {/* Task List Space */}
-              <div className="space-y-2">
+              <div className="flex m-4 gap-3 overflow-x-auto">
                 {tasks.map(task => (
                   <div key={task.id} className="flex justify-between items-center p-3 border rounded hover:bg-gray-50">
                     <span className="text-sm">{task.title}</span>
@@ -157,29 +175,42 @@ const ProjectDetails = () => {
          
 
         {/* members */}
-       
+       {
+  pending && (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-xl shadow-xl">
+        <p className="mb-4">{pending.message}</p>
+        <div className="flex gap-4">
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded"
+            onClick={() => handleAssigmMember(pending.userId, project._id, true)}
+          >
+            Assign Anyway
+          </button>
+          <button
+            className="bg-red-600 text-white px-4 py-2 rounded"
+            onClick={() => setPending(null)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
         
         <div className={`${invitebox?'flex gap-4 p-3 h-40 overflow-x-auto bg-gray-300 rounded-xl':'h-0'} duration-300 `}>
           {
             invitebox?
             
               members?.map(x=>{
-                return <div className=' hover:bg-gray-400 items-center duration-300 hover:scale-105 flex flex-col  rounded-xl p-4 ' key={x._id} onClick={()=>{handleAssigmMember(userId=x._id,projectId=project._id)}}>
+                return <div className=' hover:bg-gray-400 items-center duration-300 hover:scale-105 flex flex-col  rounded-xl p-4 ' key={x._id} onClick={()=>{handleAssigmMember(x._id,project._id)}}>
                     <img src="https://images.pexels.com/photos/31162437/pexels-photo-31162437.jpeg" className=' h-18 w-18 object-cover rounded-full' alt="" />
                     <div>
                       <h1>{x.name}</h1>
                     <h1>status:</h1>
                     </div>
-                     {
-          pending? <div className='bg-2/black backdrop-blur-xl h-screen'>
-            <button onClick={()=>{handleAssigmMember(userId=x._id,projectId=project._id,isConfirm=true)}}>
-              Assign Anyway
-            </button>
-            <button className='bg-red-600' onClick={()=>{setPending(false)}}>
-              Cancel
-            </button>
-          </div>:''
-        }
+                    
                 </div>
               })
             

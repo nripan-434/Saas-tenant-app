@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import OrganizationModel from "../models/OrganizationModel.js";
 import invitaionModel from "../models/invitaionModel.js";
+import projectModel from "../models/projectModel.js"
 import sendEmail from '../utils/sendEmail.js'
 
 export const OrgRegister = asyncHandler(async (req, res) => {
@@ -144,11 +145,18 @@ export const projectmember =asyncHandler( async(req,res)=>{
         return res.status(409).json({message:'member not exist'})
     }
     if(member.projects.length>0 && !confirm){
-        
-        return res.status(400).json({needsConfirmation: true,message:`${member.name} already assigned in another project   `})
+        console.log(member.projects.length)
+        console.log(confirm)
+       if (member.projects && member.projects.includes(projectId)) {
+    return res.status(409).json({ message: 'Already assigned to this project' });
+}
+        return res.status(200).json({
+            needsConfirmation: true,
+            message:`${member.name} already assigned in another project   `
+        })
     }
 const added = await userModel.findByIdAndUpdate(userId,{$addToSet:{projects:projectId}},{new:true})
 await projectModel.findByIdAndUpdate(projectId,{$addToSet:{members:userId}},{new:true})
-res.status(200).json({messsage:'Successfully assigned',added})
+res.status(200).json({message:'Successfully assigned',added})
 })
 
