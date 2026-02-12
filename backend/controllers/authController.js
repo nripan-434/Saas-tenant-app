@@ -165,6 +165,6 @@ export const getallprojectmembers = asyncHandler(async(req,res)=>{
     if (!projectId) {
     return res.status(400).json({ message: "Project ID is required" })
   }
-    const m = await userModel.find({projects:projectId})
+    const m = await userModel.find({projects:projectId}).populate('projects')
     return res.status(200).json({m})
 })

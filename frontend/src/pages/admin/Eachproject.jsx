@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import { FaArrowDown } from "react-icons/fa";
 import { getAllMembers, projectmember, getallprojectmembers } from '../../features/AuthSlice'
+import { useMemo } from 'react';
 
 const Eachproject = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
-  const { members, status, existmembers} = useSelector(s => s.auth)
-
+  const { members, status, existmembers } = useSelector(s => s.auth)
+  const [memtoggle, setMemtoggle] = useState(false)
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
-  const project = projects?.find(p => p._id === id)
+  const project = useMemo(() => {
+    return projects?.find(p => p._id === id);
+  }, [projects, id]);
   const [pending, setPending] = useState(null)
   const handleAssigmMember = async (userId, projectId) => {
     try {
@@ -36,16 +40,20 @@ const Eachproject = () => {
     }
   };
   useEffect(() => {
-    if(status === 'pending')return
-     dispatch(getallprojectmembers(project._id))
+    if (!project._id) return
+    if (existmembers?.length > 0) return;
+    if (status === "pending") return;
+    dispatch(getallprojectmembers(project._id))
   }, [project?._id, dispatch])
 
   useEffect(() => {
     if (!project?.organizationId) return
     if (members?.length > 0) return
-   
+    if (status === "pending") return;
+
     dispatch(getAllMembers(project.organizationId))
-  }, [project?.organizationId, dispatch])
+
+  }, [project?.organizationId, dispatch, members?.length])
 
   const progress = 20;
   const deadline = "2024-12-31";
@@ -221,11 +229,28 @@ const Eachproject = () => {
 
 
       </div>
-      {
-        existmembers?.map(x=>{
-          return <div key={x._id}>{x.name}</div>
-        })
-      }
+
+      <div className='bg-gray-400 flex gap-3 p-3 rounded-xl'>
+        {
+          existmembers?.map(x => {
+            return <div key={x._id} className='bg-white rounded-md p-3 overflow-hidden'>
+              <h1 className='font-bold'>Name : {x.name}</h1>
+              <h2 className='font-bold'>Email : {x.email}</h2>
+              <p onClick={() => { setMemtoggle(!memtoggle) }} className='font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
+              <div
+                className={`flex gap-2 p-3 overflow-x-auto w-55 transition-all duration-300 ${memtoggle ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+              >
+                {x.projects?.map(p => (
+                  <div key={p._id} className="flex-shrink-0 bg-gray-300 rounded-md p-2">
+                    {p.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          })
+        }
+      </div>
     </div>
   )
 }
