@@ -11,7 +11,7 @@ const Eachproject = () => {
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
   const { members, status, existmembers } = useSelector(s => s.auth)
-  const [memtoggle, setMemtoggle] = useState(false)
+  const [memtoggle, setMemtoggle] = useState({})
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
@@ -206,7 +206,7 @@ const Eachproject = () => {
           )
         }
 
-        <div className={`${invitebox ? 'flex gap-4 p-3 h-40 overflow-x-auto bg-gray-300 rounded-xl' : 'h-0'} duration-300 `}>
+        <div className={`${invitebox ? 'flex mb-3 gap-4 p-3 h-40 overflow-x-auto bg-gray-300 rounded-xl' : 'h-0'} duration-300 `}>
           {
             invitebox ?
 
@@ -230,19 +230,23 @@ const Eachproject = () => {
 
       </div>
 
-      <div className='bg-gray-400 flex gap-3 p-3 rounded-xl'>
+      <div className='bg-gray-400  flex gap-3 p-3 rounded-xl'>
         {
           existmembers?.map(x => {
-            return <div key={x._id} className='bg-white rounded-md p-3 overflow-hidden'>
+            return <div key={x._id} className={` bg-white ${memtoggle[x._id] ?'rounded-t-md':'rounded-md'} w-[230px]  overflow-hidden `}>
+              <div className='p-3 '>
+
+              
               <h1 className='font-bold'>Name : {x.name}</h1>
               <h2 className='font-bold'>Email : {x.email}</h2>
-              <p onClick={() => { setMemtoggle(!memtoggle) }} className='font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
+             </div>
+              <p onClick={() => setMemtoggle(prev => ({ ...prev, [x._id]: !prev[x._id] }))} className=' ml-2 mb-3  font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
               <div
-                className={`flex gap-2 p-3 overflow-x-auto w-55 transition-all duration-300 ${memtoggle ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                className={`absolute bg-white  left-auto right-auto flex gap-2 p-3 overflow-x-auto w-[230px] transition-all duration-300 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
                   }`}
               >
                 {x.projects?.map(p => (
-                  <div key={p._id} className="flex-shrink-0 bg-gray-300 rounded-md p-2">
+                  <div key={p._id} className="flex-shrink-0  bg-gray-300 rounded-md p-2">
                     {p.name}
                   </div>
                 ))}
