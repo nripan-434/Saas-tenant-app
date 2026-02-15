@@ -123,7 +123,7 @@ const Eachproject = () => {
           </div>
         </div>
 
-        {/* Description */}
+        {/* description */}
         <div className="mb-10">
           <h2 className="text-sm font-bold text-gray-400 uppercase mb-2">About Project</h2>
           <p className="text-gray-700 leading-relaxed">{project.description || "No description provided."}</p>
