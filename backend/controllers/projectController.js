@@ -32,7 +32,7 @@ export const getallprojects = asyncHandler(async (req, res) => {
     if (!orgId || !mongoose.Types.ObjectId.isValid(orgId)) {
         return res.status(400).json({ message: "Invalid Organization Id" })
     }
-    const prj = await projectModel.find({ organizationId:orgId })
+    const prj = await projectModel.find({ organizationId:orgId }).populate('createdBy')
     if (prj.length === 0) {
         return res.status(404).json({ message: 'no projects found' })
     }

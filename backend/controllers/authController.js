@@ -168,3 +168,16 @@ export const getallprojectmembers = asyncHandler(async(req,res)=>{
     const m = await userModel.find({projects:projectId}).populate('projects')
     return res.status(200).json({m})
 })
+export const removemember =asyncHandler(async(req,res)=>{
+    const {userId,orgId}=req.params
+    if(!userId || !orgId){
+      return  res.status(400).json({message:'Missing required parameters'})
+    }
+    const exist = await userModel.findOne({_id:userId,organizationId:orgId})
+    if(!exist){
+        return res.status(404).json({message:'User is not a member of this organization.'})
+        }
+    await userModel.deleteOne({_id:userId})
+        return res.status(200).json({message:'user deleted successfully'})
+
+})

@@ -7,6 +7,7 @@ const initialState = {
     token: JSON.parse(sessionStorage.getItem('token')) || null,
     members:[],
     existmembers:[],
+    memberstatus:'idle',
     status: 'success'
 
 }
@@ -77,6 +78,13 @@ export const projectmember = createAsyncThunk('patch/projectmember',async({userI
 export const getallprojectmembers = createAsyncThunk('get/getallprojectmembers',async(projectId,{rejectWithValue})=>{
     try {
      const res =await api.get(`/auth/getallprojectmembers/${projectId}`)
+    return res.data
+   } catch (error) {
+         return rejectWithValue(error);} 
+})
+export const removemember = createAsyncThunk('get/removemember',async({orgId,userId},{rejectWithValue})=>{
+    try {
+     const res =await api.delete(`/auth/removemember/${userId}/${orgId}`)
     return res.data
    } catch (error) {
          return rejectWithValue(error);} 
@@ -157,16 +165,15 @@ export const AuthSlice = createSlice({
 
         })
         .addCase(getAllMembers.pending, (state) => {
-        state.status = 'pending'
+        state.memberstatus = 'pending'
     })
     .addCase(getAllMembers.fulfilled, (state, action) => {
-        state.status = 'success'
+        state.memberstatus = 'success'
         state.members=action.payload.members
-        console.log(action.payload.members)
         action.payload.message?toast.success(action.payload.message):''
     })
     .addCase(getAllMembers.rejected, (state, action) => {
-        state.status = 'rejected'
+        state.memberstatus = 'rejected'
         toast.error(action.payload.message)
     })
     .addCase(projectmember.pending, (state) => {
@@ -190,6 +197,19 @@ export const AuthSlice = createSlice({
     .addCase(getallprojectmembers.rejected, (state, action) => {
         state.status = 'rejected'
         toast.error(action.payload.message)
+    })
+    .addCase(removemember.pending, (state) => {
+        state.status = 'pending'
+    })
+    .addCase(removemember.fulfilled, (state, action) => {
+        state.status = 'success'
+        state.members.filter(x=>{
+            x._id !== action.meta.arg.userId
+        })
+         toast.success(action.payload.message)
+    })
+    .addCase(removemember.rejected, (state, action) => {
+        state.status = 'rejected'
     })
 
 
