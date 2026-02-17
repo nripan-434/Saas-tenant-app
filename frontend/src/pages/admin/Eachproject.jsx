@@ -206,7 +206,7 @@ const Eachproject = () => {
           )
         }
 
-        <div className={`${invitebox ? 'flex mb-3 gap-4 p-3 h-40 overflow-x-auto bg-gray-300 rounded-xl' : 'h-0'} duration-300 `}>
+        <div className={`${invitebox ? ' flex mb-3 gap-4 p-3 h-40 overflow-x-auto bg-gray-300 rounded-xl' : 'h-0'} duration-300 `}>
           {
             invitebox ?
 
@@ -230,10 +230,10 @@ const Eachproject = () => {
 
       </div>
 
-      <div className='bg-gray-400  flex gap-3 p-3 rounded-xl'>
+      <div className='bg-gray-300 mb-10 flex gap-3 p-3 rounded-xl'>
         {
           existmembers?.map(x => {
-            return <div key={x._id} className={` bg-white ${memtoggle[x._id] ?'rounded-t-md':'rounded-md'} w-[230px]  overflow-hidden `}>
+            return <div key={x._id} className={`z-60  bg-white ${memtoggle[x._id] ?'rounded-t-md':'rounded-md'} w-[230px]  overflow-hidden `}>
               <div className='p-3 '>
 
               
@@ -242,11 +242,11 @@ const Eachproject = () => {
              </div>
               <p onClick={() => setMemtoggle(prev => ({ ...prev, [x._id]: !prev[x._id] }))} className=' ml-2 mb-3  font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
               <div
-                className={`absolute bg-white  left-auto right-auto flex gap-2 p-3 overflow-x-auto w-[230px] transition-all duration-300 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                className={`absolute bg-white rounded-b-xl left-auto right-auto flex gap-2 p-3 overflow-x-auto w-[230px] transition-all duration-300 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
                   }`}
               >
                 {x.projects?.map(p => (
-                  <div key={p._id} className="flex-shrink-0  bg-gray-300 rounded-md p-2">
+                  <div key={p._id} className="flex-shrink-0   bg-gray-300 rounded-md p-2">
                     {p.name}
                   </div>
                 ))}

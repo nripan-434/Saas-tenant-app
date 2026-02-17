@@ -3,9 +3,10 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { acceptinvite } from '../../features/AuthSlice'
-
+import { useNavigate } from 'react-router-dom'
 const MemberRegister = () => {
     const dispatch = useDispatch()
+    const navigate=useNavigate()
     const [searchparams] =useSearchParams()
     const token = searchparams.get('token')
     const [form,setForm]=useState({
@@ -19,6 +20,9 @@ const MemberRegister = () => {
     const handlesubmit =(e)=>{
         e.preventDefault()
         dispatch(acceptinvite({...form,token}))
+       .then((res) => { if (res.type === acceptinvite.fulfilled.type)
+         { navigate('/login'); }
+         });
     }
   return (
       <div className='flex min-h-[calc(100vh-160px)] justify-center items-center '>

@@ -6,7 +6,7 @@ const MembersCard = ({ members, orgId }) => {
     const dispatch = useDispatch()
 
     return (
-        <div className='m-5  grid   sm:grid-cols-2 md:grid-cols-3 break-all lg:grid-cols-4 gap-3'>
+        <div className='m-5  grid  text-black sm:grid-cols-2 md:grid-cols-3 break-all lg:grid-cols-4 gap-3'>
 
             {
                 members?.length === '0' ? <div>No members</div> :
