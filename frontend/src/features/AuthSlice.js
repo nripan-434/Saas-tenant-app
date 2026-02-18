@@ -6,8 +6,11 @@ const initialState = {
     user: JSON.parse(sessionStorage.getItem('user')) || null,
     token: JSON.parse(sessionStorage.getItem('token')) || null,
     members:[],
-    existmembers:[],
+    existmembers:{},
     memberstatus:'idle',
+    assignstatus:'idle',
+    projectmemstatus:{},
+
     status: 'success'
 
 }
@@ -78,7 +81,7 @@ export const projectmember = createAsyncThunk('patch/projectmember',async({userI
 export const getallprojectmembers = createAsyncThunk('get/getallprojectmembers',async(projectId,{rejectWithValue})=>{
     try {
      const res =await api.get(`/auth/getallprojectmembers/${projectId}`)
-    return res.data
+    return {projectId,members:res.data}
    } catch (error) {
          return rejectWithValue(error);} 
 })
@@ -177,26 +180,29 @@ export const AuthSlice = createSlice({
         toast.error(action.payload.message)
     })
     .addCase(projectmember.pending, (state) => {
-        state.status = 'pending'
+        state.assignstatus = 'pending'
     })
     .addCase(projectmember.fulfilled, (state, action) => {
-        state.status = 'success'
+        state.assignstatus = 'success'
         toast.success(action.payload.message)
     })
     .addCase(projectmember.rejected, (state, action) => {
-        state.status = 'rejected'
+        state.assignstatus = 'rejected'
         toast.error(action.payload.message)
     })
     .addCase(getallprojectmembers.pending, (state) => {
-        state.status = 'pending'
+        const projectId = action.meta.arg;
+        state.projectmemstatus[projectId] = 'pending'
     })
     .addCase(getallprojectmembers.fulfilled, (state, action) => {
-        state.status = 'success'
-        state.existmembers=action.payload.m
+       const { projectId, members } = action.payload;
+
+    state.existmembers[projectId] = members;
+    state.projectmemstatus[projectId] = "success";
     })
     .addCase(getallprojectmembers.rejected, (state, action) => {
-        state.status = 'rejected'
-        toast.error(action.payload.message)
+        const projectId = action.meta.arg;
+        state.projectmemstatus[projectId] = 'rejected'
     })
     .addCase(removemember.pending, (state) => {
         state.status = 'pending'

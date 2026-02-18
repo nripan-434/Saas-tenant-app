@@ -10,41 +10,22 @@ const Eachproject = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
-  const { members, status, existmembers } = useSelector(s => s.auth)
+  const { members, status,projectmemstatus, existmembers } = useSelector(s => s.auth)
   const [memtoggle, setMemtoggle] = useState({})
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
+  const projectmemebers=existmembers[id]
+  const prjmemstatus=projectmemstatus[id]
   const project = useMemo(() => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
-  const [pending, setPending] = useState(null)
-  const handleAssigmMember = async (userId, projectId) => {
-    try {
-      const data = await dispatch(
-        projectmember({ userId, projectId, isConfirm: false })
-      ).unwrap();
+   useEffect(() => {
+     if (!id) return;
 
-      if (data.needsConfirmation) {
-        const confirmAssign = window.confirm(data.message);
-
-        if (confirmAssign) {
-          await dispatch(
-            projectmember({ userId, projectId, isConfirm: true })
-          ).unwrap();
-        }
-      }
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    if (!project._id) return
-    if (existmembers?.length > 0) return;
-    if (status === "pending") return;
-    dispatch(getallprojectmembers(project._id))
-  }, [project?._id, dispatch])
+  if (prjmemstatus === "pending" || prjmemstatus === "success") return;
+  dispatch(getallprojectmembers(project._id));
+}, [project?._id, projectmemebers?.length, prjmemstatus,dispatch]);
 
   useEffect(() => {
     if (!project?.organizationId) return
@@ -54,6 +35,30 @@ const Eachproject = () => {
     dispatch(getAllMembers(project.organizationId))
 
   }, [project?.organizationId, dispatch, members?.length])
+  const [pending, setPending] = useState(null)
+ const handleAssigmMember = async (userId, projectId, force = false) => {
+  try {
+    const data = await dispatch(
+      projectmember({ userId, projectId, isConfirm: force })
+    ).unwrap();
+
+    if (data.needsConfirmation && !force) {
+      setPending({
+        userId,
+        message: data.message
+      });
+      return;
+    }
+
+    setPending(null);
+
+  } catch (error) {
+    console.log(error);
+    setPending(null);
+  }
+};
+
+
 
   const progress = 20;
   const deadline = "2024-12-31";
@@ -184,14 +189,13 @@ const Eachproject = () => {
         {/* members */}
         {
           pending && (
-            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-100">
               <div className="bg-white p-6 rounded-xl shadow-xl">
                 <p className="mb-4">{pending.message}</p>
                 <div className="flex gap-4">
                   <button
                     className="bg-blue-600 text-white px-4 py-2 rounded"
-                    onClick={() => handleAssigmMember(pending.userId, project._id, true)}
-                  >
+                   onClick={() => handleAssigmMember(pending.userId, project._id, true)}>
                     Assign Anyway
                   </button>
                   <button
@@ -232,7 +236,7 @@ const Eachproject = () => {
 
       <div className='bg-gray-300 mb-10 flex gap-3 p-3 rounded-xl'>
         {
-          existmembers?.map(x => {
+          projectmemebers?.map(x => {
             return <div key={x._id} className={`z-60  bg-white ${memtoggle[x._id] ?'rounded-t-md':'rounded-md'} w-[230px]  overflow-hidden `}>
               <div className='p-3 '>
 

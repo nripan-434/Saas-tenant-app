@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 const Orgadmin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
-  const { members, user, memberstatus } = useSelector((state) => (state.auth))
+  const { members, user } = useSelector((state) => (state.auth))
   useEffect(() => {
     if (!user?.organizationId) return;
     dispatch(getAllMembers(user.organizationId));
@@ -37,7 +37,7 @@ const Orgadmin = () => {
       <main className="flex-1 p-3  ">
         <motion.header
           initial={{ x: 200, opacity: 0 }}
-          animate={{ x: 0, opacity: 10 }}
+          animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
           className="flex rounded-bl-[90px] rounded-tr-[60px] p-10 text-white justify-between bg-gray-600 items-center mb-2  border-bottom ">
           <div>
