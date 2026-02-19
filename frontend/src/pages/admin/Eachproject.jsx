@@ -20,10 +20,12 @@ const Eachproject = () => {
   const project = useMemo(() => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
- useEffect(()=>{
-      dispatch(getallprojectmembers(id))
- },[])
+   useEffect(() => {
+     if (!id) return;
 
+  if (prjmemstatus === "pending" || prjmemstatus === "success") return;
+  dispatch(getallprojectmembers(project._id));
+}, [project?._id, projectmemebers?.length, prjmemstatus,dispatch]);
 
   useEffect(() => {
     if (!project?.organizationId) return
