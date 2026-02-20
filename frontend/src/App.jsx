@@ -12,6 +12,7 @@ import AddProject from './pages/admin/AddProject'
 import Eachproject from './pages/admin/Eachproject'
 import MemberRegister from './pages/user/MemberRegister'
 import Members from './pages/admin/Members'
+import Memberprj from './pages/user/Memberprj'
 const App = () => {
   return (
     <div className='flex flex-col min-h-screen '>
@@ -22,6 +23,7 @@ const App = () => {
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/home' element={<ProtectedRoutes role='user'><Userhome/></ProtectedRoutes>}/>
+        <Route path='/memberprj/:id' element={<ProtectedRoutes role='user'><Memberprj/></ProtectedRoutes>}/>
         <Route path='/adminhome' element={<ProtectedRoutes role='admin'><Orgadmin/></ProtectedRoutes>}/>
         <Route path='/addproject' element={<ProtectedRoutes role='admin'><AddProject/></ProtectedRoutes>}/>
         <Route path='/project/:id' element={<ProtectedRoutes role='admin'><Eachproject/></ProtectedRoutes>}/>
