@@ -11,7 +11,7 @@ const Orgadmin = () => {
   const { members, user } = useSelector((state) => (state.auth))
   useEffect(() => {
     if (!user?.organizationId) return;
-    dispatch(getAllMembers(user.organizationId));
+    dispatch(getAllMembers(user.organizationId._id));
   }, [dispatch, user?.organizationId]);
   const { projects, count } = useSelector(state => state.prj);
 
