@@ -38,3 +38,13 @@ export const getallprojects = asyncHandler(async (req, res) => {
     }
     return res.status(200).json({ prj,count:prj.length })
 })
+
+export const getmemberprjs = asyncHandler(async(req,res)=>{
+  const {orgId,userId}=req.params
+  if(!orgId  || !userId ){
+    return res.status(400).json({message:'User and Organization Id required'})
+  }
+  const prjs = await projectModel.find({organizationId:orgId,members:userId}).populate('createdBy')
+  return res.status(200).json({prjs})
+  
+})

@@ -4,6 +4,7 @@ import api from '../api/axios';
 const initialState = {
     projects: JSON.parse(localStorage.getItem('projects')) || null,
     count: null,
+    memberprjs:[]
 }
 export const createproject = createAsyncThunk('post/createproject', async (form, { rejectWithValue }) => {
     try {
@@ -19,6 +20,16 @@ export const createproject = createAsyncThunk('post/createproject', async (form,
 export const getallprojects = createAsyncThunk('get/getallprojects', async (orgId, { rejectWithValue }) => {
     try {
         const res = await api.get('/project/getallprojects' )
+        return res.data
+    } catch (error) {
+        console.error("API Error:", error.response?.data || error.message);
+        return rejectWithValue(error)
+
+    }
+})
+export const getmemberprjs = createAsyncThunk('get/getmemberprjs', async ({orgId,userId}, { rejectWithValue }) => {
+    try {
+        const res = await api.get(`/project/getmemberprjs/${orgId}/${userId}` )
         return res.data
     } catch (error) {
         console.error("API Error:", error.response?.data || error.message);
@@ -58,6 +69,19 @@ export const ProjectSlice = createSlice({
 
             })
             .addCase(getallprojects.rejected, (state, action) => {
+                state.status = 'rejected'
+                toast.error(action.payload.message)
+            })
+             .addCase(getmemberprjs.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getmemberprjs.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.memberprjs = action.payload.prjs
+                console.log('ad')
+
+            })
+            .addCase(getmemberprjs.rejected, (state, action) => {
                 state.status = 'rejected'
                 toast.error(action.payload.message)
             })

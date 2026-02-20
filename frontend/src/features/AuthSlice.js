@@ -81,7 +81,7 @@ export const projectmember = createAsyncThunk('patch/projectmember',async({userI
 export const getallprojectmembers = createAsyncThunk('get/getallprojectmembers',async(projectId,{rejectWithValue})=>{
     try {
      const res =await api.get(`/auth/getallprojectmembers/${projectId}`)
-    return {projectId,members:res.data}
+    return {projectId,members:res.data.m}
    } catch (error) {
          return rejectWithValue(error);} 
 })
@@ -198,9 +198,11 @@ export const AuthSlice = createSlice({
        const { projectId, members } = action.payload;
 
     state.existmembers[projectId] = members;
+    console.log(members)
     state.projectmemstatus[projectId] = "success";
     })
     .addCase(getallprojectmembers.rejected, (state, action) => {
+        console.log('as')
         const projectId = action.meta.arg;
         state.projectmemstatus[projectId] = 'rejected'
     })

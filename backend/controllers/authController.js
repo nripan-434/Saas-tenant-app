@@ -37,7 +37,7 @@ export const login = asyncHandler(async (req, res) => {
      if ( !email || !password) {
         return res.status(400).json({ message: "Fill All Fields" })
     }
-    const exist = await userModel.findOne({ email }).select("+password")
+    const exist = await userModel.findOne({ email }).select("+password").populate('organizationId')
     if (!exist) {
         return res.status(400).json({ message: "Invalid Credentials" })
     }
