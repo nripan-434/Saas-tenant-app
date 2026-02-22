@@ -7,8 +7,21 @@ import { getallprojects } from '../../features/ProjectSlice'
 import { motion } from 'framer-motion'
 const Orgadmin = () => {
   const dispatch = useDispatch();
-  const pending=false
   const navigate = useNavigate()
+  const [isOpen, setIsOpen] = useState(true)
+ useEffect(() => {
+  const handleResize = () => {
+    if (window.innerWidth >= 1024) {
+      setIsOpen(true)
+    } else {
+      setIsOpen(false)
+    }
+  }
+
+  handleResize()
+  window.addEventListener("resize", handleResize)
+  return () => window.removeEventListener("resize", handleResize)
+}, [])
   const { members, user } = useSelector((state) => (state.auth))
   useEffect(() => {
     if (!user?.organizationId) return;
@@ -22,19 +35,19 @@ const Orgadmin = () => {
 
   return (
     <div className="flex z-10 min-h-screen bg-white text-gray-800">
-      <div
-
-        className='hidden pr-2 z-10 lg:flex lg:w-64 lg:bg-gray-600 flex-col pt-11  rounded-tr-[60px] overflow-hidden transition-all duration-300' >
+      {isOpen?
+      <motion.div
+      initial={{ x:-50,y:30, opacity: 0 }}
+          animate={{ x: 0,y:0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        className=' pr-2  flex w-64 bg-gray-600 flex-col pt-11  rounded-tr-[60px] overflow-hidden ' >
         <h1 className=' pl-4 font-bold text-2xl text-white'>DASHBOARD</h1>
         <div className='pt-6 '>
           <Link to={'/members'} className='hidden rounded-r-xl lg:flex hover:bg-white p-6  hover:text-black text-white  duration-300 font-[bold] '>Members</Link>
           <Link to={'/members'} className='hidden rounded-r-xl lg:flex hover:bg-white p-6  hover:text-black text-white  duration-300 font-[bold] '>Members</Link>
         </div>
-
-
-
-
-      </div>
+      </motion.div>:''
+}
       <main className="flex-1 p-3  ">
         <motion.header
           initial={{ x: 200, opacity: 0 }}
@@ -51,8 +64,8 @@ const Orgadmin = () => {
         </motion.header>
 
         <motion.h2
-          initial={{ x: -200 }}
-          animate={{ x: 0 }}
+          initial={{ y: 200 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.5 }}
           className="text-lg  font-semibold mb-4">Total Projects: {count}
         </motion.h2>
@@ -87,32 +100,7 @@ const Orgadmin = () => {
             )}
 
             <div />
- {
-          pending && (
-            <div onClick={()=>{setPending(false)}} className="fixed inset-0 bg-black/40 flex items-center justify-center z-100">
-              <motion.div 
-              initial={{y:40,opacity:0}}
-              animate={{y:0,opacity:1}}
-              transition={{duration:0.3}}
-              className="bg-white p-6 rounded-xl shadow-xl">
-                <p className="mb-4">{pending.message}</p>
-                <div className="flex gap-4 justify-center">
-                  <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
-                   onClick={() => handleAssigmMember(pending.userId, project._id, true)}>
-                    Assign Anyway
-                  </button>
-                  <button
-                    className="bg-red-600 text-white px-4 py-2 rounded"
-                    onClick={() => setPending(null)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-          )
-        }
+
           </div>
           <div className='text-white border-t-7 border-white mt-10'>
             <h1 className='m-6 font-bold text-xl'>Members:</h1>

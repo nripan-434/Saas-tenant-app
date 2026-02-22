@@ -45,7 +45,9 @@ const Userhome = () => {
         </div>
         {/* cards */}
         <div className='h-full '>
-          <div className='grid grid-cols-1 gap-4 m-6   md:grid-cols-2 lg:grid-cols-4 '>
+          {
+            !memberprjs.length===0?
+                      <div className='grid grid-cols-1 gap-4 m-6   md:grid-cols-2 lg:grid-cols-4 '>
             {
               memberprjs?.map(x => {
                 return <div
@@ -64,7 +66,8 @@ const Userhome = () => {
               })
 
             }
-          </div>
+          </div>: <h1 className='flex justify-center '>Not Assigned To Any Projects Yet!</h1>
+}
         </div>
 
       </div>
