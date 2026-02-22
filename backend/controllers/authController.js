@@ -179,6 +179,6 @@ export const removemember =asyncHandler(async(req,res)=>{
         return res.status(404).json({message:'User is not a member of this organization.'})
         }
     await userModel.deleteOne({_id:userId})
-        return res.status(200).json({message:'user deleted successfully'})
+        return res.status(200).json({message:'Member successfully suspended'})
 
 })

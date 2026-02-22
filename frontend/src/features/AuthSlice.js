@@ -81,7 +81,7 @@ export const projectmember = createAsyncThunk('patch/projectmember',async({userI
 export const getallprojectmembers = createAsyncThunk(
   'get/getallprojectmembers',
   async (projectId, { rejectWithValue }) => {
-    console.log("Thunk started with projectId:", projectId);  // always runs if dispatched
+    console.log("Thunk started with projectId:", projectId);  
     try {
       const res = await api.get(`/auth/getallprojectmembers/${projectId}`);
       console.log("API response:", res.data);
@@ -194,7 +194,6 @@ export const AuthSlice = createSlice({
     })
     .addCase(projectmember.fulfilled, (state, action) => {
         state.assignstatus = 'success'
-        toast.success(action.payload.message)
     })
     .addCase(projectmember.rejected, (state, action) => {
         state.assignstatus = 'rejected'

@@ -7,6 +7,7 @@ import { getallprojects } from '../../features/ProjectSlice'
 import { motion } from 'framer-motion'
 const Orgadmin = () => {
   const dispatch = useDispatch();
+  const pending=false
   const navigate = useNavigate()
   const { members, user } = useSelector((state) => (state.auth))
   useEffect(() => {
@@ -86,7 +87,32 @@ const Orgadmin = () => {
             )}
 
             <div />
-
+ {
+          pending && (
+            <div onClick={()=>{setPending(false)}} className="fixed inset-0 bg-black/40 flex items-center justify-center z-100">
+              <motion.div 
+              initial={{y:40,opacity:0}}
+              animate={{y:0,opacity:1}}
+              transition={{duration:0.3}}
+              className="bg-white p-6 rounded-xl shadow-xl">
+                <p className="mb-4">{pending.message}</p>
+                <div className="flex gap-4 justify-center">
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                   onClick={() => handleAssigmMember(pending.userId, project._id, true)}>
+                    Assign Anyway
+                  </button>
+                  <button
+                    className="bg-red-600 text-white px-4 py-2 rounded"
+                    onClick={() => setPending(null)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )
+        }
           </div>
           <div className='text-white border-t-7 border-white mt-10'>
             <h1 className='m-6 font-bold text-xl'>Members:</h1>

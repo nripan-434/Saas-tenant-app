@@ -4,24 +4,27 @@ import { useSelector, useDispatch } from 'react-redux'
 import { FaArrowDown } from "react-icons/fa";
 import { getAllMembers, projectmember, getallprojectmembers } from '../../features/AuthSlice'
 import { useMemo } from 'react';
+import { motion } from 'framer-motion';
 
 const Eachproject = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
-  const { members, status,projectmemstatus, existmembers } = useSelector(s => s.auth)
+  const { members, status, projectmemstatus, existmembers } = useSelector(s => s.auth)
   const [memtoggle, setMemtoggle] = useState({})
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
-  const projectmemebers=existmembers[id]
-  const prjmemstatus=projectmemstatus[id]
+  const projectmemebers = existmembers[id]||[]
+  const prjmemstatus = projectmemstatus[id]
   const project = useMemo(() => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
-   useEffect(() => { if (!id) return; if (!project?._id) return;
-     if (prjmemstatus === "pending" || prjmemstatus === "success") return; dispatch(getallprojectmembers(project._id)); }, [project?._id, projectmemebers?.length, prjmemstatus, dispatch]);
+  useEffect(() => {
+    if (!id) return; if (!project?._id) return;
+    if (prjmemstatus === "pending" || prjmemstatus === "success") return; dispatch(getallprojectmembers(project._id));
+  }, [project?._id, projectmemebers?.length, prjmemstatus, dispatch]);
 
   useEffect(() => {
     if (!project?.organizationId) return
@@ -32,27 +35,27 @@ const Eachproject = () => {
 
   }, [project?.organizationId, dispatch, members?.length])
   const [pending, setPending] = useState(null)
- const handleAssigmMember = async (userId, projectId, force = false) => {
-  try {
-    const data = await dispatch(
-      projectmember({ userId, projectId, isConfirm: force })
-    ).unwrap();
+  const handleAssigmMember = async (userId, projectId, force = false) => {
+    try {
+      const data = await dispatch(
+        projectmember({ userId, projectId, isConfirm: force })
+      ).unwrap();
 
-    if (data.needsConfirmation && !force) {
-      setPending({
-        userId,
-        message: data.message
-      });
-      return;
+      if (data.needsConfirmation && !force) {
+        setPending({
+          userId,
+          message: data.message
+        });
+        return;
+      }
+
+      setPending(null);
+
+    } catch (error) {
+      console.log(error);
+      setPending(null);
     }
-
-    setPending(null);
-
-  } catch (error) {
-    console.log(error);
-    setPending(null);
-  }
-};
+  };
 
 
 
@@ -185,10 +188,14 @@ const Eachproject = () => {
         {/* members */}
         {
           pending && (
-            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-100">
-              <div className="bg-white p-6 rounded-xl shadow-xl">
+            <div onClick={()=>{setPending(false)}} className="fixed inset-0 bg-black/40 flex items-center justify-center z-100">
+              <motion.div 
+              initial={{y:40,opacity:0}}
+              animate={{y:0,opacity:1}}
+              transition={{duration:0.3}}
+              className="bg-white p-6 rounded-xl shadow-xl">
                 <p className="mb-4">{pending.message}</p>
-                <div className="flex gap-4">
+                <div className="flex gap-4 justify-center">
                   <button
                     className="bg-blue-600 text-white px-4 py-2 rounded"
                    onClick={() => handleAssigmMember(pending.userId, project._id, true)}>
@@ -201,7 +208,7 @@ const Eachproject = () => {
                     Cancel
                   </button>
                 </div>
-              </div>
+              </motion.div>
             </div>
           )
         }
@@ -230,7 +237,7 @@ const Eachproject = () => {
 
       </div>
 
-      <div className='bg-gray-300 mb-10 flex gap-3 p-3 rounded-xl'>
+      <div className={`${projectmemebers.length===0?'bg-none':'bg-gray-300'} mb-10 flex gap-3 p-3 rounded-xl`}>
         {
           projectmemebers?.map(x => {
             return <div key={x._id} className={`z-60  bg-white ${memtoggle[x._id] ?'rounded-t-md':'rounded-md'} w-[230px]  overflow-hidden `}>
@@ -255,7 +262,7 @@ const Eachproject = () => {
           })
         }
       </div>
-    </div>
+    </div >
   )
 }
 
