@@ -52,8 +52,18 @@ export const getmemberprjs = asyncHandler(async(req,res)=>{
 export const  deallocatemember = asyncHandler(async(req,res)=>{
     const {userId,projectId}= req.params
     const exist = await projectModel.findOne({_id:projectId,members:userId})
-    if(!exist){
-       return res.status(400).json({message:'Already deallocated'})
+  
+    const updatedProject = await projectModel.findByIdAndUpdate(
+        projectId,
+        { $pull: { members: new mongoose.Types.ObjectId(userId)} },
+        { new: true }
+    )
+    if (!updatedProject) {
+        return res.status(404).json({ message: 'Project not found' });
     }
-    await projectModel.deleteByiD({})
+
+    return res.status(200).json({ 
+        message: 'Member deallocated successfully', 
+        project: updatedProject 
+    })
 })

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { FaArrowDown } from "react-icons/fa";
 import { getAllMembers, projectmember, getallprojectmembers } from '../../features/AuthSlice'
+import { deallocatemember } from '../../features/ProjectSlice';
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
@@ -248,7 +249,7 @@ const Eachproject = () => {
               <h2 className='font-bold'>Email : {x.email}</h2>
              </div>
               <p onClick={() => setMemtoggle(prev => ({ ...prev, [x._id]: !prev[x._id] }))} className='absolute bottom-1 left-1 ml-2 mb-3  font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
-              <button onClick={()=>{}} className='absolute bottom-2 right-3 bg-red-600 font-bold text-white p-1 rounded-xl active:scale-95 hover:translate-y-[-3px] hover:translate-x-[2px] hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] duration-200'>Deallocate</button>
+              <button onClick={()=>{dispatch(deallocatemember({userId:x._id,projectId:id}))}} className='absolute bottom-2 right-3 bg-red-600 font-bold text-white p-1 rounded-xl active:scale-95 hover:translate-y-[-3px] hover:translate-x-[2px] hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] duration-200'>Deallocate</button>
               <div
                 className={` absolute   bg-white rounded-b-xl left-auto right-auto flex gap-2 p-3 overflow-x-auto w-[230px] transition-all duration-300 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
                   }`}

@@ -37,6 +37,16 @@ export const getmemberprjs = createAsyncThunk('get/getmemberprjs', async ({orgId
 
     }
 })
+export const deallocatemember = createAsyncThunk('patch/deallocatemember', async ({userId,projectId}, { rejectWithValue }) => {
+    try {
+        const res = await api.patch(`/project/deallocatemember/${userId}/${projectId}` )
+        return res.data
+    } catch (error) {
+        console.error("API Error:", error.response?.data || error.message);
+        return rejectWithValue(error)
+
+    }
+})
 export const ProjectSlice = createSlice({
     name: 'project',
     initialState,
@@ -78,15 +88,31 @@ export const ProjectSlice = createSlice({
             .addCase(getmemberprjs.fulfilled, (state, action) => {
                 state.status = 'success'
                 state.memberprjs = action.payload.prjs
-                console.log('ad')
+                // console.log('ad')
 
             })
             .addCase(getmemberprjs.rejected, (state, action) => {
                 state.status = 'rejected'
                 toast.error(action.payload.message)
             })
+            .addCase(deallocatemember.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(deallocatemember.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.memberprjs = action.payload.project
+                console.log(action.payload.project)
+                toast.success(action.payload.message)
+                
+                
+
+            })
+            .addCase(deallocatemember.rejected, (state, action) => {
+                state.status = 'rejected'
+                toast.error(action.payload.message)
+            })
 
     }
 })
-// export const {} ProjectSlice.actions
+// export const {} ProjectSlice.actions deallocatemember
 export default ProjectSlice.reducer

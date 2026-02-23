@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import api from '../api/axios';
+import { deallocatemember } from './ProjectSlice';
 
 const initialState = {
     user: JSON.parse(sessionStorage.getItem('user')) || null,
@@ -81,10 +82,8 @@ export const projectmember = createAsyncThunk('patch/projectmember',async({userI
 export const getallprojectmembers = createAsyncThunk(
   'get/getallprojectmembers',
   async (projectId, { rejectWithValue }) => {
-    console.log("Thunk started with projectId:", projectId);  
     try {
       const res = await api.get(`/auth/getallprojectmembers/${projectId}`);
-      console.log("API response:", res.data);
       return { projectId, members: res.data.m };
     } catch (error) {
       console.error("API Error:", error.response?.data || error.message);
@@ -200,7 +199,7 @@ export const AuthSlice = createSlice({
         toast.error(action.payload.message)
     })
     .addCase(getallprojectmembers.pending, (state, action) => {
-  console.log("Pending action arg:", action.meta.arg);
+//   console.log("Pending action arg:", action.meta.arg);
   const projectId = action.meta.arg;
   state.projectmemstatus[projectId] = 'pending';
 })
@@ -209,11 +208,11 @@ export const AuthSlice = createSlice({
        const { projectId, members } = action.payload;
 
     state.existmembers[projectId] = members;
-    console.log(members)
+    // console.log(members)
     state.projectmemstatus[projectId] = "success";
     })
     .addCase(getallprojectmembers.rejected, (state, action) => {
-        console.log('asd')
+        // console.log('asd')
         const projectId = action.meta.arg;
         state.projectmemstatus[projectId] = 'rejected'
     })
@@ -230,6 +229,14 @@ export const AuthSlice = createSlice({
     .addCase(removemember.rejected, (state, action) => {
         state.status = 'rejected'
     })
+   .addCase(deallocatemember.fulfilled, (state, action) => {
+    const { userId, projectId } = action.meta.arg;
+    if (state.existmembers[projectId]) {
+        state.existmembers[projectId] = state.existmembers[projectId].filter(
+            member => member._id !== userId
+        );
+    }
+});
 
 
     }

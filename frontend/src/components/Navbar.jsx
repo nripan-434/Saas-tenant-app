@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <div >
       <div >
-      <div className='h-20 absolute  mt-5  shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0,0,0,0.4)] inset-x-0 fixed z-50 shadow rounded-4xl   top-0 bg-transparent backdrop-blur flex justify-between items-center p-6 '>
+      <div className='h-20 z-80 absolute  mt-5  shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0,0,0,0.4)] inset-x-0 fixed z-50 shadow rounded-4xl   top-0 bg-transparent backdrop-blur flex justify-between items-center p-6 '>
         <div>
            <h1 className='font-(--font-comic)'></h1> Home
         </div>
