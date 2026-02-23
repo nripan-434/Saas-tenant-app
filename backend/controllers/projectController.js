@@ -48,3 +48,12 @@ export const getmemberprjs = asyncHandler(async(req,res)=>{
   return res.status(200).json({prjs})
   
 })
+
+export const  deallocatemember = asyncHandler(async(req,res)=>{
+    const {userId,projectId}= req.params
+    const exist = await projectModel.findOne({_id:projectId,members:userId})
+    if(!exist){
+       return res.status(400).json({message:'Already deallocated'})
+    }
+    await projectModel.deleteByiD({})
+})

@@ -181,7 +181,7 @@ const Eachproject = () => {
           <button className="text-xs text-blue-600 font-bold hover:underline" onClick={() => {
             setInvitebox(!invitebox)
 
-          }}>{invitebox ? 'cancel' : '+ Invite Member'}</button>
+          }}>{invitebox ?  <h1 className='font-bold text-[15px]'>Cancel</h1> : <h1 className='font-bold text-[15px]'>+ Assign Member</h1>}</button>
         </div>
 
 
@@ -240,16 +240,17 @@ const Eachproject = () => {
       <div className={`${projectmemebers.length===0?'bg-none':'bg-gray-300'} mb-10 flex gap-3 p-3 rounded-xl`}>
         {
           projectmemebers?.map(x => {
-            return <div key={x._id} className={`z-60  bg-white ${memtoggle[x._id] ?'rounded-t-md':'rounded-md'} w-[230px]  overflow-hidden `}>
-              <div className='p-3 '>
+            return <div key={x._id} className={`z-60 relative  bg-white ${memtoggle[x._id] ?'rounded-t-md':'rounded-md'} w-[230px] `}>
+              <div className='p-3 min-h-36 '>
 
               
               <h1 className='font-bold'>Name : {x.name}</h1>
               <h2 className='font-bold'>Email : {x.email}</h2>
              </div>
-              <p onClick={() => setMemtoggle(prev => ({ ...prev, [x._id]: !prev[x._id] }))} className=' ml-2 mb-3  font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
+              <p onClick={() => setMemtoggle(prev => ({ ...prev, [x._id]: !prev[x._id] }))} className='absolute bottom-1 left-1 ml-2 mb-3  font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
+              <button onClick={()=>{}} className='absolute bottom-2 right-3 bg-red-600 font-bold text-white p-1 rounded-xl active:scale-95 hover:translate-y-[-3px] hover:translate-x-[2px] hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] duration-200'>Deallocate</button>
               <div
-                className={`absolute bg-white rounded-b-xl left-auto right-auto flex gap-2 p-3 overflow-x-auto w-[230px] transition-all duration-300 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                className={` absolute   bg-white rounded-b-xl left-auto right-auto flex gap-2 p-3 overflow-x-auto w-[230px] transition-all duration-300 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
                   }`}
               >
                 {x.projects?.map(p => (
