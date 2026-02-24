@@ -1,4 +1,4 @@
-import { OrgRegister,login,removemember,getallusers,getallmembers,getallprojectmembers,projectmember, inviteMember,acceptinvite } from "../controllers/authController.js";
+import { OrgRegister,login,removemember,getallusers,getallmembers,projectmember, inviteMember,acceptinvite } from "../controllers/authController.js";
 import { authmiddleware } from "../middleware/auth.js";
 import { adminonly } from "../middleware/adminMiddleware.js";
 import express from 'express'
@@ -10,7 +10,6 @@ router.get('/getallusers',authmiddleware,adminonly,getallusers)
 router.post('/invite',authmiddleware,adminonly,inviteMember)
 router.post('/acceptinvite',acceptinvite)
 router.get('/getallmembers/:orgId',getallmembers)
-router.get('/getallprojectmembers/:projectId',getallprojectmembers)
 router.patch('/projectmember/:userId/:projectId',projectmember)
 router.delete('/removemember/:userId/:orgId',removemember)
 

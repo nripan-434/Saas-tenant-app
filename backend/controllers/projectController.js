@@ -48,6 +48,28 @@ export const getmemberprjs = asyncHandler(async(req,res)=>{
   return res.status(200).json({prjs})
   
 })
+export const getallprojectmembers = asyncHandler(async (req, res) => {
+  const { projectId } = req.params;
+
+  const raw = await mongoose.connection.db
+    .collection("projects")
+    .findOne({ _id: new mongoose.Types.ObjectId(projectId) });
+
+
+  const userRaw = await mongoose.connection.db
+    .collection("users")
+    .findOne({ 
+      _id: new mongoose.Types.ObjectId("6985fa61e8651d5bde5620e4")
+    });
+
+
+  const project = await projectModel
+    .findById(projectId)
+    .populate("members");
+
+
+  return res.json(project);
+});
 
 export const  deallocatemember = asyncHandler(async(req,res)=>{
     const {userId,projectId}= req.params

@@ -4,6 +4,10 @@ import api from '../api/axios';
 const initialState = {
     projects: JSON.parse(localStorage.getItem('projects')) || null,
     count: null,
+    existmembers:{},
+    projectmemstatus:{},
+
+
     memberprjs:[]
 }
 export const createproject = createAsyncThunk('post/createproject', async (form, { rejectWithValue }) => {
@@ -17,6 +21,20 @@ export const createproject = createAsyncThunk('post/createproject', async (form,
 
     }
 })
+export const getallprojectmembers = createAsyncThunk(
+  'get/getallprojectmembers',
+  async (projectId, { rejectWithValue }) => {
+    try {
+      const res = await api.get(`/project/getallprojectmembers/${projectId}`);
+      return { projectId, members: res.data.members };
+    } catch (error) {
+      console.error("API Error:", error.response?.data || error.message);
+      return rejectWithValue({
+        message: error.response?.data?.message || error.message || "Something went wrong"
+      });
+    }
+  }
+);
 export const getallprojects = createAsyncThunk('get/getallprojects', async (orgId, { rejectWithValue }) => {
     try {
         const res = await api.get('/project/getallprojects' )
@@ -80,6 +98,8 @@ export const ProjectSlice = createSlice({
             })
             .addCase(getallprojects.rejected, (state, action) => {
                 state.status = 'rejected'
+                state.projects = action.payload.prj
+                state.count = action.payload.count
                 toast.error(action.payload.message)
             })
              .addCase(getmemberprjs.pending, (state) => {
@@ -95,17 +115,35 @@ export const ProjectSlice = createSlice({
                 state.status = 'rejected'
                 toast.error(action.payload.message)
             })
+            .addCase(getallprojectmembers.pending, (state, action) => {
+//   console.log("Pending action arg:", action.meta.arg);
+  const projectId = action.meta.arg;
+  state.projectmemstatus[projectId] = 'pending';
+})
+
+    .addCase(getallprojectmembers.fulfilled, (state, action) => {
+       const { projectId, members } = action.payload;
+console.log("PAYLOAD:", action.payload)
+    state.existmembers[projectId] = members;
+    console.log(members)
+    state.projectmemstatus[projectId] = "success";
+    })
+    .addCase(getallprojectmembers.rejected, (state, action) => {
+        // console.log('asd')
+        const projectId = action.meta.arg;
+        state.projectmemstatus[projectId] = 'rejected'
+    })
             .addCase(deallocatemember.pending, (state) => {
                 state.status = 'pending'
             })
-            .addCase(deallocatemember.fulfilled, (state, action) => {
-                state.status = 'success'
-                state.memberprjs = action.payload.project
-                console.log(action.payload.project)
-                toast.success(action.payload.message)
-                
-                
-
+              .addCase(deallocatemember.fulfilled, (state, action) => {
+                const { userId, projectId } = action.meta.arg;
+                if (state.existmembers[projectId]) {
+                    state.existmembers[projectId] = state.existmembers[projectId].filter(
+                        member => member._id !== userId
+                    );
+                }
+                toast.success('memeber removed')
             })
             .addCase(deallocatemember.rejected, (state, action) => {
                 state.status = 'rejected'

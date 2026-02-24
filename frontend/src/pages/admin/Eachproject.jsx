@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { FaArrowDown } from "react-icons/fa";
-import { getAllMembers, projectmember, getallprojectmembers } from '../../features/AuthSlice'
+import { getAllMembers, projectmember } from '../../features/AuthSlice'
+import { getallprojectmembers } from '../../features/ProjectSlice';
 import { deallocatemember } from '../../features/ProjectSlice';
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -12,7 +13,8 @@ const Eachproject = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
-  const { members, status, projectmemstatus, existmembers } = useSelector(s => s.auth)
+  const { members, status  } = useSelector(s => s.auth)
+  const {projectmemstatus, existmembers} = useSelector(s=>s.prj)
   const [memtoggle, setMemtoggle] = useState({})
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
@@ -23,9 +25,10 @@ const Eachproject = () => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
   useEffect(() => {
-    if (!id) return; if (!project?._id) return;
-    if (prjmemstatus === "pending" || prjmemstatus === "success") return; dispatch(getallprojectmembers(project._id));
-  }, [project?._id, projectmemebers?.length, prjmemstatus, dispatch]);
+  if (!id || !project?._id) return;
+
+  dispatch(getallprojectmembers(project._id));
+}, [project?._id, dispatch]);
 
   useEffect(() => {
     if (!project?.organizationId) return
@@ -51,7 +54,7 @@ const Eachproject = () => {
       }
 
       setPending(null);
-
+       dispatch(getallprojectmembers(projectId));
     } catch (error) {
       console.log(error);
       setPending(null);

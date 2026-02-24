@@ -140,35 +140,33 @@ export const getallmembers =asyncHandler(async(req,res)=>{
 export const projectmember =asyncHandler( async(req,res)=>{
     const {userId,projectId}=req.params;
     const {confirm}= req.body
-    const member =await userModel.findById(userId)
-    if(!member){
-        return res.status(409).json({message:'member not exist'})
-    }
-    if(member.projects.length>0 && !confirm){
-        console.log(member.projects.length)
-        console.log(confirm)
-       if (member.projects && member.projects.includes(projectId)) {
+    const member =await projectModel.findOne({_id:projectId,members:userId})
+    if(member){
+       
     return res.status(409).json({ message: 'Already assigned to this project' });
 }
-        return res.status(200).json({
-            needsConfirmation: true,
-            message:`${member.name} already assigned in another project   `
-        })
-    }
-const added = await userModel.findByIdAndUpdate(userId,{$addToSet:{projects:projectId}},{new:true})
+const existingInAnotherProject = await projectModel.findOne({
+    members: userId,
+    _id: { $ne: projectId }
+  });
+
+  if (existingInAnotherProject && !confirm) {
+    return res.status(200).json({
+      needsConfirmation: true,
+      message: "User already assigned in another project"
+    });
+  }
+
+  await projectModel.findByIdAndUpdate(
+    projectId,
+    { $addToSet: { members: userId } },
+    { new: true }
+  );
 await projectModel.findByIdAndUpdate(projectId,{$addToSet:{members:userId}},{new:true})
-res.status(200).json({message:'Successfully assigned',added})
+res.status(200).json({message:'Successfully assigned'})
 })
 
-export const getallprojectmembers = asyncHandler(async(req,res)=>{
-    const {projectId} = req.params
-    console.log(projectId)
-    if (!projectId) {
-    return res.status(400).json({ message: "Project ID is required" })
-  }
-    const m = await userModel.find({projects:projectId}).populate('projects')
-    return res.status(200).json({m})
-})
+
 export const removemember =asyncHandler(async(req,res)=>{
     const {userId,orgId}=req.params
     if(!userId || !orgId){

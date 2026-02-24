@@ -10,7 +10,7 @@ const AddProject = () => {
   const [form, setForm] = useState({
     name: '',
     description: '',
-    organizationId: user.organizationId,
+    organizationId: user.organizationId._id,
   })
   const handleinput = (e) => {
     const { name, value } = e.target
