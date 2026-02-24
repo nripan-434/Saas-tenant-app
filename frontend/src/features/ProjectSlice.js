@@ -123,9 +123,9 @@ export const ProjectSlice = createSlice({
 
     .addCase(getallprojectmembers.fulfilled, (state, action) => {
        const { projectId, members } = action.payload;
-console.log("PAYLOAD:", action.payload)
+// console.log("PAYLOAD:", action.payload)
     state.existmembers[projectId] = members;
-    console.log(members)
+    // console.log(members)
     state.projectmemstatus[projectId] = "success";
     })
     .addCase(getallprojectmembers.rejected, (state, action) => {

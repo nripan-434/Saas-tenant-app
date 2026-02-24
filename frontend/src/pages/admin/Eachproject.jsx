@@ -14,13 +14,12 @@ const Eachproject = () => {
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
   const { members, status  } = useSelector(s => s.auth)
-  const {projectmemstatus, existmembers} = useSelector(s=>s.prj)
+  const { existmembers} = useSelector(s=>s.prj)
   const [memtoggle, setMemtoggle] = useState({})
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
   const projectmemebers = existmembers[id]||[]
-  const prjmemstatus = projectmemstatus[id]
   const project = useMemo(() => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
@@ -28,6 +27,7 @@ const Eachproject = () => {
   if (!id || !project?._id) return;
 
   dispatch(getallprojectmembers(project._id));
+    
 }, [project?._id, dispatch]);
 
   useEffect(() => {
@@ -244,25 +244,13 @@ const Eachproject = () => {
       <div className={`${projectmemebers.length===0?'bg-none':'bg-gray-300'} mb-10 flex gap-3 p-3 rounded-xl`}>
         {
           projectmemebers?.map(x => {
-            return <div key={x._id} className={`z-60 relative  bg-white ${memtoggle[x._id] ?'rounded-t-md':'rounded-md'} w-[230px] `}>
-              <div className='p-3 min-h-36 '>
-
-              
-              <h1 className='font-bold'>Name : {x.name}</h1>
+            return <div key={x._id} className={'z-60 relative  bg-white  rounded-md w-[230px] '}>
+              <div className='p-2 min-h-26  '>
+                <h1 className='font-bold'>Name : {x.name}</h1>
               <h2 className='font-bold'>Email : {x.email}</h2>
              </div>
-              <p onClick={() => setMemtoggle(prev => ({ ...prev, [x._id]: !prev[x._id] }))} className='absolute bottom-1 left-1 ml-2 mb-3  font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
-              <button onClick={()=>{dispatch(deallocatemember({userId:x._id,projectId:id}))}} className='absolute bottom-2 right-3 bg-red-600 font-bold text-white p-1 rounded-xl active:scale-95 hover:translate-y-[-3px] hover:translate-x-[2px] hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] duration-200'>Deallocate</button>
-              <div
-                className={` absolute   bg-white rounded-b-xl left-auto right-auto flex gap-2 p-3 overflow-x-auto w-[230px] transition-all duration-300 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
-                  }`}
-              >
-                {x.projects?.map(p => (
-                  <div key={p._id} className="flex-shrink-0   bg-gray-300 rounded-md p-2">
-                    {p.name}
-                  </div>
-                ))}
-              </div>
+              <button onClick={()=>{dispatch(deallocatemember({userId:x._id,projectId:id}))}} className='absolute bottom-2 left-3 bg-red-600 font-bold text-white p-1 rounded-xl active:scale-95 hover:translate-y-[-3px] hover:translate-x-[2px] hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] duration-200'>Deallocate</button>
+             
             </div>
           })
         }

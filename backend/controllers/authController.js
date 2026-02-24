@@ -145,12 +145,12 @@ export const projectmember =asyncHandler( async(req,res)=>{
        
     return res.status(409).json({ message: 'Already assigned to this project' });
 }
-const existingInAnotherProject = await projectModel.findOne({
+const existInAnotherProject = await projectModel.findOne({
     members: userId,
     _id: { $ne: projectId }
   });
 
-  if (existingInAnotherProject && !confirm) {
+  if (existInAnotherProject && !confirm) {
     return res.status(200).json({
       needsConfirmation: true,
       message: "User already assigned in another project"
