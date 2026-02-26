@@ -162,6 +162,11 @@ const existInAnotherProject = await projectModel.findOne({
     { $addToSet: { members: userId } },
     { new: true }
   );
+   await userModel.findByIdAndUpdate(
+    userId,
+    { $addToSet: { projects: projectId } },
+    { new: true }
+  );
 await projectModel.findByIdAndUpdate(projectId,{$addToSet:{members:userId}},{new:true})
 res.status(200).json({message:'Successfully assigned'})
 })

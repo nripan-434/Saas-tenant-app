@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import { asyncHandler } from "../middleware/asyncHandler.js"
 import projectModel from "../models/projectModel.js"
-
+import userModel from "../models/userModel.js"
 
 
 export const createproject = asyncHandler(async (req, res) => {
@@ -50,7 +50,13 @@ export const getmemberprjs = asyncHandler(async(req,res)=>{
 })
 export const getallprojectmembers = asyncHandler(async (req, res) => {
   const { projectId } = req.params;
-  const project = await projectModel.findById(projectId).populate("members");
+  const project = await projectModel.findById(projectId).populate({
+      path: "members",
+      populate: {
+        path: "projects",
+        select: "name _id"
+      }
+    })
   return res.json(project);
 });
 
@@ -63,8 +69,16 @@ export const  deallocatemember = asyncHandler(async(req,res)=>{
         { $pull: { members: new mongoose.Types.ObjectId(userId)} },
         { new: true }
     )
+    const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        { $pull: { projects: new mongoose.Types.ObjectId(projectId)} },
+        { new: true }
+    )
     if (!updatedProject) {
         return res.status(404).json({ message: 'Project not found' });
+    }
+     if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
     }
 
     return res.status(200).json({ 

@@ -13,22 +13,22 @@ const Eachproject = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
-  const { members, status  } = useSelector(s => s.auth)
-  const { existmembers} = useSelector(s=>s.prj)
+  const { members, status } = useSelector(s => s.auth)
+  const { existmembers } = useSelector(s => s.prj)
   const [memtoggle, setMemtoggle] = useState({})
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
-  const projectmemebers = existmembers[id]||[]
+  const projectmemebers = existmembers[id] || []
   const project = useMemo(() => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
   useEffect(() => {
-  if (!id || !project?._id) return;
+    if (!id || !project?._id) return;
 
-  dispatch(getallprojectmembers(project._id));
-    
-}, [project?._id, dispatch]);
+    dispatch(getallprojectmembers(project._id));
+
+  }, [project?._id, dispatch]);
 
   useEffect(() => {
     if (!project?.organizationId) return
@@ -54,7 +54,7 @@ const Eachproject = () => {
       }
 
       setPending(null);
-       dispatch(getallprojectmembers(projectId));
+      dispatch(getallprojectmembers(projectId));
     } catch (error) {
       console.log(error);
       setPending(null);
@@ -185,24 +185,24 @@ const Eachproject = () => {
           <button className="text-xs text-blue-600 font-bold hover:underline" onClick={() => {
             setInvitebox(!invitebox)
 
-          }}>{invitebox ?  <h1 className='font-bold text-[15px]'>Cancel</h1> : <h1 className='font-bold text-[15px]'>+ Assign Member</h1>}</button>
+          }}>{invitebox ? <h1 className='font-bold text-[15px]'>Cancel</h1> : <h1 className='font-bold text-[15px]'>+ Assign Member</h1>}</button>
         </div>
 
 
         {/* members */}
         {
           pending && (
-            <div onClick={()=>{setPending(false)}} className="fixed inset-0 bg-black/40 flex items-center justify-center z-100">
-              <motion.div 
-              initial={{y:40,opacity:0}}
-              animate={{y:0,opacity:1}}
-              transition={{duration:0.3}}
-              className="bg-white p-6 rounded-xl shadow-xl">
+            <div onClick={() => { setPending(false) }} className="fixed inset-0 bg-black/40 flex items-center justify-center z-100">
+              <motion.div
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white p-6 rounded-xl shadow-xl">
                 <p className="mb-4">{pending.message}</p>
                 <div className="flex gap-4 justify-center">
                   <button
                     className="bg-blue-600 text-white px-4 py-2 rounded"
-                   onClick={() => handleAssigmMember(pending.userId, project._id, true)}>
+                    onClick={() => handleAssigmMember(pending.userId, project._id, true)}>
                     Assign Anyway
                   </button>
                   <button
@@ -241,20 +241,37 @@ const Eachproject = () => {
 
       </div>
 
-      <div className={`${projectmemebers.length===0?'bg-none':'bg-gray-300'} mb-10 flex gap-3 p-3 rounded-xl`}>
+      <div className={`${projectmemebers.length === 0 ? 'bg-none' : 'bg-gray-300'} mb-10 flex gap-3 p-3 rounded-xl`}>
         {
           projectmemebers?.map(x => {
             return <div key={x._id} className={'z-60 relative  bg-white  rounded-md w-[230px] '}>
               <div className='p-2 min-h-26  '>
                 <h1 className='font-bold'>Name : {x.name}</h1>
-              <h2 className='font-bold'>Email : {x.email}</h2>
-             </div>
-              <button onClick={()=>{dispatch(deallocatemember({userId:x._id,projectId:id}))}} className='absolute bottom-2 left-3 bg-red-600 font-bold text-white p-1 rounded-xl active:scale-95 hover:translate-y-[-3px] hover:translate-x-[2px] hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] duration-200'>Deallocate</button>
-             
-            </div>
+                <h2 className='font-bold'>Email : {x.email}</h2>
+              </div>
+
+              <p onClick={() => setMemtoggle(prev => ({ ...prev, [x._id]: !prev[x._id] }))} className=' ml-2 mb-3  font-bold text-blue-600 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
+              <div
+                className={`absolute bg-white rounded-b-xl left-auto right-auto flex gap-2 p-3 overflow-x-auto w-[230px] transition-all duration-300 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+              >
+                {
+                  x.projects.length>0?
+                x.projects?.map(p => (
+                  <div key={p._id} className="flex-shrink-0   bg-gray-300 rounded-md p-2">
+                    {p.name}
+                  </div>
+                )): <p></p>
+                }
+              </div>
+           
+
+          < button onClick={() => { dispatch(deallocatemember({ userId: x._id, projectId: id })) }} className='absolute bottom-2 right-3 bg-red-600 font-bold text-white p-1 rounded-xl active:scale-95 hover:translate-y-[-3px] hover:translate-x-[2px] hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] duration-200'>Deallocate</button>
+
+    </div>
           })
         }
-      </div>
+      </div >
     </div >
   )
 }

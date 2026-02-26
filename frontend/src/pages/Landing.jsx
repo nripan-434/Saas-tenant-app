@@ -1,10 +1,11 @@
 import React from 'react'
+import landing from '../assets/images/landing.png'
 
 const Landing = () => {
   return (
     <div className='flex min-h-500 flex-col'>
       <div className='flex-5'>
-        <img src="https://images.pexels.com/photos/33802167/pexels-photo-33802167.jpeg" alt="" />
+        <img src={landing} alt="" />
         </div>
       <div className='flex-4'>centralized</div>
       <div className='flex-4'>chat</div>

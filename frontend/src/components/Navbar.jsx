@@ -13,8 +13,22 @@ const Navbar = () => {
     <div >
       <div >
       <div className='h-20 z-80 absolute  mt-5  shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0,0,0,0.4)] inset-x-0 fixed z-50 shadow rounded-4xl   top-0 bg-transparent backdrop-blur flex justify-between items-center p-6 '>
+         {
+           user?.role==='user'?<div>
+                      <Link to={'/home'} className='font-(--font-comic) cursor-pointer'>Home</Link> 
+
+
+        </div>:user?.role==='admin'?<div>
+                      <Link to={'/adminhome'} className='font-(--font-comic) cursor-pointer'>Home</Link> 
+
+
+        </div>:
+                      <Link to={'/'} className='font-(--font-comic) cursor-pointer'>Home</Link> 
+
+
+       
+        }
         <div>
-           <h1 className='font-(--font-comic)'></h1> Home
         </div>
       {
         user?.role==='user'?<div>
