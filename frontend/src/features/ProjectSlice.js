@@ -108,7 +108,7 @@ export const ProjectSlice = createSlice({
             .addCase(getmemberprjs.fulfilled, (state, action) => {
                 state.status = 'success'
                 state.memberprjs = action.payload.prjs
-                // console.log('ad')
+                console.log(state.memberprjs )
 
             })
             .addCase(getmemberprjs.rejected, (state, action) => {

@@ -45,6 +45,7 @@ export const getmemberprjs = asyncHandler(async(req,res)=>{
     return res.status(400).json({message:'User and Organization Id required'})
   }
   const prjs = await projectModel.find({organizationId:orgId,members:userId}).populate('createdBy')
+  console.log('asdasd========================'+prjs)
   return res.status(200).json({prjs})
   
 })

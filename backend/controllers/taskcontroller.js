@@ -17,7 +17,7 @@ export const createtask =async(req,res)=>{
     })
     return res.status(201).json({message:"task created successfully"})
    } catch (error) {
-    console.log(error)
+    // console.log(error)
    return res.status(500).json({message:'server error'}) 
    }
 

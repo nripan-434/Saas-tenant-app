@@ -5,7 +5,7 @@ const Landing = () => {
   return (
     <div className='flex min-h-500 flex-col'>
       <div className='flex-5'>
-        <img src={landing} alt="" />
+        <img src={landing} className='h-screen  width-full' alt="" />
         </div>
       <div className='flex-4'>centralized</div>
       <div className='flex-4'>chat</div>

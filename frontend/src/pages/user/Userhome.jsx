@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Menu from '../../components/Menu'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getmemberprjs } from '../../features/ProjectSlice'
 import { IoIosPeople } from "react-icons/io";
@@ -8,6 +8,7 @@ import { IoIosPeople } from "react-icons/io";
 const Userhome = () => {
   const { user } = useSelector(s => s.auth)
   const { memberprjs } = useSelector(s => s.prj)
+  const navigate =useNavigate()
   const dispatch = useDispatch()
   const [menu, setMenu] = useState(false)
   useEffect(() => {
@@ -46,7 +47,8 @@ const Userhome = () => {
         {/* cards */}
         <div className='h-full '>
           {
-            !memberprjs.length===0?
+            memberprjs.length>0?
+            
                       <div className='grid grid-cols-1 gap-4 m-6   md:grid-cols-2 lg:grid-cols-4 '>
             {
               memberprjs?.map(x => {
