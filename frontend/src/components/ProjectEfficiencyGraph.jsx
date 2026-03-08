@@ -26,7 +26,7 @@ const data = projectDurations.map((p) => ({
 
 export default function ProjectEfficiencyGraph() {
   return (
-    <div className="m-5 p-10 bg-gray-100 shadow-xl  rounded-xl" style={{ width: "60%", height: 300 }}>
+    <div className="m-5  p-10 bg-gray-100 shadow-xl  rounded-xl" style={{ width: "90%", height: 300 }}>
       <h3>Project Completion Efficiency</h3>
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>

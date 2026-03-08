@@ -1,7 +1,7 @@
 import React from "react";
 
 const Footer = () => (
-  <footer className="flex z-50 justify-center h-20 items-center text-white bg-[#0C1A2B]  ">
+  <footer className="flex z-50 justify-center border-t-4 border-[#B6FF3B] mt-10 h-20 items-center text-white bg-[#0C1A2B]  ">
     <p>&copy; 2026 AI SaaS Platform. All rights reserved.</p>
   </footer>
 );
