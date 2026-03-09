@@ -8,6 +8,8 @@ import { deallocatemember } from '../../features/ProjectSlice';
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { GrGenai } from "react-icons/gr";
+import { FiEdit } from "react-icons/fi";
+import { createAitask } from '../../features/AiSlice';
 
 const Eachproject = () => {
   const dispatch = useDispatch()
@@ -21,9 +23,23 @@ const Eachproject = () => {
   const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
   const projectmemebers = existmembers[id] || []
+ 
   const project = useMemo(() => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
+   const [prompt,setprompt] = useState('')
+    const handleinput =(e)=>{
+      setprompt(e.target.value)
+    }
+    const handlesubmit = (e)=>{
+      e.preventDefault()
+       console.log("Dispatching AI task",prompt)
+      dispatch(createAitask({projectId:project._id,prompt}))
+
+
+    }
+   const [isopen,setIsopen]=useState(false)
+  
   useEffect(() => {
     if (!id || !project?._id) return;
 
@@ -93,6 +109,7 @@ const Eachproject = () => {
   return (
     <div className="min-h-screen bg-white text-gray-800 p-8 w-full">
       {/* Back Navigation */}
+      <div></div>
       <button
         onClick={() => navigate(-1)}
         className="mb-6 text-sm text-gray-500 hover:text-blue-600"
@@ -139,7 +156,7 @@ const Eachproject = () => {
         </div>
 
         {/* Tasks Section with Toggle & Add Input */}
-        <section className={`${showTasks ? 'h-70' : 'h-15'} duration-300 mb-10 border rounded-xl overflow-hidden`}>
+        <section className={`${showTasks ? 'h-70' : 'h-15'} duration-300 mb-10 border rounded-xl overflow-y-auto`}>
           <button
             onClick={() => setShowTasks(!showTasks)}
             className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 font-semibold"
@@ -149,17 +166,35 @@ const Eachproject = () => {
           </button>
 
           {showTasks && (
-            <div className="p-4">
+            <div className="p-4 ">
               {/* Add Task Space */}
-              <div className=" flex flex-col gap-2   mb-6">
-                <button className='bg-[#B6FF3B] rounded-xl p-3 font-bold w-40 flex justify-center gap-1  items-center'>
-                  Generate Tasks <GrGenai/></button>
+              <div className=" flex flex-col gap-2    mb-6">
+               <div className='flex items-center gap-2'>
+                 <button  onClick={()=>{dispatch(createAitask({projectId:project._id,prompt}))}} className='hover:bg-[#B6FF3B] rounded-xl p-3 font-bold bg-[#B6FF3B]/70 duration-200 w-40 flex justify-center gap-1  items-center'>
+                  Generate Tasks <GrGenai/> 
+                
+
+                    </button>
+                     <button className='flex items-center text-blue-900' onClick={()=>{setIsopen(!isopen)}}> <FiEdit className='text-[15px]  ' />prompt</button>
+                     {
+                      isopen?
+                      <div className=' fixed   bg-black/40 backdrop-blur-2xl  inset-0 z-999 flex justify-center items-center  ' onClick={()=>{setIsopen(false)}}>
+                        <form onSubmit={handlesubmit} onClick={(e) => e.stopPropagation()} action="" className='text-[#B6FF3B] flex flex-col gap-2   bg-[#0C1A2B] rounded-xl p-4'>
+                        <h1 className='text-xl border-b p-1'>Prompt:</h1>
+
+                          <textarea onChange={handleinput}  type="text" className='h-60 mt-4 w-100 break-all outline-0 overflow-x-auto' value={prompt} />
+                          <button className='bg-[#B6FF3B]/70 hover:bg-[#B6FF3B] duration-200 rounded-md p-1 text-[#0C1A2B]' type='submit'> Submit</button>
+                        </form>
+                      </div>
+                       :''
+                     }
+               </div>
                 <input
                   type="text"
                   value={newTask}
                   onChange={(e) => setNewTask(e.target.value)}
                   placeholder="Enter new task..."
-                  className="flex-1 border rounded px-3 py-2 text-sm focus:outline-blue-500"
+                  className="flex-1 border rounded px-3 py-2 text-sm "
                 />
                 <button
                   onClick={handleAddTask}

@@ -39,10 +39,7 @@ export const createAitask = asyncHandler(async (req, res) => {
         } catch (e) {
             tasks = resultText; 
         }
-        res.status(200).json({
-            success: true,
-            tasks
-        });
+        res.status(200).json({tasks});
 
     
 });

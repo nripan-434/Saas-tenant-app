@@ -63,10 +63,10 @@ const Orgadmin = () => {
         </motion.div>
 
         <motion.header
-         initial={{ y: 200 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.1 }}
-          className="flex mt-10 rounded-xl p-10 text-white justify-between border-t-4 border-[#B6FF3B]  shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0.5,0.5,0,0.5)] border-b-4 duration-300 transition-all   items-center mb-2  border-bottom ">
+         initial={{opacity:0,y:110 }}
+          animate={{opacity:1,y:0 }}
+          transition={{ duration: 0.5 }}
+          className="flex mt-10 rounded-xl p-10 text-white justify-between border-t-4 border-[#B6FF3B]  shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0.5,0.5,0,0.5)] border-b-4  items-center mb-2  border-bottom ">
           <div>
             <h1 className="text-3xl font-bold text-[#B6FF3B] ">Projects</h1>
             <p className="text-[#B6FF3B]">Manage organization projects</p>
