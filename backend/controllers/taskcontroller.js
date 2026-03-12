@@ -26,9 +26,24 @@ export const createtask =async(req,res)=>{
 
 export const addaitask = asyncHandler(async(req,res)=>{
     const {task,projectId} = req.body
-    const {organizationId} = req.user
-    if(!task ){
-        return res.status(400).json({message:''})
+    const {organizationId,_id} = req.user
+    // console.log(projectId)
+    console.log(task)
+    if(!task){
+        return res.status(400).json({message:'Task is required'})
     }
+    if(!projectId){
+         return res.status(400).json({message:'Project Id not found!'})
+    }
+    if(!organizationId){
+         return res.status(400).json({message:'Unauthorized Access!'})
+    }
+    const prj = await taskModel.findOne({projectId:projectId})
+    if(prj){
+         return res.status(400).json({message:'Task Already Added!'})
+    }
+    await taskModel.create({title:task.title ,description:task.description,projectId:projectId,createdBy:_id})
+    return res.status(200).json({message:'Task added'})
+    
 
 })

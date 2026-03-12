@@ -19,13 +19,12 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
- const dynamicColor = isScrolled ? 'text-black' : 'text-[#B6FF3B]';
 //  [#B6FF3B] <-green blue-> [#0C1A2B]
 
   return (
     <div >
       <div className='flex justify-center items-center'  >
-      <div className={`h-23  z-80 absolute    ${dynamicColor==='text-[#B6FF3B]'?'mt-5':'shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]  '} inset-x-5 fixed ${dynamicColor} z-50  rounded-b-xl font-bold  top-0 ${dynamicColor==='text-[#B6FF3B]'?'bg-transparent':'bg-[#B6FF3B]/60'} backdrop-blur-sm flex justify-between items-center p-6 transition-all duration-200`}>
+      <div className={`  z-80 absolute text-[#B6FF3B]   inset-x-5 fixed  z-50  rounded-b-xl font-bold  top-0 ${!isScrolled?'mt-5 bg-transparent h-23':'bg-[#0C1A2B]/80 h-18 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]'} backdrop-blur-sm flex justify-between items-center p-6 transition-all duration-200`}>
          {
            user?.role==='user'?<div>
                       <Link to={'/home'} className='font-(--font-comic) cursor-pointer'>Home</Link> 
@@ -48,7 +47,10 @@ const Navbar = () => {
             <Link onClick={()=>{dispatch(logout())}}>logout</Link>
 
         </div> :user?.role==='admin'?<div className='flex gap-3'>
-          <Link to={'/members'}>Members</Link>
+
+          <Link  to={'/members'}>Members</Link>
+
+       
          <Link className="  " onClick={()=>{setInvitebox(!invitebox)}}>{invitebox?'cancel':' InviteMember'}</Link>
             <Link onClick={()=>{dispatch(logout())}}>Logout</Link>
         </div>

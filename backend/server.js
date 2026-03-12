@@ -4,6 +4,7 @@ import { connectDB } from './db.js'
 import Authrouter from './routes/authRoute.js'
 import Projectrouter from './routes/projectRoute.js'
 import aiRouter from './routes/aiRoute.js'
+import taskRouter from './routes/taskRoute.js'
 
 import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler.js'
@@ -14,6 +15,7 @@ app.use(cors())
 app.use('/auth',Authrouter)
 app.use('/project',Projectrouter)
 app.use('/ai',aiRouter)
+app.use('/task',taskRouter)
 app.use(errorHandler)
 
 app.listen(process.env.PORT,()=>{

@@ -45,12 +45,41 @@ const Eachproject = () => {
     
     useEffect(() => {
   if(project?.description){
-    setprompt(`You are a Project Manager. Based on this project:
+    setprompt(`You are a Project Manager.
 
-${project.description}
+Based on the project description: ${project.description}, generate a list of actionable development tasks.
 
-Generate a list of actionable tasks.
-Return ONLY a JSON array of strings.`)
+Each task MUST follow this JSON structure:
+
+{
+  "title": "short task name",
+  "description": "clear explanation of what needs to be done",
+  "priority": "low | medium | high",
+  "status": "todo"
+}
+
+Rules:
+- Return ONLY a valid JSON array.
+- Do NOT include explanations or text outside JSON.
+- Each task should be practical and implementable by a developer.
+- Priority should reflect the logical order of implementation.
+
+Example Output:
+
+[
+  {
+    "title": "Setup database",
+    "description": "Configure MongoDB connection and create initial schemas for users and projects",
+    "priority": "high",
+    "status": "todo"
+  },
+  {
+    "title": "Create authentication API",
+    "description": "Implement user registration and login using JWT authentication",
+    "priority": "high",
+    "status": "todo"
+  }
+]`)
   }
 }, [project])
    const [isopen,setIsopen]=useState(false)
@@ -163,7 +192,7 @@ Return ONLY a JSON array of strings.`)
         </div>
 
         {/* Tasks Section with Toggle & Add Input */}
-        <section className={`${showTasks ? 'h-90' : 'h-15'} duration-300 mb-10 border rounded-xl no-scrollbar overflow-y-auto`}>
+        <section className={`${showTasks ? 'h-100' : 'h-15'} duration-300 mb-10 border rounded-xl no-scrollbar overflow-y-auto`}>
           <button
             onClick={() => setShowTasks(!showTasks)}
             className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 font-semibold"
@@ -197,7 +226,7 @@ Return ONLY a JSON array of strings.`)
                      }
                      
                </div>
-              <Aitasks aitasks={aigentasks} status={aistatus} id={project._id}/>
+              <Aitasks aitasks={aigentasks} status={aistatus} projectId={project._id}/>
                 <input
                   type="text"
                   value={newTask}

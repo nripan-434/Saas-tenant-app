@@ -15,16 +15,47 @@ export const createAitask = asyncHandler(async (req, res) => {
     if (!project) {
         return res.status(404).json({ message: 'Project not found' })
     }
-    const systemPrompt = `You are a Project Manager. Based on the project description :${project.description}, generate a list of actionable tasks. 
-    Return ONLY a valid JSON array of strings.
-    Example: ["Setup database and should be structured", "Create login API and necessary logic", "Design UI"]`
+    const systemPrompt = `You are a Project Manager.
+
+Based on the project description: ${project.description}, generate a list of actionable development tasks.
+
+Each task MUST follow this JSON structure:
+
+{
+  "title": "short task name",
+  "description": "clear explanation of what needs to be done",
+  "priority": "low | medium | high",
+  "status": "todo"
+}
+
+Rules:
+- Return ONLY a valid JSON array.
+- Do NOT include explanations or text outside JSON.
+- Each task should be practical and implementable by a developer.
+- Priority should reflect the logical order of implementation.
+
+Example Output:
+
+[
+  {
+    "title": "Setup database",
+    "description": "Configure MongoDB connection and create initial schemas for users and projects",
+    "priority": "high",
+    "status": "todo"
+  },
+  {
+    "title": "Create authentication API",
+    "description": "Implement user registration and login using JWT authentication",
+    "priority": "high",
+    "status": "todo"
+  }
+]`
 
     const finalPrompt = prompt ===''
         ? systemPrompt
-        : `${prompt}. Project Context: ${project.description} ,Return ONLY a valid JSON array of strings` 
+        : `${prompt}` 
 
-       try {
-         const response = await client.chatCompletion({
+        const response = await client.chatCompletion({
             model: "Qwen/Qwen2.5-7B-Instruct",
             messages: [
                 { role: "system", content: systemPrompt },
@@ -41,10 +72,6 @@ export const createAitask = asyncHandler(async (req, res) => {
             tasks = resultText; 
         }
         res.status(200).json({tasks,projectId});
-       } catch (error) {
-        console.log(error)
-        return res.status(400).json({message:"Ai Model server is down"})  
-       }
 
     
 });
