@@ -3,7 +3,7 @@ import api from "../api/axios";
 import toast from "react-hot-toast";
 
 const initialState = {
-    aitasks: {},
+    aitasks: JSON.parse(localStorage.getItem('aitasks'))||{},
     aistatus: 'success'
 
 }
@@ -33,8 +33,9 @@ const AiSlice = createSlice({
                 state.aistatus = 'fulfilled'
 
                 const { projectId, tasks } = action.payload
-
                 state.aitasks[projectId] = tasks
+                localStorage.setItem('aitasks',JSON.stringify(state.aitasks))
+
             })
             .addCase(createAitask.rejected, (state,action) => {
                 state.aistatus = 'rejected'

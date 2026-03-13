@@ -55,11 +55,10 @@ const Orgadmin = () => {
           transition={{ duration: 0.5 }}
           
           >
-          
-        
+  <h1 className='font-bold text-2xl flex justify-center mb-4 pt-3 pb-3 border-b-2 text-[#B6FF3B] rounded-[10px] border-t-2 border-[#B6FF3B]'>Admin DashBoard</h1>
 
 <div className="grid grid-cols-1 md:grid-cols-5  md:grid-rows-5 md:h-screen gap-4 flex mb-10">
-    <div className="rounded-md md:col-span-3   md:row-span-3  bg-[#B6FF3B] p-1 h-70 md:h-full "><ProjectEfficiencyGraph />1</div>
+    <div className="rounded-md md:col-span-3   md:row-span-3  bg-[#B6FF3B] p-1 h-70 md:h-full "><ProjectEfficiencyGraph /></div>
     <div className="rounded-md md:col-span-2 md:row-span-4 md:col-start-4 bg-[#B6FF3B]">4 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea repudiandae distinctio quas itaque dolorem totam iure adipisci, earum repellat quam possimus soluta incidunt doloremque, nostrum corporis dolores magnam! Quisquam, eaque.</div>
        <div className="rounded-md md:col-start-3 md:row-start-4 bg-[#0C1A2B] flex justify-center shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0.5,0.5,0,0.5)]  items-center"> <motion.h2
           initial={{ y: 200 }}
@@ -103,29 +102,14 @@ const Orgadmin = () => {
 
           </div>
     </div>
-    
- 
 </div>
-    
-
-    
-    
-
-            
-
         </motion.div>
-
         {/* <motion.header
          initial={{opacity:0,y:110 }}
           animate={{opacity:1,y:0 }}
           transition={{ duration: 0.5 }}
           className="flex mt-10 rounded-xl p-10 text-white justify-between border-t-4 border-[#B6FF3B]  shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0.5,0.5,0,0.5)] border-b-4  items-center mb-2  border-bottom ">
-         
-         
         </motion.header> */}
-
-       
-        
         <motion.div
           initial={{ y: 200 }}
           animate={{ y: 0 }}

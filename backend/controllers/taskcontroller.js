@@ -38,7 +38,7 @@ export const addaitask = asyncHandler(async(req,res)=>{
     if(!organizationId){
          return res.status(400).json({message:'Unauthorized Access!'})
     }
-    const prj = await taskModel.findOne({projectId:projectId})
+    const prj = await taskModel.findOne({projectId:projectId,title:task.title})
     if(prj){
          return res.status(400).json({message:'Task Already Added!'})
     }
@@ -47,3 +47,4 @@ export const addaitask = asyncHandler(async(req,res)=>{
     
 
 })
+// getalltask

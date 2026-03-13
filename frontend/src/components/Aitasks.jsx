@@ -11,9 +11,9 @@ const Aitasks = ({aitasks,status,projectId}) => {
             status==='pending'?
             <Loading/>
             :
-            <div className="flex m-4 gap-3 custom-scrollbar transition-all duration-300 overflow-x-auto p-1">
+            <div className="flex mt-3 gap-3 custom-scrollbar transition-all duration-300 overflow-x-auto pb-3">
                 {aitasks?.map(task => (
-                  <div key={task.id} className="flex flex-col gap-2 overflow-x-auto  justify-between min-w-80 items-center p-3 border rounded hover:bg-gray-50">
+                  <div key={task._id} className="flex flex-col gap-2 overflow-x-auto  justify-between min-w-80 items-center p-3 border hover:bg-[#B6FF3B] bg-[#B6FF3B]/90 text-[#0C1A2B] rounded-xl ">
                     <span className="text-[18px] underline font-bold"><span className='font-bold'></span>Task: {task.title}</span>
                     <span className="text-[16px]"><span className='font-bold underline'>Description:</span> {task.description}</span>
                     <span className="text-[16px]"><span className='font-bold underline'>Priority:</span> {task.priority}</span>
