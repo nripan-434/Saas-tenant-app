@@ -47,4 +47,16 @@ export const addaitask = asyncHandler(async(req,res)=>{
     
 
 })
-// getalltask
+// 
+export const getalltask = asyncHandler(async(req, res) => {
+    const { projectId } = req.query; 
+    const { organizationId } = req.user;
+
+    if (!projectId) {
+        return res.status(400).json({ message: 'Project Id is required in query params!' });
+    }
+    
+    const tasks = await taskModel.find({ projectId: projectId });
+
+    return res.status(200).json({ tasks });
+});

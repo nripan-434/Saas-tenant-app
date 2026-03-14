@@ -12,6 +12,7 @@ import { FiEdit } from "react-icons/fi";
 import { createAitask } from '../../features/AiSlice';
 import Aitasks from '../../components/Aitasks';
 import Loading from '../../components/Loading';
+import { getalltask } from '../../features/TaskSlice';
 
 const Eachproject = () => {
   const dispatch = useDispatch()
@@ -21,6 +22,7 @@ const Eachproject = () => {
   const { members, status } = useSelector(s => s.auth)
   const { aitasks ,aistatus} = useSelector(s=>s.ai)
   const { existmembers } = useSelector(s => s.prj)
+  const { tasks } = useSelector(s => s.task)
   const [memtoggle, setMemtoggle] = useState({})
   const [showTasks, setShowTasks] = useState(false);
   const [newTask, setNewTask] = useState("");
@@ -42,7 +44,11 @@ const Eachproject = () => {
 
     }
   const aigentasks=aitasks[project._id]
-    
+   useEffect(() => {
+    if (project?._id) {
+        dispatch(getalltask(project._id));
+    }
+}, [project?._id, dispatch]); // Added dependencies
     useEffect(() => {
   if(project?.description){
     setprompt(`You are a Project Manager.
@@ -192,10 +198,10 @@ Example Output:
         </div>
 
         {/* Tasks Section with Toggle & Add Input */}
-        <section className={`${showTasks ? 'min-h-45 max-h-100' : 'min-h-14'}  top-0 duration-300 mb-10 border rounded-xl no-scrollbar overflow-y-auto`}>
+        <section className={`${showTasks ? 'min-h-45 max-h-100' : 'min-h-14'}  duration-300 mb-10 border rounded-xl no-scrollbar overflow-y-auto`}>
           <button
             onClick={() => setShowTasks(!showTasks)}
-            className="w-full flex justify-between items-center p-4 fixed font-semibold"
+            className="w-full flex justify-between items-center p-4  font-semibold"
           >
             <span>Project Tasks ({aigentasks?.length})</span>
             <span>{showTasks ? '−' : '+'}</span>
@@ -241,7 +247,18 @@ Example Output:
                   Add Task
                 </button>
               </div>
-
+                  <div>
+                    {
+                      tasks.length=='0'?<div>No Tasks Added Yet!</div>:
+                      <div>
+                        {
+                          tasks?.map(x=>{
+                            return <div>{x.title}</div>
+                          })
+                        }
+                      </div>
+                    }
+                  </div>
               {/* Task List Space */}
               
             </div>

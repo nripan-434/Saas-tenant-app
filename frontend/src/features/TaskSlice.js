@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 
 const initialState = {
     taskStatus: 'success',
+    tasks:JSON.parse(localStorage.getItem('tasks'))||[],
 
 
 }
@@ -17,9 +18,9 @@ export const addaitask = createAsyncThunk('post/addaitask', async ({ task, proje
         return rejectWithValue(error);
     }
 })
-export const getalltask = createAsyncThunk('get/getalltask', async ({ projectId }, { rejectWithValue }) => {
+export const getalltask = createAsyncThunk('get/getalltask', async ( projectId , { rejectWithValue }) => {
     try {
-        const res = await api.get('/task/getalltask', { projectId })
+        const res = await api.get(`/task/getalltask?projectId=${projectId}`)
         return res.data
 
     } catch (error) {
@@ -53,12 +54,12 @@ const TaskSlice = createSlice({
             })
             .addCase(getalltask.fulfilled, (state, action) => {
                 state.taskStatus = 'fulfilled'
-                toast.success(action.payload.message)
-
+                state.tasks=action.payload.tasks
+                console.log(state.tasks)
+                localStorage.setItem('tasks',JSON.stringify(state.tasks))
             })
             .addCase(getalltask.rejected, (state, action) => {
                 state.taskStatus = 'rejected'
-                toast.error(action.payload.message)
             })
     }
 
