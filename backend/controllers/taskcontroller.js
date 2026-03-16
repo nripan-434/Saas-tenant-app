@@ -4,9 +4,9 @@ import taskModel from "../models/taskModel.js"
 
 export const createtask =async(req,res)=>{
    try {
-     const {title,description,user}=req.body
+     const {title,description}=req.body
     if(!title||!description){
-        return res.status(422).json({message:"Please fill in all required fields"})
+        return res.status(400).json({message:"Please fill in all required fields"})
     }
     const userId = req.user._id;
     const titleexist = await taskModel.findOne({title:title,user:userId})

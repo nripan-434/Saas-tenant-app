@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { inviteMember, logout } from '../features/AuthSlice'
 import InvitationCard from './InvitationCard'
+import Menu from './Menu'
+import { motion } from 'framer-motion'
 const Navbar = () => {
+  const [menu, setMenu]=useState(false)
   const  {user}=useSelector(x=>x.auth)
   const dispatch=useDispatch()
    const [invitebox,setInvitebox] = useState(false)
@@ -40,13 +43,44 @@ const Navbar = () => {
 
        
         }
-        <div>
+      <div className='flex md:hidden'>
+        <Menu menu={menu}  setMenu={setMenu} />
+      </div>
+      <motion.div 
+       initial={{opacity:0,x:20}}
+        animate={{opacity:menu ?1:0,x:menu ?0:20}}
+        transition={{duration:0.3}}
+      className={`absolute rounded-xl md:hidden backdrop-blur-md bg-[#0C1A2B]/80 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5  top-20 right-0`}>
+       
+           {
+        user?.role==='user'?<div className='flex flex-col'>
+            <Link onClick={()=>{dispatch(logout())}}>logout</Link>
+
+        </div> :user?.role==='admin'?<div className='flex flex-col gap-3'>
+
+          <Link  to={'/members'}>Members</Link>
+
+       
+         <Link className="  " onClick={()=>{setInvitebox(!invitebox)}}>{invitebox?'cancel':' InviteMember'}</Link>
+            <Link onClick={()=>{dispatch(logout())}}>Logout</Link>
         </div>
-      {
+        
+         :<div className='flex flex-col gap-3 '>
+            <Link to={'/login'}>Sign in</Link>
+            <Link to={'/register'}>Register</Link>
+            
+        </div>
+        
+      }
+        </motion.div>
+
+     
+    <div className='hidden md:flex'>
+        {
         user?.role==='user'?<div>
             <Link onClick={()=>{dispatch(logout())}}>logout</Link>
 
-        </div> :user?.role==='admin'?<div className='flex gap-3'>
+        </div> :user?.role==='admin'?<div className='flex  gap-3'>
 
           <Link  to={'/members'}>Members</Link>
 
@@ -62,6 +96,7 @@ const Navbar = () => {
         </div>
         
       }
+    </div>
         
       </div>
 
