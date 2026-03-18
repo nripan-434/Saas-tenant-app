@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <div >
       <div className='flex justify-center items-center'  >
-      <div className={`  z-80 absolute text-[#B6FF3B]   inset-x-5 fixed  z-50  rounded-b-xl font-bold  top-0 ${!isScrolled?'mt-5 bg-transparent h-23':'bg-[#0C1A2B]/80 h-18 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]'} backdrop-blur-sm flex justify-between items-center p-6 transition-all duration-200`}>
+      <div className={`  z-80 absolute text-[#B6FF3B]   inset-x-5 fixed  z-50   rounded-b-xl font-bold  top-0 ${!isScrolled?'mt-5 bg-transparent h-23':'bg-[#0C1A2B]/80 h-18 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]'} backdrop-blur-md flex justify-between items-center p-6 transition-all duration-200`}>
          {
            user?.role==='user'?<div>
                       <Link to={'/home'} className='font-(--font-comic) cursor-pointer'><img className='h-13 w-38' src={logo} alt="" /></Link> 
@@ -51,7 +51,7 @@ const Navbar = () => {
        initial={{opacity:0,x:20}}
         animate={{opacity:menu ?1:0,x:menu ?0:20}}
         transition={{duration:0.3}}
-      className={`absolute rounded-xl md:hidden backdrop-blur-md bg-[#0C1A2B]/80 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5  top-20 right-0`}>
+      className='absolute rounded-xl md:hidden  bg-[#0C1A2B] shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5  top-20 right-0'>
        
            {
         user?.role==='user'?<div className='flex flex-col'>

@@ -93,7 +93,7 @@ const Orgadmin = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full border-2 border-dashed p-10 text-center text-gray-400">
+              <div className=" w-full border-2 border-dashed p-10 text-center text-gray-400">
                 No projects found.
               </div>
             )}

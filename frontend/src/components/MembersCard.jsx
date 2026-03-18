@@ -23,12 +23,12 @@ const MembersCard = ({ members, orgId }) => {
                                 }} className='cursor-pointer absolute bottom-2 right-4 bg-red-700 text-white rounded-xl  p-2'>remove</button>
 {
           pending && (
-            <div onClick={()=>{setPending(null)}} className="fixed inset-0 bg-black/40 flex items-center justify-center z-100">
+            <div onClick={()=>{setPending(null)}} className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-100">
               <motion.div 
               initial={{y:40,opacity:0}}
               animate={{y:0,opacity:1}}
               transition={{duration:0.3}}
-              className="bg-white p-6 rounded-xl shadow-xl">
+              className="bg-[#0C1A2B] p-6 rounded-xl shadow-xl">
                 <p className="mb-4">Member will be removed from the Organization </p>
                 <div className="flex gap-4 justify-center">
                   <button

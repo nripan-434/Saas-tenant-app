@@ -50,6 +50,7 @@ Example Output:
     "status": "todo"
   }
 ]`
+console.log(prompt)
 
     const finalPrompt = prompt ===''
         ? `${systemPrompt}. Return ONLY a valid JSON array.`
