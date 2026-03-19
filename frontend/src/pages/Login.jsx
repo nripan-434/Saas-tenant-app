@@ -64,42 +64,41 @@ const Login = () => {
                     initial={{   y: 50 }}
                     animate={{  y: 0 }}
                     transition={{ duration: 0.3 }}
-                    className='bg-[#B6FF3B]  absolute h-full w-full rounded-t-full lg:rounded-none lg:rounded-tl-full  -z-20  '>
+                    className='bg-[#B6FF3B]  absolute h-full w-full rounded-t-full lg:rounded-none lg:rounded-tl-[860px]  -z-20  '>
 
 
                 </motion.div>
                 {/* element */}
                 <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1, y: [0, 10, 0], rotate: [0, 6, 0] }}
+                    animate={{ opacity: 1, y: [0, 10, 0], rotate: [0, 2, 0] }}
                     transition={{ opacity: 1, repeat: Infinity, duration: 2.8 }}
-                    className='text-transparent lg:top-10 lg:left-22 shadow-[0_0_10px_rgba(0,0,0,1)] top-10 left-8 -z-20 h-6  w-6 md:h-30 md:w-30 border lg:border-80 border-45 border-r-transparent   bg-transparent absolute bottom-4 rounded-md'>
-
+                    className='text-[#B6FF3B]  lg:top-10 lg:left-22 shadow-[0_0_10px_rgba(0,0,0,1)] flex items-center justify-center top-10 left-8 -z-20 h-6  w-6 md:h-30 md:w-30 border lg:border-80 border-45    bg-transparent absolute bottom-4 rounded-xl  '>
 
                 </motion.div>
 
                 <motion.div
                     initial={{ opacity: 0  }}
-                    animate={{ opacity: 1, y: [0, 10, 0] }}
+                    animate={{ opacity: 1, y: [0, 10, 0] ,rotate: [0, 6, 0] }}
                     transition={{ opacity: 1, repeat: Infinity, duration: 3.8 }}
-                    className=' text-transparent lg:top-45 lg:left-16 shadow-[0_0_10px_rgba(0,0,0,1)] top-3 left-5  -z-10  h-10 w-10 md:h-14 md:w-14 md:top-0 border lg:border-22 border-10   bg-transparent absolute bottom-4 rounded-md'>
-
+                    className=' text-[#B6FF3B]   lg:top-45 lg:left-16 shadow-[0_0_10px_rgba(0,0,0,1)] top-3 left-5  -z-10  h-10 w-10 md:h-14 md:w-14 md:top-0 border lg:border-30 border-10   bg-transparent absolute bottom-4 rounded-xl'>
+                            
 
                 </motion.div>
                 <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1, y: [0, 10, 0], rotate: [0, 6, 0] }}
+                    animate={{ opacity: 1, y: [0, 10, 0],  rotate: [0, 2, 0] }}
                     transition={{ opacity: 1, repeat: Infinity, duration: 3.8 }}
-                    className=' text-transparent lg:bottom-10 lg:right-14 shadow-[0_0_10px_rgba(0,0,0,1)] bottom-10 right-8 -z-20 h-10 w-10 border lg:border-80 border-45    bg-transparent rounded-md absolute '>
+                    className='  text-[#B6FF3B]  lg:bottom-15 lg:right-14 shadow-[0_0_10px_rgba(0,0,0,1)] bottom-10 right-8 -z-20 h-10 w-10 border lg:border-80 border-45    bg-transparent rounded-xl absolute '>
 
 
                 </motion.div>
 
                 <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1, y: [0, 10, 0] }}
+                    animate={{ opacity: 1, y: [0, 10, 0],rotate: [0, 6, 0]   }}
                     transition={{ opacity: 1, repeat: Infinity, duration: 3.8 }}
-                    className=' text-transparent lg:bottom-45 lg:right-6 shadow-[0_0_10px_rgba(0,0,0,1)] bottom-4 right-5  -z-10  h-10 w-10 border md:h-14 md:w-14 lg:border-22 border-10 rounded-md  bg-transparent absolute '>
+                    className='  text-[#B6FF3B]  lg:bottom-10 lg:right-6 shadow-[0_0_10px_rgba(0,0,0,1)] bottom-4 right-5  -z-10  h-10 w-10 border md:h-14 md:w-14 lg:border-30 border-10 rounded-xl  bg-transparent absolute '>
 
 
                 </motion.div>

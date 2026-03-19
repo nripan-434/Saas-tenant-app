@@ -17,7 +17,7 @@ export const addnewtask =async(req,res)=>{
     const task1=await taskModel.create({
         title:task.title,description:task.description,priority:task.priority,createdBy:userId,projectId:projectId
     })
-    return res.status(201).json({message:"task created successfully"})
+    return res.status(201).json({message:"task created successfully",task:task1})
 }
 
 export const addaitask = asyncHandler(async(req,res)=>{
@@ -55,3 +55,19 @@ export const getalltask = asyncHandler(async(req, res) => {
 
     return res.status(200).json({ tasks });
 });
+export const removetask = async (req, res) => {
+  const { taskId } = req.params
+  const userId = req.user._id
+console.log(userId)
+console.log(taskId)
+  const task = await taskModel.findOne({ _id:taskId,createdBy:userId})
+
+  if (!task) {
+    return res.status(404).json({ message: "Task not found" })
+  }
+
+  await task.deleteOne()
+
+  return res.status(200).json({
+    message: "Task deleted successfully",taskId})
+}

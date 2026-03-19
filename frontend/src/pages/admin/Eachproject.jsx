@@ -11,7 +11,6 @@ import { GrGenai } from "react-icons/gr";
 import { FiEdit } from "react-icons/fi";
 import { createAitask } from '../../features/AiSlice';
 import Aitasks from '../../components/Aitasks';
-import Loading from '../../components/Loading';
 import { addnewtask, getalltask } from '../../features/TaskSlice';
 import Tasklist from '../../components/Tasklist';
 import { useRef } from 'react';
@@ -38,7 +37,7 @@ const Eachproject = () => {
   const { tasks } = useSelector(s => s.task)
   const [memtoggle, setMemtoggle] = useState({})
   // const [showTasks, setShowTasks] = useState(false);
-  const [newTask, setNewTask] = useState("");
+  // const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
   const projectmemebers = existmembers[id] || []
   const project = useMemo(() => {
@@ -159,6 +158,12 @@ Example Output:
   const handletaskAddsubmit=(e)=>{
     e.preventDefault()
     dispatch(addnewtask({task,projectId:project._id}))
+  
+    setTask({
+       title:'',
+    description:'',
+    priority:'medium'
+    })
   }
 
 
@@ -229,7 +234,7 @@ Example Output:
                   </div>
                   <div className='flex flex-col'>
                     <label htmlFor="">Description :</label>
-                    <input onChange={handledata} name='description' value={task.description} className='outline-0' type="text" placeholder='add auth and jwt for authentication' />
+                    <textarea onChange={handledata} name='description' value={task.description} className='outline-0' type="text" placeholder='add auth and jwt for authentication' />
                   </div>
                   <div className='flex'>
                     <label htmlFor="">Priority :</label>
