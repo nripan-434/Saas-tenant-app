@@ -80,9 +80,10 @@ const Orgadmin = () => {
               projects.map((prj) => (
                 <motion.div
                   
-                  key={prj._id} className="  hover:scale-104 max-w-80 min-w-70 no-scrollbar overflow-y-auto duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl shadow-sm bg-[#0C1A2B]">
-                  <div className="flex justify-between mb-2 text-[#B6FF3B]">
+                  key={prj._id} className="  hover:scale-104 max-w-80 min-w-70  overflow-y-auto  no-scrollbar duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl shadow-sm bg-[#0C1A2B]">
+                  <div className="flex justify-between items-center mb-2 text-[#B6FF3B]">
                     <span className="text-xs uppercase font-bold ">Active</span>
+                    <span className={`${prj.status=='overdue'?'bg-red-500':prj.status=='overdue'?'bg-yellow-500':'bg-[#B6FF3B] '} px-1 text-[#0C1A2B] rounded-xl`}>Deadline: {new Date(prj.deadline).toLocaleDateString()}</span>
                   </div>
                   <h3 className="text-xl text-[#B6FF3B] font-semibold">{prj.name}</h3>
                   <p className="text-[#B6FF3B] text-sm  my-2">{prj.description || "No description provided."}</p>

@@ -13,7 +13,7 @@ const MembersCard = ({ members, orgId }) => {
             {
                 members?.length === '0' ? <div>No members</div> :
                     members?.map(x => {
-                        return <div key={x._id} className='relative overflow-x-auto shadow-black shadow-[0_0_20px_rgba(0,0,0,0.3)] bg-[#0C1A2B] text-[#B6FF3B] p-5 rounded-xl'>
+                        return <div key={x._id} className='relative overflow-x-auto  shadow-black shadow-[0_0_20px_rgba(0,0,0,0.3)] bg-[#0C1A2B] text-[#B6FF3B] p-5 rounded-xl'>
                             <h1 className='text-2xl font-[moto]'>Name:{x.name}</h1>
                             <h1 className='text-[19px]'>email:{x.email}</h1>
                             <h1>status</h1>
@@ -23,7 +23,7 @@ const MembersCard = ({ members, orgId }) => {
                                 }} className='cursor-pointer absolute bottom-2 right-4 bg-red-700 text-white rounded-xl  p-2'>remove</button>
 {
           pending && (
-            <div onClick={()=>{setPending(null)}} className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-100">
+            <div onClick={()=>{setPending(null)}} className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center">
               <motion.div 
               initial={{y:40,opacity:0}}
               animate={{y:0,opacity:1}}

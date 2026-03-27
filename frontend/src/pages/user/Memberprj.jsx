@@ -87,9 +87,10 @@ const Memberprj = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <StatCard icon={<IoIosPeople className="text-blue-500 " />} label="Team Members :" value={project.members?.length || 0} />
           <StatCard icon={<IoIosTime className="text-green-500" />} label="Status :" value="Active" />
+          <StatCard icon={<IoIosTime className="text-green-500" />} label="Deadline :" value={new Date(project.deadline).toLocaleDateString()} />
           <StatCard icon={<IoIosRocket className="text-purple-500" />} label="Remaining Tasks :" value={remainingtask.length} />
         </div>
         {

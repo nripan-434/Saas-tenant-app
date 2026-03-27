@@ -101,7 +101,7 @@ Example Output:
 ]`)
     }
   }, [project])
-  
+
   const [isopen, setIsopen] = useState(false)
   useEffect(() => {
     if (!id || !project?._id) return;
@@ -135,7 +135,7 @@ Example Output:
     }
   };
   const progress = 20;
-  const deadline = "2024-12-31";
+  const deadline = new Date(project.deadline).toLocaleDateString();
   // if (!project) {
   //   return (
   //     <div className="p-8 text-center">
@@ -162,7 +162,7 @@ Example Output:
 
     setTask({
       title: '',
-      description: '',  
+      description: '',
       priority: 'medium'
     })
   }
@@ -191,10 +191,10 @@ Example Output:
         </header>
         {/* Deadline & Progress Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          <div className="p-4  rounded-xl border">
+          <div className={`${project.status=='overdue'?'bg-red-500':project.status=='overdue'?'bg-yellow-500':''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5 rounded-xl `}>
             <h3 className="text-xs font-bold  uppercase mb-2">Deadline</h3>
             <p className="text-lg font-semibold text-orange-600">
-              {new Date(deadline).toLocaleDateString()}
+              {new Date(project.deadline).toLocaleDateString()}
             </p>
           </div>
           <div className="p-4  rounded-xl border flex flex-col items-start justify-between">
@@ -338,37 +338,92 @@ Example Output:
           }
         </div>
       </div>
-      <div className={`${projectmemebers.length === 0 ? 'bg-none' : 'shadow-[0_3px_5px_rgba(0,0,0,2.1)]'} mb-10  flex gap-3 p-5  rounded-xl overflow-x-auto custom-scrollbar`}>
-        {
-          projectmemebers?.map(x => {
-            return <div key={x._id} className={` relative shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]   hover:rounded-none     rounded-[25px] duration-300 hover:shadow-[5px_3px_30px_rgba(0,0,0,2.1)] min-w-60 max-w-60 p-4 `}>
-              <div className='justify-center items-center flex'>
-              <div className='rounded-full h-16 w-16 justify-center items-center flex  font-bold text-2xl bg-[#B6FF3B] text-[#0C1A2B]'>{x.name.charAt([0]).toUpperCase()} </div>
-              </div>
-              <div className='p-2 min-h-26  '>
-                <h1 className='font-bold'>Name : <span className='font-light'>{x.name}</span> </h1>
-                <h2 className='font-bold'>Email : <span className='font-light'>{x.email}</span></h2>
-              </div>
+      <div
+  className={`${
+    projectmemebers.length === 0
+      ? ""
+      : "shadow-[0_3px_5px_rgba(0,0,0,2.1)]"
+  } mb-10 flex items-start gap-3 p-5 rounded-xl overflow-x-auto custom-scrollbar`}
+>
+  {projectmemebers?.map((x) => {
+    return (
+      <div
+        key={x._id}
+        className="shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] hover:rounded-none rounded-[25px] duration-300 hover:shadow-[5px_3px_30px_rgba(0,0,0,2.1)] min-w-60 max-w-60 p-4 flex flex-col"
+      >
+        {/* Avatar */}
+        <div className="flex justify-center items-center">
+          <div className="rounded-full h-16 w-16 flex justify-center items-center font-bold text-2xl bg-[#B6FF3B] text-[#0C1A2B]">
+            {x.name.charAt(0).toUpperCase()}
+          </div>
+        </div>
 
-              <p onClick={() => setMemtoggle(prev => ({ ...prev, [x._id]: !prev[x._id] }))} className=' ml-2 mb-3  font-bold text-blue-400 underline flex items-center gap-1 cursor-pointer '>Activein <FaArrowDown className='text-[15px]' />  </p>
+        {/* Info */}
+        <div className="p-2 min-h-26">
+          <h1 className="font-bold">
+            Name : <span className="font-light">{x.name}</span>
+          </h1>
+          <h2 className="font-bold">
+            Email : <span className="font-light">{x.email}</span>
+          </h2>
+        </div>
+
+        {/* Toggle */}
+    
+          <p
+          onClick={() =>
+            setMemtoggle((prev) => ({
+              ...prev,
+              [x._id]: !prev[x._id],
+            }))
+          }
+          className="ml-2 mb-2 justify-between  font-bold text-blue-400  flex items-center gap-1 cursor-pointer"
+        >
+         <button className='flex underline justify-center items-center gap-1' >
+           Activein
+          <FaArrowDown
+            className={`text-[15px] transition-transform ${
+              memtoggle[x._id] ? "rotate-180" : ""
+            }`}
+          />
+         </button>
+           <button
+          onClick={() =>
+            dispatch(
+              deallocatemember({ userId: x._id, projectId: id })
+            )
+          }
+          className=" mt-3 self-end bg-red-600 font-bold text-white px-2 py-1 rounded-xl active:scale-95 hover:shadow-[0_0px_10px_rgba(255,0,0,0.8)] duration-200"
+        >
+          Deallocate
+        </button>
+        </p>
+     
+
+        <div
+          className={`shadow-[0_3px_5px_rgba(0,0,0,0.5)] custom-scrollbar rounded-xl flex gap-2 overflow-x-auto w-full transition-all duration-300 ${
+            memtoggle[x._id]
+              ? "opacity-100 h-auto p-3"
+              : "opacity-0 h-0 p-0 overflow-hidden"
+          }`}
+        >
+          {x.projects?.length > 0 &&
+            x.projects.map((p) => (
               <div
-                className={`absolute shadow-[0_3px_5px_rgba(0,0,0,2.1)] mt-3 custom-scrollbar   left-0 rounded-b-xl right-auto flex gap-2 p-3 overflow-x-auto  w-full transition-all duration-400 ${memtoggle[x._id] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
-                  }`}
+                key={p._id}
+                className="flex-shrink-0 text-[#0C1A2B] bg-[#B6FF3B] rounded-md px-2 py-1 "
               >
-                {
-                  x.projects.length > 0 ?
-                    x.projects?.map(p => (
-                      <div key={p._id} className="flex-shrink-0 text-[#0C1A2B]   bg-[#B6FF3B] rounded-md p-2">
-                        {p.name}
-                      </div>
-                    )) : <p></p>
-                }
+                {p.name}
               </div>
-              < button onClick={() => { dispatch(deallocatemember({ userId: x._id, projectId: id })) }} className='absolute bottom-5 right-3 bg-red-600 font-bold text-white p-1 rounded-xl active:scale-95 hover:shadow-[0_0px_10px_rgba(255,0,0,2.1)] duration-200'>Deallocate</button>
-            </div>
-          })
-        }
-      </div >
+            ))}
+        </div>
+
+       
+      </div>
+    );
+  })}
+</div>
+
     </div >
   )
 }

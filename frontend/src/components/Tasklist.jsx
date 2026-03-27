@@ -76,7 +76,7 @@ const Tasklist = ({ tasks, members }) => {
                     <div className='flex  justify-between w-full gap-2 font-bold'>
                       <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white' onClick={() => { setIsremove(x._id) }}>remove</button>
                       {
-                        isremove == x._id ? <div onClick={() => { setIsremove(null) }} className=' text-[#B6FF3B]  inset-0 z-999 fixed flex justify-center items-center  min-h-screen bg-black/50 backdrop-blur-md'>
+                        isremove == x._id ? <div onClick={() => { setIsremove(null) }} className=' text-[#B6FF3B]  inset-0 z-100 fixed flex justify-center items-center  min-h-screen bg-black/50 backdrop-blur-md'>
                           <motion.div
                             initial={{ opacity: 0, y: 40 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -93,7 +93,7 @@ const Tasklist = ({ tasks, members }) => {
                         </div> : ''
                       }
 
-                      <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B]/90 p-1 font-light rounded-sm text-white' onClick={() => { setIsupdate(x) }}>update</button>
+                      <button className={`${x.status == 'done' ? 'hidden' : ''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B]/90 p-1 font-light rounded-sm text-white`} onClick={() => { setIsupdate(x) }}>update</button>
                       {
                         isupdate == x ? <div onClick={() => { setIsupdate({}) }} className='fixed backdrop-blur-md flex justify-center items-center inset-0 bg-black/50'>
 
@@ -103,7 +103,7 @@ const Tasklist = ({ tasks, members }) => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4 }}
                             onClick={(e) => { e.stopPropagation() }}
-                            className='z-999 relative text-[#B6FF3B] w-120 mt-15 flex flex-col gap-4 bg-[#0C1A2B] p-9 rounded-xl '>
+                            className='z-109 relative text-[#B6FF3B] w-120 mt-15 flex flex-col gap-4 bg-[#0C1A2B] p-9 rounded-xl '>
                             <div className='flex gap-2 flex-col'>
                               <label className='' htmlFor="">Task : </label>
                               <input onChange={handleChange} name='title' type="text" className='outline-1 outline-white focus:outline-3 focus:outline-[#B6FF3B]  rounded-md p-2' value={form.title} />
@@ -123,6 +123,18 @@ const Tasklist = ({ tasks, members }) => {
                               </select>
 
                             </div>
+                            <div className='flex flex-col gap-2 w-full'>
+                              <label>Deadline :</label>
+                              <input
+                                type="date"
+                                name="deadline"
+                                value={form.startDate}
+                                onChange={handleChange}
+                                className='rounded-md border border-white p-2'
+                              />
+                            </div>
+
+
                             {/* <div className='flex gap-2 flex-col'>
                                 <label className='' htmlFor="">Status : </label>
                               <input type="text" onChange={handleChange} name='status' className='outline-1 outline-white focus:outline-3  focus:outline-[#B6FF3B]  rounded-md p-2' value={form.status} />
@@ -139,7 +151,7 @@ const Tasklist = ({ tasks, members }) => {
                       }
                       {
                         x.assignedTo ?
-                          <button className='font-medium  text-[#0C1A2B] p-1 text-sm rounded-sm ' >Assigned to {x.assignedTo.name}</button>
+                          <button className={`font-medium  ${x.status == 'done' ? 'text-[#0C1A2B]' : 'text-[#B6FF3B]'} p-1 text-sm rounded-sm `} >Assigned to {x.assignedTo.name}</button>
                           :
                           <button className=' font-light shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B] p-1 rounded-sm text-white' onClick={() => { setIsassign(x._id) }}>+assign</button>
 
@@ -155,11 +167,11 @@ const Tasklist = ({ tasks, members }) => {
 
                             onClick={(e) => e.stopPropagation()} className='bg-[#0C1A2B] p-7 max-w-180 overflow-x-auto custom-scrollbar shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)]  flex flex-col  gap-5 rounded-xl text-[#B6FF3B]'>
                             <h1>Available Members :</h1>
-                            <div className='flex gap-6'>
+                            <div className='flex   gap-6'>
                               {
-                                members ?
+                                members.length == 0 ? <div className='text-sm font-light flex justify-center items-center '>No members</div> :
                                   members?.map(x => {
-                                    return <div className=" relative flex flex-col items-center justify-between   p-4  rounded-2xl shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] ">
+                                    return <div key={x._id} className={`flex flex-col gap-1 custom-scrollbar  overflow-x-auto items-center ${x.status != 'done' ? 'text-[#B6FF3B]  shadow-[inset_5px_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]' : 'bg-[#B6FF3B]'}  justify-between min-w-80 max-w-100  p-3  /90 text-[#0C1A2B] rounded-xl `}>
 
                                       <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#B6FF3B] text-[#0C1A2B] font-bold text-xl ">
                                         {x.name.charAt(0)}
@@ -178,7 +190,7 @@ const Tasklist = ({ tasks, members }) => {
                                         Tasks assigned
                                       </button>
                                     </div>
-                                  }) : 'No members'
+                                  })
                               }
                             </div>
                           </motion.div>
@@ -201,7 +213,7 @@ const Tasklist = ({ tasks, members }) => {
             <div className='flex gap-2 rounded-xl overflow-x-auto  custom-scrollbar pb-5 '>
               {
                 inprogresstasks?.map(x => {
-                  return <div key={x._id} className={`flex flex-col gap-1 custom-scrollbar  overflow-x-auto items-start ${x.status == 'done' ? 'bg-green-600' : 'bg-[#B6FF3B]'}  justify-between min-w-80 max-w-100  p-3 border /90 text-[#0C1A2B] rounded-xl `}>
+                  return <div key={x._id} className={`flex flex-col gap-1 custom-scrollbar  overflow-x-auto items-start ${x.status != 'done' ? 'text-[#B6FF3B]  shadow-[inset_5px_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]' : 'bg-[#B6FF3B]'}  justify-between min-w-80 max-w-100  p-3  /90 text-[#0C1A2B] rounded-xl `}>
                     <span className="text-[18px] underline font-bold"><span className='font-bold'></span>Task: {x.title}</span>
                     <span className="text-[16px]"><span className='font-bold'>Description:</span> {x.description}</span>
                     <span className="text-[16px]"><span className='font-bold'>Priority:</span> {x.priority}</span>
@@ -226,7 +238,7 @@ const Tasklist = ({ tasks, members }) => {
                         </div> : ''
                       }
 
-                      <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B]/90 p-1 font-light rounded-sm text-white' onClick={() => { setIsupdate(x) }}>update</button>
+                      <button className={`${x.status == 'done' ? 'hidden' : ''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B]/90 p-1 font-light rounded-sm text-white`} onClick={() => { setIsupdate(x) }}>update</button>
                       {
                         isupdate == x ? <div onClick={() => { setIsupdate({}) }} className='fixed backdrop-blur-md flex justify-center items-center inset-0 bg-black/50'>
 
@@ -272,7 +284,7 @@ const Tasklist = ({ tasks, members }) => {
                       }
                       {
                         x.assignedTo ?
-                          <button className='font-medium  text-[#0C1A2B] p-1 text-sm rounded-sm ' >Assigned to {x.assignedTo.name}</button>
+                          <button className={`font-medium  ${x.status == 'done' ? 'text-[#0C1A2B]' : 'text-[#B6FF3B]'} p-1 text-sm rounded-sm `} >Assigned to {x.assignedTo.name}</button>
                           :
                           <button className=' font-light shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B] p-1 rounded-sm text-white' onClick={() => { setIsassign(x._id) }}>+assign</button>
 
@@ -292,7 +304,7 @@ const Tasklist = ({ tasks, members }) => {
                               {
                                 members ?
                                   members?.map(x => {
-                                    return <div className=" relative flex flex-col items-center justify-between   p-4  rounded-2xl shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] ">
+                                    return <div key={x._id} className={`flex flex-col gap-1 custom-scrollbar  overflow-x-auto items-start ${x.status != 'done' ? 'text-[#B6FF3B]  shadow-[inset_5px_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]' : 'bg-[#B6FF3B]'}  justify-between min-w-80 max-w-100  p-3  /90 text-[#0C1A2B] rounded-xl `}>
 
                                       <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#B6FF3B] text-[#0C1A2B] font-bold text-xl ">
                                         {x.name.charAt(0)}
@@ -359,7 +371,7 @@ const Tasklist = ({ tasks, members }) => {
                         </div> : ''
                       }
 
-                      <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B]/90 p-1 font-light rounded-sm text-white' onClick={() => { setIsupdate(x) }}>update</button>
+                      <button className={`${x.status == 'done' ? 'hidden' : ''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B]/90 p-1 font-light rounded-sm text-white`} onClick={() => { setIsupdate(x) }}>update</button>
                       {
                         isupdate == x ? <div onClick={() => { setIsupdate({}) }} className='fixed backdrop-blur-md flex justify-center items-center inset-0 bg-black/50'>
 
@@ -405,7 +417,7 @@ const Tasklist = ({ tasks, members }) => {
                       }
                       {
                         x.assignedTo ?
-                          <button className='font-medium  text-[#0C1A2B] p-1 text-sm rounded-sm ' >Assigned to {x.assignedTo.name}</button>
+                          <button className={`font-medium  ${x.status == 'done' ? 'text-[#0C1A2B]' : 'text-[#B6FF3B]'} p-1 text-sm rounded-sm `} >Assigned to {x.assignedTo.name}</button>
                           :
                           <button className=' font-light shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B] p-1 rounded-sm text-white' onClick={() => { setIsassign(x._id) }}>+assign</button>
 
@@ -467,7 +479,7 @@ const Tasklist = ({ tasks, members }) => {
             <div className='flex gap-2 rounded-xl overflow-x-auto  custom-scrollbar pb-5 '>
               {
                 completedtasks?.map(x => {
-                   return <div key={x._id} className={`flex flex-col gap-1 custom-scrollbar  overflow-x-auto items-start ${x.status != 'done' ? 'text-[#B6FF3B]  shadow-[inset_5px_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]' : 'bg-[#B6FF3B]'}  justify-between min-w-80 max-w-100  p-3  /90 text-[#0C1A2B] rounded-xl `}>
+                  return <div key={x._id} className={`flex flex-col gap-1 custom-scrollbar  overflow-x-auto items-start ${x.status != 'done' ? 'text-[#B6FF3B]  shadow-[inset_5px_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]' : 'bg-[#B6FF3B]'}  justify-between min-w-80 max-w-100  p-3  /90 text-[#0C1A2B] rounded-xl `}>
                     <span className="text-[18px] underline font-bold"><span className='font-bold'></span>Task: {x.title}</span>
                     <span className="text-[16px]"><span className='font-bold'>Description:</span> {x.description}</span>
                     <span className="text-[16px]"><span className='font-bold'>Priority:</span> {x.priority}</span>
@@ -492,7 +504,7 @@ const Tasklist = ({ tasks, members }) => {
                         </div> : ''
                       }
 
-                      <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B]/90 p-1 font-light rounded-sm text-white' onClick={() => { setIsupdate(x) }}>update</button>
+                      <button className={`${x.status == 'done' ? 'hidden' : ''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B]/90 p-1 font-light rounded-sm text-white`} onClick={() => { setIsupdate(x) }}>update</button>
                       {
                         isupdate == x ? <div onClick={() => { setIsupdate({}) }} className='fixed backdrop-blur-md flex justify-center items-center inset-0 bg-black/50'>
 
@@ -538,7 +550,7 @@ const Tasklist = ({ tasks, members }) => {
                       }
                       {
                         x.assignedTo ?
-                          <button className='font-medium  text-[#0C1A2B] p-1 text-sm rounded-sm ' >Assigned to {x.assignedTo.name}</button>
+                          <button className={`font-medium  ${x.status == 'done' ? 'text-[#0C1A2B]' : 'text-[#B6FF3B]'} p-1 text-sm rounded-sm `} >Assigned to {x.assignedTo.name}</button>
                           :
                           <button className=' font-light shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] bg-[#0C1A2B] p-1 rounded-sm text-white' onClick={() => { setIsassign(x._id) }}>+assign</button>
 
@@ -568,9 +580,7 @@ const Tasklist = ({ tasks, members }) => {
                                         <h1 className="text-[#B6FF3B] font-semibold mb-4 w-32">{x.name}</h1>
                                       </div>
 
-                                      <button className="w-full py-2 bg-[#0C1A2B] text-[#0C1A2B] active:scale-95 rounded-xl text-sm font-light bg-[#B6FF3B]  "
-                                        onClick={() => { dispatch(taskassign({ taskId: isassign, memberId: x._id })) }}
-                                      >
+                                      <button className="w-full py-2 bg-[#0C1A2B] text-[#0C1A2B] active:scale-95 rounded-xl text-sm font-light bg-[#B6FF3B]  " onClick={() => { dispatch(taskassign({ taskId: isassign, memberId: x._id })) }}>
                                         Assign
                                       </button>
                                       <button className="w-full mt-2 py-2 bg-[#0C1A2B] text-[#0C1A2B] active:scale-95 rounded-xl text-sm font-medium bg-[#B6FF3B]  ">

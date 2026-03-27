@@ -15,7 +15,7 @@
 }
 /* thin modern scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  height: 10px;
+  height: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
