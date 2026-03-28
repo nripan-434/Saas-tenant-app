@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { FaArrowDown } from "react-icons/fa";
 import { getAllMembers, projectmember } from '../../features/AuthSlice'
-import { getallprojectmembers } from '../../features/ProjectSlice';
+import { getallprojectmembers, updateProject } from '../../features/ProjectSlice';
 import { deallocatemember } from '../../features/ProjectSlice';
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -13,21 +13,14 @@ import { createAitask } from '../../features/AiSlice';
 import Aitasks from '../../components/Aitasks';
 import { addnewtask, getalltask } from '../../features/TaskSlice';
 import Tasklist from '../../components/Tasklist';
+
 import { useRef } from 'react';
 const Eachproject = () => {
   const dispatch = useDispatch()
   const current = useRef()
   const aitaskcurrent = useRef()
   const prjtaskcurrent = useRef()
-  const scrollToInput = () => {
-    current.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
-  const scrolltoaitasks = () => {
-    aitaskcurrent.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  }
-  // const scrolltoprjtasks = () => {
-  //   prjtaskcurrent.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  // }
+ 
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
@@ -36,13 +29,53 @@ const Eachproject = () => {
   const { existmembers } = useSelector(s => s.prj)
   const { tasks } = useSelector(s => s.task)
   const [memtoggle, setMemtoggle] = useState({})
-  // const [showTasks, setShowTasks] = useState(false);
-  // const [newTask, setNewTask] = useState("");
   const [invitebox, setInvitebox] = useState(false)
   const projectmemebers = existmembers[id] || []
+  const [editOpen, setEditOpen] = useState(false)
+
+const [editData, setEditData] = useState({
+  name: '',
+  description: '',
+  deadline: ''
+})
   const project = useMemo(() => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
+useEffect(() => {
+  if (project && editOpen) {
+    setEditData({
+      name: project.name || '',
+      description: project.description || '',
+      deadline: project.deadline
+        ? new Date(project.deadline).toISOString().split("T")[0]
+        : ''
+    })
+  }
+}, [project, editOpen])
+const handleEditChange = (e) => {
+  const { name, value } = e.target
+  setEditData(prev => ({ ...prev, [name]: value }))
+}
+const handleEditSubmit = (e) => {
+  e.preventDefault()
+
+  dispatch(updateProject({projectId:project._id,editData}))
+
+  // dispatch(updateProject({
+  //   projectId: project._id,
+  //   updatedData: editData
+  // }))
+
+  setEditOpen(false)
+}
+
+ const scrollToInput = () => {
+    current.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+  const scrolltoaitasks = () => {
+    aitaskcurrent.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+
   const [prompt, setprompt] = useState('')
   const handleinput = (e) => {
     setprompt(e.target.value)
@@ -52,11 +85,7 @@ const Eachproject = () => {
     dispatch(createAitask({ projectId: project._id, prompt }))
   }
   const aigentasks = aitasks[project._id]
-  // useEffect(() => {
-  //   if (showTasks === true) {
-  //     scrolltoprjtasks()
-  //   }
-  // }, [showTasks])
+
   useEffect(() => {
     if (project?._id) {
       dispatch(getalltask(project._id));
@@ -185,19 +214,90 @@ Example Output:
             <p className="">Project Reference: {project._id}</p>
           </div>
           <div className="flex gap-2">
-            <button className="px-4 py-2 border bg-[#B6FF3B] text-[#0C1A2B] rounded-full text-sm">Edit</button>
+           <button onClick={() => setEditOpen(true)}className="px-4 py-2 border bg-[#B6FF3B] text-[#0C1A2B] rounded-full text-sm">Edit</button>
+           {
+  editOpen && (
+    <div
+      className="fixed inset-0 bg-black/40 backdrop-blur-2xl z-[999] flex justify-center items-center"
+      onClick={() => setEditOpen(false)}
+    >
+      <motion.form
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        onSubmit={handleEditSubmit}
+        onClick={(e) => e.stopPropagation()}
+        className="bg-[#0C1A2B] text-[#B6FF3B] border rounded-xl p-6 flex flex-col gap-4 w-[400px]"
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center border-b pb-2">
+          <h1 className="text-xl font-bold">Edit Project</h1>
+          <button
+            type="button"
+            className="text-red-500"
+            onClick={() => setEditOpen(false)}
+          >
+            X
+          </button>
+        </div>
+
+        {/* Name */}
+        <div className="flex flex-col">
+          <label>Project Name</label>
+          <input
+            name="name"
+            value={editData.name}
+            onChange={handleEditChange}
+            className="outline-0 bg-transparent border rounded-xl p-3"
+          />
+        </div>
+
+        {/* Description */}
+        <div className="flex flex-col">
+          <label>Description</label>
+          <textarea
+            name="description"
+            value={editData.description}
+            onChange={handleEditChange}
+            className="outline-0 bg-transparent no-scrollbar border rounded-xl p-3"
+          />
+        </div>
+
+        {/* Deadline */}
+        <div className="flex flex-col">
+          <label>Deadline</label>
+          <input
+            type="date"
+            name="deadline"
+            value={editData.deadline}
+            onChange={handleEditChange}
+            className="outline-0 bg-transparent border rounded-xl p-3"
+          />
+        </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          className="bg-[#B6FF3B] text-[#0C1A2B] font-bold rounded-md p-2"
+        >
+          Update Project
+        </button>
+      </motion.form>
+    </div>
+  )
+}
             <button className="px-4 py-2  bg-red-600 rounded-full text-white text-sm">Delete</button>
           </div>
         </header>
         {/* Deadline & Progress Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          <div className={`${project.status=='overdue'?'bg-red-500':project.status=='overdue'?'bg-yellow-500':''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5 rounded-xl `}>
+          <div className={`${project.status == 'overdue' ? 'bg-red-500' : project.status == 'overdue' ? 'bg-yellow-500' : ''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5 rounded-xl `}>
             <h3 className="text-xs font-bold  uppercase mb-2">Deadline</h3>
-            <p className="text-lg font-semibold text-orange-600">
+            <p className="text-lg font-semibold ">
               {new Date(project.deadline).toLocaleDateString()}
             </p>
           </div>
-          <div className="p-4  rounded-xl border flex flex-col items-start justify-between">
+          <div className="p-4  rounded-xl shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] flex flex-col items-start justify-between">
             <div className="flex justify-between mb-2">
               <h3 className="text-xl font-bold  uppercase">Progress :  </h3>
               <span className="text-xl font-bold"> {progress}%</span>
@@ -208,9 +308,9 @@ Example Output:
           </div>
         </div>
         {/* description */}
-        <div className="mb-10">
-          <h2 className="text-sm font-bold  uppercase mb-2">About Project</h2>
-          <p className="leading-relaxed">{project.description || "No description provided."}</p>
+        <div className="mb-10 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-6">
+          <h2 className="text-sm font-bold border-b uppercase mb-2">About Project</h2>
+          <p className="leading-relaxed  text-[16px]">{project.description || "No description provided."}</p>
         </div>
         <button className="w-full flex gap-4 items-center pb-4  font-semibold">
           <span>Project Tasks ({tasks?.length})</span>
@@ -253,15 +353,23 @@ Example Output:
                 {
                   isopen ?
                     <div className=' fixed   bg-black/40 backdrop-blur-2xl  inset-0 z-999 flex justify-center items-center  ' onClick={() => { setIsopen(false) }}>
-                      <form onSubmit={(e) => {
-                        handlesubmit(e)
-                        scrolltoaitasks()
-                        setIsopen(false)
-                      }} onClick={(e) => e.stopPropagation()} action="" className='text-[#B6FF3B] border  flex flex-col gap-2   bg-[#0C1A2B] rounded-xl p-6'>
-                        <h1 className='text-xl border-b p-1 '>Prompt:</h1>
-                        <textarea onChange={handleinput} type="text" className='h-60 mt-4 w-100 break-all outline-0 no-scrollbar overflow-x-auto' value={prompt} />
-                        <button className='bg-[#B6FF3B]/70 hover:bg-[#B6FF3B] duration-200 rounded-md p-1 text-' type='submit' > Submit</button>
-                      </form>
+                      <motion.form
+                        initial={{ y: 40, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        onSubmit={(e) => {
+                          handlesubmit(e)
+                          scrolltoaitasks()
+                          setIsopen(false)
+                        }} onClick={(e) => e.stopPropagation()} action="" className='text-[#B6FF3B] border  flex flex-col gap-2   bg-[#0C1A2B] rounded-xl p-6'>
+                          <div className='flex border-b justify-between p-2 items-center'>
+                        <h1 className='text-xl  p-1 '>Prompt:</h1>
+                        <button className='text-red-500 font-medium' onClick={()=>{setIsopen(false)}}>X</button>
+
+                          </div>
+                        <textarea onChange={handleinput} type="text" className='h-80 mt-4 w-100 break-all outline-0 no-scrollbar overflow-x-auto' value={prompt} />
+                        <button className='bg-[#B6FF3B]/70 hover:bg-[#B6FF3B] text-[#0C1A2B] font-medium duration-200 rounded-md p-1 text-' type='submit' > Submit</button>
+                      </motion.form>
                     </div>
                     : ''
                 }
@@ -339,90 +447,87 @@ Example Output:
         </div>
       </div>
       <div
-  className={`${
-    projectmemebers.length === 0
-      ? ""
-      : "shadow-[0_3px_5px_rgba(0,0,0,2.1)]"
-  } mb-10 flex items-start gap-3 p-5 rounded-xl overflow-x-auto custom-scrollbar`}
->
-  {projectmemebers?.map((x) => {
-    return (
-      <div
-        key={x._id}
-        className="shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] hover:rounded-none rounded-[25px] duration-300 hover:shadow-[5px_3px_30px_rgba(0,0,0,2.1)] min-w-60 max-w-60 p-4 flex flex-col"
+        className={`${projectmemebers.length === 0
+            ? ""
+            : "shadow-[0_3px_5px_rgba(0,0,0,2.1)]"
+          } mb-10 flex items-start gap-3 p-5 rounded-xl overflow-x-auto custom-scrollbar`}
       >
-        {/* Avatar */}
-        <div className="flex justify-center items-center">
-          <div className="rounded-full h-16 w-16 flex justify-center items-center font-bold text-2xl bg-[#B6FF3B] text-[#0C1A2B]">
-            {x.name.charAt(0).toUpperCase()}
-          </div>
-        </div>
-
-        {/* Info */}
-        <div className="p-2 min-h-26">
-          <h1 className="font-bold">
-            Name : <span className="font-light">{x.name}</span>
-          </h1>
-          <h2 className="font-bold">
-            Email : <span className="font-light">{x.email}</span>
-          </h2>
-        </div>
-
-        {/* Toggle */}
-    
-          <p
-          onClick={() =>
-            setMemtoggle((prev) => ({
-              ...prev,
-              [x._id]: !prev[x._id],
-            }))
-          }
-          className="ml-2 mb-2 justify-between  font-bold text-blue-400  flex items-center gap-1 cursor-pointer"
-        >
-         <button className='flex underline justify-center items-center gap-1' >
-           Activein
-          <FaArrowDown
-            className={`text-[15px] transition-transform ${
-              memtoggle[x._id] ? "rotate-180" : ""
-            }`}
-          />
-         </button>
-           <button
-          onClick={() =>
-            dispatch(
-              deallocatemember({ userId: x._id, projectId: id })
-            )
-          }
-          className=" mt-3 self-end bg-red-600 font-bold text-white px-2 py-1 rounded-xl active:scale-95 hover:shadow-[0_0px_10px_rgba(255,0,0,0.8)] duration-200"
-        >
-          Deallocate
-        </button>
-        </p>
-     
-
-        <div
-          className={`shadow-[0_3px_5px_rgba(0,0,0,0.5)] custom-scrollbar rounded-xl flex gap-2 overflow-x-auto w-full transition-all duration-300 ${
-            memtoggle[x._id]
-              ? "opacity-100 h-auto p-3"
-              : "opacity-0 h-0 p-0 overflow-hidden"
-          }`}
-        >
-          {x.projects?.length > 0 &&
-            x.projects.map((p) => (
-              <div
-                key={p._id}
-                className="flex-shrink-0 text-[#0C1A2B] bg-[#B6FF3B] rounded-md px-2 py-1 "
-              >
-                {p.name}
+        {projectmemebers?.map((x) => {
+          return (
+            <div
+              key={x._id}
+              className="shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] hover:rounded-none rounded-[25px] duration-300 hover:shadow-[5px_3px_30px_rgba(0,0,0,2.1)] min-w-60 max-w-60 p-4 flex flex-col"
+            >
+              {/* Avatar */}
+              <div className="flex justify-center items-center">
+                <div className="rounded-full h-16 w-16 flex justify-center items-center font-bold text-2xl bg-[#B6FF3B] text-[#0C1A2B]">
+                  {x.name.charAt(0).toUpperCase()}
+                </div>
               </div>
-            ))}
-        </div>
 
-       
+              {/* Info */}
+              <div className="p-2 min-h-26">
+                <h1 className="font-bold">
+                  Name : <span className="font-light">{x.name}</span>
+                </h1>
+                <h2 className="font-bold">
+                  Email : <span className="font-light">{x.email}</span>
+                </h2>
+              </div>
+
+              {/* Toggle */}
+
+              <p
+                onClick={() =>
+                  setMemtoggle((prev) => ({
+                    ...prev,
+                    [x._id]: !prev[x._id],
+                  }))
+                }
+                className="ml-2 mb-2 justify-between  font-bold text-blue-400  flex items-center gap-1 cursor-pointer"
+              >
+                <button className='flex underline justify-center items-center gap-1' >
+                  Activein
+                  <FaArrowDown
+                    className={`text-[15px] transition-transform ${memtoggle[x._id] ? "rotate-180" : ""
+                      }`}
+                  />
+                </button>
+                <button
+                  onClick={() =>
+                    dispatch(
+                      deallocatemember({ userId: x._id, projectId: id })
+                    )
+                  }
+                  className=" mt-3 self-end bg-red-600 font-bold text-white px-2 py-1 rounded-xl active:scale-95 hover:shadow-[0_0px_10px_rgba(255,0,0,0.8)] duration-200"
+                >
+                  Deallocate
+                </button>
+              </p>
+
+
+              <div
+                className={`shadow-[0_3px_5px_rgba(0,0,0,0.5)] custom-scrollbar rounded-xl flex gap-2 overflow-x-auto w-full transition-all duration-300 ${memtoggle[x._id]
+                    ? "opacity-100 h-auto p-3"
+                    : "opacity-0 h-0 p-0 overflow-hidden"
+                  }`}
+              >
+                {x.projects?.length > 0 &&
+                  x.projects.map((p) => (
+                    <div
+                      key={p._id}
+                      className="flex-shrink-0 text-[#0C1A2B] bg-[#B6FF3B] rounded-md px-2 py-1 "
+                    >
+                      {p.name}
+                    </div>
+                  ))}
+              </div>
+
+
+            </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
 
     </div >
   )
