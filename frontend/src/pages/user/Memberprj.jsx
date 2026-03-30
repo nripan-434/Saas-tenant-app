@@ -55,7 +55,7 @@ const Memberprj = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#0C1A2B] p-4 md:p-8">
+    <div className="min-h-screen bg-[#0C1A2B] text-sm p-4 md:p-8">
       {/* Back Button & Header */}
       <div className="max-w-6xl mx-auto">
         <button
@@ -66,18 +66,18 @@ const Memberprj = () => {
           Back to Dashboard
         </button>
 
-        <div className="bg-[[#0C1A2B]] rounded-3xl p-6 md:p-10 shadow-[inset_0_2px_4px_0_rgb(0,0,0,2.2),_0_6px_10px_5px_rgb(0,0,0,3.9)] border-[#B6FF3B] mb-8">
+        <div className="bg-[[#0C1A2B]]  rounded-3xl p-6 md:p-10 shadow-[inset_0_2px_4px_0_rgb(0,0,0,2.2),_0_6px_10px_5px_rgb(0,0,0,3.9)] border-[#B6FF3B] mb-8">
           <div className="flex  justify-between items-center md:items-center gap-4">
             <div>
-              <span className="bg-[#B6FF3B]  text-[#0C1A2B] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              <span className="bg-[#B6FF3B]  text-[#0C1A2B] text-xs font-bold px-1 rounded-full uppercase  tracking-wider">
                 Project Workspace
               </span>
-              <h1 className="text-4xl font-bold text-[#B6FF3B] mt-2">{project.name}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-[#B6FF3B] mt-2">{project.name}</h1>
               <p className="text-[#B6FF3B] mt-2 max-w-2xl">{project.description}</p>
             </div>
             <div className="flex gap-3">
               <div className="text-right">
-                <p className="text-xs text-[#B6FF3B] uppercase font-bold tracking-widest">Created By</p>
+                <p className="text-sm text-[#B6FF3B] uppercase font-bold tracking-widest">Created By</p>
                 <p className="font-medium text-[#B6FF3B]">{project.createdBy?.name || 'Admin'}</p>
               </div>
               <div className="w-12 h-12 rounded-full  bg-[#B6FF3B] shadow-[inset_0_2px_4px_0_rgb(0,0,0,1.2),_0_6px_10px_5px_rgb(0,0,0,3.9)]   flex items-center justify-center text-[#0C1A2B] font-bold ">
@@ -87,7 +87,7 @@ const Memberprj = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid sm:grid-cols-2   md:grid-cols-4 gap-6 mb-8">
           <StatCard icon={<IoIosPeople className="text-blue-500 " />} label="Team Members :" value={project.members?.length || 0} />
           <StatCard icon={<IoIosTime className="text-green-500" />} label="Status :" value="Active" />
           <StatCard icon={<IoIosTime className="text-green-500" />} label="Deadline :" value={new Date(project.deadline).toLocaleDateString()} />

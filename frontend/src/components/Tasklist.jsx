@@ -54,7 +54,7 @@ const Tasklist = ({ tasks, members }) => {
   }
   const dispatch = useDispatch()
   return (
-    <div className='flex flex-col gap-3'>
+    <div className='flex flex-col gap-3 text-sm md:text-md  '>
       <div className='flex gap-3'>
         <button onClick={() => { setTaskcatogory('alltasks') }} className={`${taskcatogory == 'alltasks' ? 'bg-white text-black' : 'text-white bg-gray-500'} text-[15px]  cursor-pointer duration-300 active:scale-95  rounded-sm px-2 text-medium`}>all tasks</button>
         <button onClick={() => { setTaskcatogory('completed') }} className={`${taskcatogory == 'completed' ? 'bg-white  text-black' : 'text-white bg-gray-500'} text-[15px]  cursor-pointer duration-300 active:scale-95  rounded-sm px-2 text-medium`}>completed tasks</button>
@@ -68,11 +68,11 @@ const Tasklist = ({ tasks, members }) => {
             <div className='flex gap-2 rounded-xl overflow-x-auto  custom-scrollbar pb-5 '>
               {
                 tasks?.map(x => {
-                  return <div key={x._id} className={`flex flex-col gap-1 custom-scrollbar  overflow-x-auto items-start ${x.status != 'done' ? 'text-[#B6FF3B]  shadow-[inset_5px_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]' : 'bg-[#B6FF3B]'}  justify-between min-w-80 max-w-100  p-3  /90 text-[#0C1A2B] rounded-xl `}>
-                    <span className="text-[18px] underline font-bold"><span className='font-bold'></span>Task: {x.title}</span>
-                    <span className="text-[16px]"><span className='font-bold'>Description:</span> {x.description}</span>
-                    <span className="text-[16px]"><span className='font-bold'>Priority:</span> {x.priority}</span>
-                    <span className="text-[16px]"><span className='font-bold'>Status:</span> {x.status}</span>
+                  return <div key={x._id} className={`flex flex-col gap-1 custom-scrollbar  overflow-x-auto items-start ${x.status != 'done' ? 'text-[#B6FF3B]  shadow-[inset_5px_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)]' : 'bg-[#B6FF3B]'}  justify-between min-w-80 max-w-100  p-3  text-[#0C1A2B] rounded-xl `}>
+                    <span className="text-[17px] underline font-bold"><span className='font-bold'></span>Task: {x.title}</span>
+                    <span className="text-[14px]"><span className='font-bold'>Description:</span> {x.description}</span>
+                    <span className="text-[15px]"><span className='font-bold'>Priority:</span> {x.priority}</span>
+                    <span className="text-[15px]"><span className='font-bold'>Status:</span> {x.status}</span>
                     <div className='flex  justify-between w-full gap-2 font-bold'>
                       <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white' onClick={() => { setIsremove(x._id) }}>remove</button>
                       {
