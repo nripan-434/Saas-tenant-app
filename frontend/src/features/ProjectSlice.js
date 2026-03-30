@@ -68,8 +68,7 @@ export const deallocatemember = createAsyncThunk('patch/deallocatemember', async
 })
 export const updateProject = createAsyncThunk("put/updateProject", async ({ projectId, updatedData }, { rejectWithValue }) => {
     try {
-        console.log(updatedData)
-        const res = await api.put(`/project/updateproject/${projectId}`, {updatedData})
+        const res = await api.put(`/project/updateproject/${projectId}`, updatedData)
         return res.data
     } catch (error) {
         return rejectWithValue(error)
@@ -104,6 +103,7 @@ export const ProjectSlice = createSlice({
             .addCase(getallprojects.fulfilled, (state, action) => {
                 state.status = 'success'
                 state.projects = action.payload.prj
+                console.log(state.projects)
                 state.count = action.payload.count
                 localStorage.setItem('projects', JSON.stringify(action.payload.prj))
 
@@ -111,6 +111,7 @@ export const ProjectSlice = createSlice({
             .addCase(getallprojects.rejected, (state, action) => {
                 state.status = 'rejected'
                 state.projects = action.payload.prj
+                console.log(state.projects)
                 state.count = action.payload.count
 
             })
@@ -130,18 +131,16 @@ export const ProjectSlice = createSlice({
             .addCase(getallprojectmembers.pending, (state, action) => {
                 //   console.log("Pending action arg:", action.meta.arg);
                 const projectId = action.meta.arg;
+                // explain
                 state.projectmemstatus[projectId] = 'pending';
             })
 
             .addCase(getallprojectmembers.fulfilled, (state, action) => {
                 const { projectId, members } = action.payload;
-                // console.log("PAYLOAD:", action.payload)
                 state.existmembers[projectId] = members;
-                // console.log(members)
                 state.projectmemstatus[projectId] = "success";
             })
             .addCase(getallprojectmembers.rejected, (state, action) => {
-                // console.log('asd')
                 const projectId = action.meta.arg;
                 state.projectmemstatus[projectId] = 'rejected'
             })
@@ -171,6 +170,7 @@ export const ProjectSlice = createSlice({
                 state.projects = state.projects.map(p =>
                     p._id === updated._id ? updated : p
                 )
+                 localStorage.setItem('projects', JSON.stringify(state.projects))
                 toast.success(action.payload.message)
             })
 

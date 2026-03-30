@@ -13,14 +13,12 @@ import { createAitask } from '../../features/AiSlice';
 import Aitasks from '../../components/Aitasks';
 import { addnewtask, getalltask } from '../../features/TaskSlice';
 import Tasklist from '../../components/Tasklist';
-
 import { useRef } from 'react';
 const Eachproject = () => {
   const dispatch = useDispatch()
   const current = useRef()
   const aitaskcurrent = useRef()
   const prjtaskcurrent = useRef()
- 
   const { id } = useParams()
   const navigate = useNavigate()
   const { projects } = useSelector(state => state.prj)
@@ -32,44 +30,36 @@ const Eachproject = () => {
   const [invitebox, setInvitebox] = useState(false)
   const projectmemebers = existmembers[id] || []
   const [editOpen, setEditOpen] = useState(false)
-
-const [editData, setEditData] = useState({
-  name: '',
-  description: '',
-  deadline: ''
-})
+  const [editData, setEditData] = useState({
+    name: '',
+    description: '',
+    deadline: ''
+  })
   const project = useMemo(() => {
     return projects?.find(p => p._id === id);
   }, [projects, id]);
-useEffect(() => {
-  if (project && editOpen) {
-    setEditData({
-      name: project.name || '',
-      description: project.description || '',
-      deadline: project.deadline
-        ? new Date(project.deadline).toISOString().split("T")[0]
-        : ''
-    })
+  useEffect(() => {
+    if (project && editOpen) {
+      setEditData({
+        name: project.name || '',
+        description: project.description || '',
+        deadline: project.deadline
+          ? new Date(project.deadline).toISOString().split("T")[0]
+          : ''
+      })
+    }
+  }, [project, editOpen])
+  const handleEditChange = (e) => {
+    const { name, value } = e.target
+    setEditData(prev => ({ ...prev, [name]: value }))
   }
-}, [project, editOpen])
-const handleEditChange = (e) => {
-  const { name, value } = e.target
-  setEditData(prev => ({ ...prev, [name]: value }))
-}
-const handleEditSubmit = (e) => {
-  e.preventDefault()
+  const handleEditSubmit = (e) => {
+    e.preventDefault()
+    dispatch(updateProject({ projectId: project._id, updatedData: editData }))
+    setEditOpen(false)
+  }
 
-  dispatch(updateProject({projectId:project._id,editData}))
-
-  // dispatch(updateProject({
-  //   projectId: project._id,
-  //   updatedData: editData
-  // }))
-
-  setEditOpen(false)
-}
-
- const scrollToInput = () => {
+  const scrollToInput = () => {
     current.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
   const scrolltoaitasks = () => {
@@ -163,16 +153,8 @@ Example Output:
       setPending(null);
     }
   };
-  const progress = 20;
-  const deadline = new Date(project.deadline).toLocaleDateString();
-  // if (!project) {
-  //   return (
-  //     <div className="p-8 text-center">
-  //       <p>Project not found.</p>
-  //       <button onClick={() => navigate(-1)} className=" underline">Go Back</button>
-  //     </div>
-  //   )
-  // }
+
+
   const [task, setTask] = useState({
     title: '',
     description: '',
@@ -198,7 +180,7 @@ Example Output:
 
 
   return (
-    <div className="min-h-screen bg-[#0C1A2B] text-[#B6FF3B] p-8 w-full">
+    <div className="min-h-screen bg-[#0C1A2B] text-[#B6FF3B] mt-8 lg:px-58 p-6 md:p-20 w-full">
       {/* Back Navigation */}
       <button
         onClick={() => navigate(-1)}
@@ -214,84 +196,84 @@ Example Output:
             <p className="">Project Reference: {project._id}</p>
           </div>
           <div className="flex gap-2">
-           <button onClick={() => setEditOpen(true)}className="px-4 py-2 border bg-[#B6FF3B] text-[#0C1A2B] rounded-full text-sm">Edit</button>
-           {
-  editOpen && (
-    <div
-      className="fixed inset-0 bg-black/40 backdrop-blur-2xl z-[999] flex justify-center items-center"
-      onClick={() => setEditOpen(false)}
-    >
-      <motion.form
-        initial={{ y: 40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        onSubmit={handleEditSubmit}
-        onClick={(e) => e.stopPropagation()}
-        className="bg-[#0C1A2B] text-[#B6FF3B] border rounded-xl p-6 flex flex-col gap-4 w-[400px]"
-      >
-        {/* Header */}
-        <div className="flex justify-between items-center border-b pb-2">
-          <h1 className="text-xl font-bold">Edit Project</h1>
-          <button
-            type="button"
-            className="text-red-500"
-            onClick={() => setEditOpen(false)}
-          >
-            X
-          </button>
-        </div>
+            <button onClick={() => setEditOpen(true)} className="px-4 py-2 border bg-[#B6FF3B] text-[#0C1A2B] rounded-full text-sm">Edit</button>
+            {
+              editOpen && (
+                <div
+                  className="fixed inset-0 bg-black/40 backdrop-blur-2xl z-[999] flex justify-center items-center"
+                  onClick={() => setEditOpen(false)}
+                >
+                  <motion.form
+                    initial={{ y: 40, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    onSubmit={handleEditSubmit}
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-[#0C1A2B] text-[#B6FF3B] border rounded-xl p-6 flex flex-col gap-4 w-[400px]"
+                  >
+                    {/* Header */}
+                    <div className="flex justify-between items-center border-b pb-2">
+                      <h1 className="text-xl font-bold">Edit Project</h1>
+                      <button
+                        type="button"
+                        className="text-red-500"
+                        onClick={() => setEditOpen(false)}
+                      >
+                        X
+                      </button>
+                    </div>
 
-        {/* Name */}
-        <div className="flex flex-col">
-          <label>Project Name</label>
-          <input
-            name="name"
-            value={editData.name}
-            onChange={handleEditChange}
-            className="outline-0 bg-transparent border rounded-xl p-3"
-          />
-        </div>
+                    {/* Name */}
+                    <div className="flex flex-col">
+                      <label>Project Name</label>
+                      <input
+                        name="name"
+                        value={editData.name}
+                        onChange={handleEditChange}
+                        className="outline-0 bg-transparent border rounded-xl p-3"
+                      />
+                    </div>
 
-        {/* Description */}
-        <div className="flex flex-col">
-          <label>Description</label>
-          <textarea
-            name="description"
-            value={editData.description}
-            onChange={handleEditChange}
-            className="outline-0 bg-transparent no-scrollbar border rounded-xl p-3"
-          />
-        </div>
+                    {/* Description */}
+                    <div className="flex flex-col">
+                      <label>Description</label>
+                      <textarea
+                        name="description"
+                        value={editData.description}
+                        onChange={handleEditChange}
+                        className="outline-0 bg-transparent no-scrollbar border rounded-xl p-3"
+                      />
+                    </div>
 
-        {/* Deadline */}
-        <div className="flex flex-col">
-          <label>Deadline</label>
-          <input
-            type="date"
-            name="deadline"
-            value={editData.deadline}
-            onChange={handleEditChange}
-            className="outline-0 bg-transparent border rounded-xl p-3"
-          />
-        </div>
+                    {/* Deadline */}
+                    <div className="flex flex-col">
+                      <label>Deadline</label>
+                      <input
+                        type="date"
+                        name="deadline"
+                        value={editData.deadline}
+                        onChange={handleEditChange}
+                        className="outline-0 bg-transparent border rounded-xl p-3"
+                      />
+                    </div>
 
-        {/* Submit */}
-        <button
-          type="submit"
-          className="bg-[#B6FF3B] text-[#0C1A2B] font-bold rounded-md p-2"
-        >
-          Update Project
-        </button>
-      </motion.form>
-    </div>
-  )
-}
+                    {/* Submit */}
+                    <button
+                      type="submit"
+                      className="bg-[#B6FF3B] text-[#0C1A2B] font-bold rounded-md p-2"
+                    >
+                      Update Project
+                    </button>
+                  </motion.form>
+                </div>
+              )
+            }
             <button className="px-4 py-2  bg-red-600 rounded-full text-white text-sm">Delete</button>
           </div>
         </header>
         {/* Deadline & Progress Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          <div className={`${project.status == 'overdue' ? 'bg-red-500' : project.status == 'overdue' ? 'bg-yellow-500' : ''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5 rounded-xl `}>
+          <div className={`${project.status == 'overdue' ? 'bg-red-500 text-black ' : project.status == 'urgent' ? 'bg-yellow-500' : ''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5 rounded-xl `}>
             <h3 className="text-xs font-bold  uppercase mb-2">Deadline</h3>
             <p className="text-lg font-semibold ">
               {new Date(project.deadline).toLocaleDateString()}
@@ -300,10 +282,10 @@ Example Output:
           <div className="p-4  rounded-xl shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] flex flex-col items-start justify-between">
             <div className="flex justify-between mb-2">
               <h3 className="text-xl font-bold  uppercase">Progress :  </h3>
-              <span className="text-xl font-bold"> {progress}%</span>
+              <span className="text-xl font-bold "> {project.progress}%</span>
             </div>
             <div className="w-full  rounded-xl h-2">
-              <div className="bg-[#B6FF3B] h-2 rounded-full" style={{ width: `${progress}%` }}></div>
+              <div className="bg-[#B6FF3B] h-2 rounded-full transition-all duration-500" style={{ width: `${project.progress}%` }}></div>
             </div>
           </div>
         </div>
@@ -316,7 +298,8 @@ Example Output:
           <span>Project Tasks ({tasks?.length})</span>
           <h1 className='cursor-pointer bg-[#B6FF3B] rounded-xl p-1 text-[#0C1A2B]' onClick={() => { scrollToInput() }}>Add Task</h1>
         </button>
-        <section
+        <div className=''>
+          <section
           ref={prjtaskcurrent}
           className={`p-5 custom-scrollbar   duration-300 mb-10 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] rounded-xl  overflow-y-auto`}>
           {/* {showTasks && ( */}
@@ -325,28 +308,40 @@ Example Output:
               <h1 className='flex justify-between'>Tasks:   </h1>
               <Tasklist tasks={tasks} members={projectmemebers} />
             </div>
-            <div className='flex flex-col mt-6 gap-3'>
-              {/* create a task */}
-              <form onSubmit={handletaskAddsubmit} action="" className='flex flex-col border p-4 rounded-xl gap-4'>
-                <h1 className='flex justify-center text-2xl font-bold'>Create a Task</h1>
-                <div className='flex flex-col'>
-                  <label htmlFor="">Task :</label>
-                  <input onChange={handledata} ref={current} name='title' value={task.title} className='outline-0' type="text" placeholder='create authentication' />
-                </div>
-                <div className='flex flex-col'>
-                  <label htmlFor="">Description :</label>
-                  <textarea onChange={handledata} name='description' value={task.description} className='outline-0' type="text" placeholder='add auth and jwt for authentication' />
-                </div>
-                <div className='flex'>
-                  <label htmlFor="">Priority :</label>
-                  <select onChange={handledata} name='priority' className='custom-scrollbar bg-[#0C1A2B] text-[#B6FF3B] px-2 outline-0 rounded-xl' id="">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                  </select>
-                </div>
-                <button className='p-2 bg-[#B6FF3B] text-[#0C1A2B] rounded-xl'>Add</button>
-              </form>
+            <div className='flex justify-center'>
+              <div className='flex flex-col lg:w-2/4 w-full  mt-6 gap-3'>
+                {/* create a task */}
+                <form onSubmit={handletaskAddsubmit} action="" className='flex flex-col shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,2.9)]  p-4 rounded-xl gap-4'>
+                  <h1 className='flex justify-center text-2xl font-bold'>Create a Task</h1>
+                  <div className='flex flex-col'>
+                    <label htmlFor="">Task :</label>
+                    <input onChange={handledata} ref={current} name='title' value={task.title} className='outline-0' type="text" placeholder='create authentication' />
+                  </div>
+                  <div className='flex flex-col'>
+                    <label htmlFor="">Description :</label>
+                    <textarea onChange={handledata} name='description' value={task.description} className='outline-0' type="text" placeholder='add auth and jwt for authentication' />
+                  </div>
+                  <div className='flex'>
+                    <label htmlFor="">Priority :</label>
+                    <select onChange={handledata} name='priority' className='custom-scrollbar bg-[#0C1A2B] text-[#B6FF3B] px-2 outline-0 rounded-xl' id="">
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                  </div>
+                  <div className='flex gap-3 flex-col'>
+                    <label>Deadline :</label>
+                    <input
+                      type="date"
+                      name="dueDate"
+                      value={task.dueDate || ""}
+                      onChange={handledata}
+                      className='border p-1 rounded-xl '
+                    />
+                  </div>
+                  <button className='p-2 bg-[#B6FF3B] text-[#0C1A2B] rounded-xl'>Add</button>
+                </form>
+              </div>
             </div>
             <div className=" flex flex-col gap-2    ">
               <div className='flex items-center gap-2 '>
@@ -362,11 +357,11 @@ Example Output:
                           scrolltoaitasks()
                           setIsopen(false)
                         }} onClick={(e) => e.stopPropagation()} action="" className='text-[#B6FF3B] border  flex flex-col gap-2   bg-[#0C1A2B] rounded-xl p-6'>
-                          <div className='flex border-b justify-between p-2 items-center'>
-                        <h1 className='text-xl  p-1 '>Prompt:</h1>
-                        <button className='text-red-500 font-medium' onClick={()=>{setIsopen(false)}}>X</button>
+                        <div className='flex border-b justify-between p-2 items-center'>
+                          <h1 className='text-xl  p-1 '>Prompt:</h1>
+                          <button className='text-red-500 font-medium' onClick={() => { setIsopen(false) }}>X</button>
 
-                          </div>
+                        </div>
                         <textarea onChange={handleinput} type="text" className='h-80 mt-4 w-100 break-all outline-0 no-scrollbar overflow-x-auto' value={prompt} />
                         <button className='bg-[#B6FF3B]/70 hover:bg-[#B6FF3B] text-[#0C1A2B] font-medium duration-200 rounded-md p-1 text-' type='submit' > Submit</button>
                       </motion.form>
@@ -393,6 +388,7 @@ Example Output:
           </div>
           {/* )} */}
         </section>
+        </div>
         {/* member */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-sm font-bold text-[#B6FF3B] uppercase">Team Members</h2>
@@ -448,8 +444,8 @@ Example Output:
       </div>
       <div
         className={`${projectmemebers.length === 0
-            ? ""
-            : "shadow-[0_3px_5px_rgba(0,0,0,2.1)]"
+          ? ""
+          : "shadow-[0_3px_5px_rgba(0,0,0,2.1)]"
           } mb-10 flex items-start gap-3 p-5 rounded-xl overflow-x-auto custom-scrollbar`}
       >
         {projectmemebers?.map((x) => {
@@ -508,8 +504,8 @@ Example Output:
 
               <div
                 className={`shadow-[0_3px_5px_rgba(0,0,0,0.5)] custom-scrollbar rounded-xl flex gap-2 overflow-x-auto w-full transition-all duration-300 ${memtoggle[x._id]
-                    ? "opacity-100 h-auto p-3"
-                    : "opacity-0 h-0 p-0 overflow-hidden"
+                  ? "opacity-100 h-auto p-3"
+                  : "opacity-0 h-0 p-0 overflow-hidden"
                   }`}
               >
                 {x.projects?.length > 0 &&

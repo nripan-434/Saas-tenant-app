@@ -94,7 +94,7 @@ export const getallprojects = asyncHandler(async (req, res) => {
     }))
 
     return res.status(200).json({ prj: updated })
-})  
+})
 
 
 export const getmemberprjs = asyncHandler(async (req, res) => {
@@ -117,54 +117,52 @@ export const getmemberprjs = asyncHandler(async (req, res) => {
 })
 
 export const getallprojectmembers = asyncHandler(async (req, res) => {
-  const { projectId } = req.params;
-  const project = await projectModel.findById(projectId).populate({
-      path: "members",
-      populate: {
-        path: "projects",
-        select: "name _id"
-      }
+    const { projectId } = req.params;
+    const project = await projectModel.findById(projectId).populate({
+        path: "members",
+        populate: {
+            path: "projects",
+            select: "name _id"
+        }
     })
-  return res.json(project);
+    return res.json(project);
 });
 
-export const  deallocatemember = asyncHandler(async(req,res)=>{
-    const {userId,projectId}= req.params
-    const exist = await projectModel.findOne({_id:projectId,members:userId})
-  
-    
+export const deallocatemember = asyncHandler(async (req, res) => {
+    const { userId, projectId } = req.params
+    const exist = await projectModel.findOne({ _id: projectId, members: userId })
+
+
     const updatedUser = await userModel.findByIdAndUpdate(
         userId,
-        { $pull: { projects: new mongoose.Types.ObjectId(projectId)} },
+        { $pull: { projects: new mongoose.Types.ObjectId(projectId) } },
         { new: true }
     )
     if (!updatedProject) {
         return res.status(404).json({ message: 'Project not found' });
     }
-     if (!updatedUser) {
+    if (!updatedUser) {
         return res.status(404).json({ message: 'User not found' });
     }
 
-    return res.status(200).json({ 
-        message: 'Member deallocated successfully', 
-        project: updatedProject 
+    return res.status(200).json({
+        message: 'Member deallocated successfully',
+        project: updatedProject
     })
 })
 
 
 export const updateProject = asyncHandler(async (req, res) => {
     const { projectId } = req.params
-    const { name, description, deadline, startDate } = req.body || {}
+    const { name, description, deadline, startDate } = req.body
+    console.log(name)
     if (!projectId || !mongoose.Types.ObjectId.isValid(projectId)) {
         return res.status(400).json({ message: "Invalid Project Id" })
     }
-
     const project = await projectModel.findById(projectId)
-
     if (!project) {
         return res.status(404).json({ message: "Project not found" })
     }
-
     if (name && name !== project.name) {
         const exist = await projectModel.findOne({
             name: name,
@@ -175,7 +173,7 @@ export const updateProject = asyncHandler(async (req, res) => {
             return res.status(409).json({ message: "Project name already exists" })
         }
     }
-       project.name = name || project.name
+    project.name = name || project.name
     project.description = description || project.description
     project.deadline = deadline || project.deadline
     project.startDate = startDate || project.startDate

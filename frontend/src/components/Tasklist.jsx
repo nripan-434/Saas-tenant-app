@@ -542,7 +542,7 @@ const Tasklist = ({ tasks, members }) => {
 
                             <div className='flex gap-6 justify-center '>
                               <button className='absolute top-3 right-3  border rounded-full w-6 h-6 flex justify-center items-center    p-1' onClick={() => { setIsupdate(null) }}>X</button>
-                              <button className='bg-green-500 rounded-xl text-white p-1 cursor-pointer active:scale-95' onClick={() => { dispatch() }}>Update</button>
+                              <button className='bg-green-500 rounded-xl text-white p-1 cursor-pointer active:scale-95' >Update</button>
                               <button className='bg-red-500 rounded-xl text-white p-1 cursor-pointer active:scale-95' onClick={() => { setIsupdate(null) }}>Cancel</button>
                             </div>
                           </motion.form>

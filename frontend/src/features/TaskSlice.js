@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import { getallprojects } from "./ProjectSlice";
 
 const initialState = {
     taskStatus: 'success',
@@ -9,20 +10,22 @@ const initialState = {
 
 
 }
-export const addnewtask = createAsyncThunk('post/addnewtask', async ({ task, projectId }, { rejectWithValue }) => {
+export const addnewtask = createAsyncThunk('post/addnewtask', async ({ task, projectId }, { rejectWithValue,dispatch }) => {
     console.log(task)
     try {
         const res = await api.post('/task/addnewtask', { task, projectId })
+        dispatch(getallprojects())
         return res.data
 
     } catch (error) {
         return rejectWithValue(error);
     }
 })
-export const addaitask = createAsyncThunk('post/addaitask', async ({ task, projectId }, { rejectWithValue }) => {
+export const addaitask = createAsyncThunk('post/addaitask', async ({ task, projectId }, { rejectWithValue,dispatch }) => {
     console.log(task)
     try {
         const res = await api.post('/task/addaitask', { task, projectId })
+         dispatch(getallprojects())
         return res.data
 
     } catch (error) {
@@ -38,20 +41,22 @@ export const getalltask = createAsyncThunk('get/getalltask', async (projectId, {
         return rejectWithValue(error);
     }
 })
-export const removetask = createAsyncThunk('delete/removetask', async (taskId, { rejectWithValue }) => {
+export const removetask = createAsyncThunk('delete/removetask', async (taskId, { rejectWithValue,dispatch }) => {
     try {
         console.log(taskId)
         const res = await api.delete(`/task/removetask/${taskId}`)
+        dispatch(getallprojects())
         return res.data
     } catch (error) {
         return rejectWithValue(error);
     }
 })
-export const updatetask = createAsyncThunk('post/updatetask', async ({ task, taskId }, { rejectWithValue }) => {
+export const updatetask = createAsyncThunk('post/updatetask', async ({ task, taskId }, { rejectWithValue,dispatch }) => {
     console.log(task)
     console.log(taskId)
     try {
         const res = await api.put(`/task/updatetask/${taskId}`, { task })
+        dispatch(getallprojects())
         return res.data
 
     } catch (error) {
@@ -93,11 +98,12 @@ export const getmembertasks = createAsyncThunk('get/getmembertasks', async ({pro
     }
 })
 
-export const statusupdate = createAsyncThunk('patch/statusupdate', async ({ taskId,form }, { rejectWithValue }) => {
+export const statusupdate = createAsyncThunk('patch/statusupdate', async ({ taskId,form }, { rejectWithValue,dispatch }) => {
     
     try {
         console.log(form)
         const res = await api.patch(`/task/statusupdate/${taskId}`,{form});
+        dispatch(getallprojects())
         return res.data;
     } catch (error) {
         return rejectWithValue(error);
