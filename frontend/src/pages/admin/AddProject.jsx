@@ -67,7 +67,7 @@ const AddProject = () => {
       
       <form
         onSubmit={handlesubmit}
-        className="flex flex-col text-[#B6FF3B] shadow-[2px_13px_10px_3px_rgba(0.4,0,0,3.1)] gap-5 justify-center items-center p-7 rounded-xl w-120"
+        className="flex flex-col text-[#B6FF3B] border-t-2 border-[#B6FF3B] m-7 shadow-[2px_3px_10px_3px_rgba(0.4,0,0,2.1)] gap-3 justify-center items-center p-7 rounded-xl w-120"
       >
         <h1 className="text-[24px] font-serif w-full border-b ">Create Project</h1>
 

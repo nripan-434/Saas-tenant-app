@@ -32,6 +32,7 @@ const Orgadmin = () => {
 
   useEffect(() => {
     dispatch(getallprojects());
+    console.log(count)
   }, [dispatch]);
 
   return (
@@ -73,20 +74,23 @@ const Orgadmin = () => {
           </div>  <Link to="/addproject" className="bg-[#B6FF3B] text-[#0C1A2B] px-4 py-2 rounded">
             + New Project
           </Link></div>
-    <div className="rounded-md md:col-span-5 md:col-start-1 md:row-start-5 bg-[#B6FF3B] p-2 h-45  overflow-x-auto custom-scrollbar  ">
+    <div className="rounded-md md:col-span-5 md:col-start-1 md:row-start-5 bg-[#B6FF3B] p-2 h-55  overflow-x-auto custom-scrollbar  ">
       <div
-            className="flex gap-4 min-w-max h-full border-[#B6FF3B] rounded-xl">
+            className="flex gap-4 min-w-max  gap-3 border-[#B6FF3B] rounded-xl">
             {projects && projects.length > 0 ? (
               projects.map((prj) => (
                 <motion.div
                   
-                  key={prj._id} className="  hover:scale-104 max-w-80 min-w-70  overflow-y-auto  no-scrollbar duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl shadow-sm bg-[#0C1A2B]">
+                  key={prj._id} className=" h-50  hover:scale-104 max-w-80 min-w-70 overflow-hidden  duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl shadow-sm bg-[#0C1A2B]">
                   <div className="flex justify-between items-center mb-2 text-[#B6FF3B]">
                     <span className="text-xs uppercase font-bold ">Active</span>
                     <span className={`${prj.status=='overdue'?'bg-red-500':prj.status=='overdue'?'bg-yellow-500':'bg-[#B6FF3B] '} px-1 text-[#0C1A2B] rounded-xl`}>Deadline: {new Date(prj.deadline).toLocaleDateString()}</span>
                   </div>
-                  <h3 className="text-xl text-[#B6FF3B] font-semibold">{prj.name}</h3>
-                  <p className="text-[#B6FF3B] text-sm  my-2">{prj.description || "No description provided."}</p>
+                  <h3 className="text-xl text-[#B6FF3B] font-semibold border-b">{prj.name}</h3>
+                  <div className='overflow-y-auto no-scrollbar  h-14 '>
+                  <p className="text-[#B6FF3B] text-sm   my-2">{prj.description || "No description provided."}</p>
+
+                  </div>
                   <div className="mt-4 pt-4 border-t flex justify-between items-center text-[#B6FF3B] text-xs">
                     <span>By: {prj.createdBy.name || ''}</span>
                     <button className="text-blue-600 font-medium" onClick={() => { navigate(`/project/${prj._id}`) }}>View →</button>
@@ -115,7 +119,7 @@ const Orgadmin = () => {
           initial={{ y: 200 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.5 }}
-          className=' rounded-xl bg-[#0C1A2B] mt-20 '>
+          className=' rounded-xl bg-[#0C1A2B] mt-30 '>
 
           
           <div className='text-white md:border-t-4 md:border-t-0 border-t-4 p-1 pt-4 border-[#B6FF3B] rounded-xl mt-10'>

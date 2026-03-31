@@ -158,7 +158,8 @@ Example Output:
   const [task, setTask] = useState({
     title: '',
     description: '',
-    priority: 'medium'
+    priority: 'medium',
+    dueDate:''
   })
   const handledata = (e) => {
     const { name, value } = e.target
@@ -180,7 +181,7 @@ Example Output:
 
 
   return (
-    <div className="min-h-screen bg-[#0C1A2B] text-[#B6FF3B] mt-8 lg:px-58 p-6 md:p-20 w-full">
+    <div className="min-h-screen bg-[#0C1A2B] text-[#B6FF3B]  lg:px-58 p-6 md:p-20 w-full">
       {/* Back Navigation */}
       <button
         onClick={() => navigate(-1)}
@@ -250,7 +251,9 @@ Example Output:
                       <label>Deadline</label>
                       <input
                         type="date"
+                        
                         name="deadline"
+                         min={new Date().toISOString().split("T")[0]}
                         value={editData.deadline}
                         onChange={handleEditChange}
                         className="outline-0 bg-transparent border rounded-xl p-3"
@@ -273,7 +276,7 @@ Example Output:
         </header>
         {/* Deadline & Progress Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          <div className={`${project.status == 'overdue' ? 'bg-red-500 text-black ' : project.status == 'urgent' ? 'bg-yellow-500' : ''} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5 rounded-xl `}>
+          <div className={`${project.status == 'overdue' ? 'bg-gradient-to-br from-red-700 via-red-600 to-red-800 text-white border border-red-400 shadow-[0_0_25px_rgba(255,0,0,0.4)]' : project.status == 'urgent' ? 'bg-[#3B2A0D] border border-[#FFC857] text-[#FFE8A3]' : 'bg-[#0C1A2B] border border-[#B6FF3B]/20 text-[#B6FF3B]'} shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5 rounded-xl `}>
             <h3 className="text-xs font-bold  uppercase mb-2">Deadline</h3>
             <p className="text-lg font-semibold ">
               {new Date(project.deadline).toLocaleDateString()}
@@ -334,6 +337,7 @@ Example Output:
                     <input
                       type="date"
                       name="dueDate"
+                      min={new Date().toISOString().split("T")[0]}
                       value={task.dueDate || ""}
                       onChange={handledata}
                       className='border p-1 rounded-xl '
@@ -370,7 +374,7 @@ Example Output:
                 }
               </div>
               <div className='flex justify-center  items-center mt-4  gap-4'>
-                <div className=' flex flex-col md:flex-row gap-3 w-full md:w-2/4 xl:w-1/4   items-center '>
+                <div className=' flex flex-col md:flex-row gap-3 w-full md:w-2/4   items-center '>
                   <button onClick={() => {
                     dispatch(createAitask({ projectId: project._id, prompt }))
                     scrolltoaitasks()

@@ -64,7 +64,7 @@ const Tasklist = ({ tasks, members }) => {
       </div>
       <div className={`${taskcatogory == 'alltasks' ? 'block' : 'hidden'} flex flex-col md:flex-row gap-4`}>
         {
-          tasks.length == '0' ? <div className='flex justify-center items-center w-full border py-2 rounded-sm border-gray-500'>No Tasks!</div> :
+          tasks.length == 0 ? <div className='flex justify-center items-center w-full border py-2 rounded-sm border-gray-500'>No Tasks!</div> :
             <div className='flex gap-2 rounded-xl overflow-x-auto  custom-scrollbar pb-5 '>
               {
                 tasks?.map(x => {
@@ -73,8 +73,9 @@ const Tasklist = ({ tasks, members }) => {
                     <span className="text-[14px]"><span className='font-bold'>Description:</span> {x.description}</span>
                     <span className="text-[15px]"><span className='font-bold'>Priority:</span> {x.priority}</span>
                     <span className="text-[15px]"><span className='font-bold'>Status:</span> {x.status}</span>
+                    <span className="text-[15px]"><span className='font-bold'>Deadline:</span>{new Date(x.dueDate).toLocaleDateString()}</span>
                     <div className='flex  justify-between w-full gap-2 font-bold'>
-                      <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white' onClick={() => { setIsremove(x._id) }}>remove</button>
+                      <button className={`${x.status == 'done' ? 'hidden' : ''}shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white`} onClick={() => { setIsremove(x._id) }}>remove</button>
                       {
                         isremove == x._id ? <div onClick={() => { setIsremove(null) }} className=' text-[#B6FF3B]  inset-0 z-100 fixed flex justify-center items-center  min-h-screen bg-black/50 backdrop-blur-md'>
                           <motion.div
@@ -209,7 +210,7 @@ const Tasklist = ({ tasks, members }) => {
       </div>
       <div className={`${taskcatogory == 'in-progress' ? 'block' : 'hidden'} flex flex-col md:flex-row gap-4`}>
         {
-          inprogresstasks.length == '0' ? <div className='flex justify-center items-center w-full border py-2 rounded-sm border-gray-500'>No Tasks!</div> :
+          inprogresstasks.length == 0 ? <div className='flex justify-center items-center w-full border py-2 rounded-sm border-gray-500'>No Tasks!</div> :
             <div className='flex gap-2 rounded-xl overflow-x-auto  custom-scrollbar pb-5 '>
               {
                 inprogresstasks?.map(x => {
@@ -219,7 +220,7 @@ const Tasklist = ({ tasks, members }) => {
                     <span className="text-[16px]"><span className='font-bold'>Priority:</span> {x.priority}</span>
                     <span className="text-[16px]"><span className='font-bold'>Status:</span> {x.status}</span>
                     <div className='flex  justify-between w-full gap-2 font-bold'>
-                      <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white' onClick={() => { setIsremove(x._id) }}>remove</button>
+                      <button className= {`${x.status == 'done' ? 'hidden' : ''}shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white`} onClick={() => { setIsremove(x._id) }}>remove</button>
                       {
                         isremove == x._id ? <div onClick={() => { setIsremove(null) }} className=' text-[#B6FF3B]  inset-0 z-999 fixed flex justify-center items-center  min-h-screen bg-black/50 backdrop-blur-md'>
                           <motion.div
@@ -352,7 +353,7 @@ const Tasklist = ({ tasks, members }) => {
                     <span className="text-[16px]"><span className='font-bold'>Priority:</span> {x.priority}</span>
                     <span className="text-[16px]"><span className='font-bold'>Status:</span> {x.status}</span>
                     <div className='flex  justify-between w-full gap-2 font-bold'>
-                      <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white' onClick={() => { setIsremove(x._id) }}>remove</button>
+                      <button className={`${x.status == 'done' ? 'hidden' : ''}shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white`} onClick={() => { setIsremove(x._id) }}>remove</button>
                       {
                         isremove == x._id ? <div onClick={() => { setIsremove(null) }} className=' text-[#B6FF3B]  inset-0 z-999 fixed flex justify-center items-center  min-h-screen bg-black/50 backdrop-blur-md'>
                           <motion.div
@@ -475,7 +476,7 @@ const Tasklist = ({ tasks, members }) => {
       </div>
       <div className={`${taskcatogory == 'completed' ? 'block' : 'hidden'} flex flex-col md:flex-row gap-4`}>
         {
-          completedtasks.length == '0' ? <div className='flex justify-center items-center w-full border py-2 rounded-sm border-gray-500'>No Tasks!</div> :
+          completedtasks.length == 0 ? <div className='flex justify-center items-center w-full border py-2 rounded-sm border-gray-500'>No Tasks!</div> :
             <div className='flex gap-2 rounded-xl overflow-x-auto  custom-scrollbar pb-5 '>
               {
                 completedtasks?.map(x => {
@@ -485,7 +486,7 @@ const Tasklist = ({ tasks, members }) => {
                     <span className="text-[16px]"><span className='font-bold'>Priority:</span> {x.priority}</span>
                     <span className="text-[16px]"><span className='font-bold'>Status:</span> {x.status}</span>
                     <div className='flex  justify-between w-full gap-2 font-bold'>
-                      <button className='shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white' onClick={() => { setIsremove(x._id) }}>remove</button>
+                      <button className={`${x.status == 'done' ? 'hidden' : ''}shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_2px_10px_0_rgb(0.5,0,0,2.4)] p-1 bg-red-600  font-light rounded-sm text-white`} onClick={() => { setIsremove(x._id) }}>remove</button>
                       {
                         isremove == x._id ? <div onClick={() => { setIsremove(null) }} className=' text-[#B6FF3B]  inset-0 z-999 fixed flex justify-center items-center  min-h-screen bg-black/50 backdrop-blur-md'>
                           <motion.div

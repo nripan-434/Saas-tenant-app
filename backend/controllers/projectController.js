@@ -58,13 +58,11 @@ export const createproject = asyncHandler(async (req, res) => {
 const getDeadlineStatus = (deadline) => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-
     const end = new Date(deadline)
     end.setHours(0, 0, 0, 0)
-
     const diffDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24))
 
-    if (diffDays < 0) return 'overdue'
+    if (diffDays < 2) return 'overdue'
     if (diffDays <= 3) return 'urgent'
     if (diffDays <= 7) return 'approaching'
 
@@ -92,8 +90,9 @@ export const getallprojects = asyncHandler(async (req, res) => {
         ...p.toObject(),
         status: getDeadlineStatus(p.deadline)
     }))
+    const count = updated.length
 
-    return res.status(200).json({ prj: updated })
+    return res.status(200).json({ prj: updated,count })
 })
 
 
@@ -133,7 +132,7 @@ export const deallocatemember = asyncHandler(async (req, res) => {
     const exist = await projectModel.findOne({ _id: projectId, members: userId })
 
 
-    const updatedUser = await userModel.findByIdAndUpdate(
+    const updatedProject = await userModel.findByIdAndUpdate(
         userId,
         { $pull: { projects: new mongoose.Types.ObjectId(projectId) } },
         { new: true }
@@ -141,7 +140,7 @@ export const deallocatemember = asyncHandler(async (req, res) => {
     if (!updatedProject) {
         return res.status(404).json({ message: 'Project not found' });
     }
-    if (!updatedUser) {
+    if (!updatedProject) {
         return res.status(404).json({ message: 'User not found' });
     }
 
