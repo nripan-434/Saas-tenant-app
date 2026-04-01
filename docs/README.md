@@ -1,4 +1,4 @@
-# Ai-Saas-tenant Documentation
+# Orgsync - Ai-Saas-tenant Documentation
 
 This folder contains comprehensive technical documentation for the Ai-Saas-tenant project.
 
