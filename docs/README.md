@@ -1,5 +1,5 @@
 # Orgsync - Ai-Saas-tenant Documentation
-  Live demo: "org-sync-saas-tenant-app.vercel.app"
+  Live demo: https://org-sync-saas-tenant-app.vercel.app
   
 This folder contains comprehensive technical documentation for the Ai-Saas-tenant project.
 
