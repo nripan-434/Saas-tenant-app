@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import img1 from '../assets/images/img1.png'
 import LightRays from "../components/LightRays";
 
 const LandingPage = () => {
@@ -93,7 +94,7 @@ const LandingPage = () => {
 
               {/* Floating Image 1 */}
               <motion.img
-                src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?q=80&w=800&auto=format&fit=crop"
+                src={img1}
                 alt="analytics"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
