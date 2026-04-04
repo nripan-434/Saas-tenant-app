@@ -28,9 +28,12 @@ export const addaitask = asyncHandler(async (req, res) => {
   const { task, projectId } = req.body
   const { organizationId, _id } = req.user
   // console.log(projectId)
-  console.log(task)
+  console.log(task.dueDate)
   if (!task) {
     return res.status(400).json({ message: 'Task is required' })
+  }
+  if (!task.dueDate) {
+    return res.status(400).json({ message: 'Deadline is required' })
   }
   if (!projectId) {
     return res.status(400).json({ message: 'Project Id not found!' })
@@ -42,7 +45,7 @@ export const addaitask = asyncHandler(async (req, res) => {
   if (prj) {
     return res.status(400).json({ message: 'Task Already Added!' })
   }
-  const restask = await taskModel.create({ title: task.title, priority: task.priority, description: task.description, projectId: projectId, createdBy: _id })
+  const restask = await taskModel.create({ title: task.title, priority: task.priority, description: task.description, projectId: projectId, createdBy: _id,dueDate:task.dueDate })
   const progress = await calculateProjectProgress(projectId)
   await projectModel.findByIdAndUpdate(projectId, { progress })
   return res.status(200).json({ message: 'Task added', restask })
@@ -77,22 +80,23 @@ export const removetask = async (req, res) => {
 export const updatetask = asyncHandler(async (req, res) => {
   const { taskId } = req.params;
   const { task } = req.body;
-  console.log(task)
+  console.log("latest"+task.dueDate)
   const userId = req.user._id;
   if (!taskId) {
-    return res.status(400).json({ message: "Task Id is required" });
+    return res.status(400).json({ message: "Task Id is required" })
   }
   const existingTask = await taskModel.findOne({ _id: taskId, createdBy: userId });
   if (!existingTask) {
     return res.status(404).json({ message: "Task not found or unauthorized" });
   }
-  if (existingTask.title == task.title && existingTask.description == task.description && existingTask.priority == task.priority && existingTask.status == task.status) {
+  if (existingTask.title == task.title && existingTask.description == task.description && existingTask.priority == task.priority && existingTask.status == task.status && existingTask.dueDate == task.dueDate) {
     return res.status(400).json({ message: "Task is already up to date. No changes saved." })
   }
-  existingTask.title = task.title;
-  existingTask.description = task.description;
-  existingTask.priority = task.priority || existingTask.priority;
-  existingTask.status = task.status || existingTask.status;
+  existingTask.title = task.title
+  existingTask.description = task.description
+  existingTask.priority = task.priority || existingTask.priority
+  existingTask.status = task.status || existingTask.status
+  existingTask.dueDate = task.dueDate || existingTask.dueDate 
 
   await existingTask.save();
   const latestprogress = await calculateProjectProgress(existingTask.projectId)

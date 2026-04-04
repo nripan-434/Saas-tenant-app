@@ -22,7 +22,7 @@ export const addnewtask = createAsyncThunk('post/addnewtask', async ({ task, pro
     }
 })
 export const addaitask = createAsyncThunk('post/addaitask', async ({ task, projectId }, { rejectWithValue,dispatch }) => {
-    console.log(task)
+    console.log(task.dueDate)
     try {
         const res = await api.post('/task/addaitask', { task, projectId })
          dispatch(getallprojects())
@@ -52,7 +52,7 @@ export const removetask = createAsyncThunk('delete/removetask', async (taskId, {
     }
 })
 export const updatetask = createAsyncThunk('post/updatetask', async ({ task, taskId }, { rejectWithValue,dispatch }) => {
-    console.log(task)
+     console.log(task.dueDate)
     console.log(taskId)
     try {
         const res = await api.put(`/task/updatetask/${taskId}`, { task })

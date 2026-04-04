@@ -51,7 +51,7 @@ const Navbar = () => {
        initial={{opacity:0,x:20}}
         animate={{opacity:menu ?1:0,x:menu ?0:20}}
         transition={{duration:0.3}}
-      className='absolute rounded-xl md:hidden  bg-[#0C1A2B] shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5  top-20 right-0'>
+      className={`${menu ? 'pointer-events-auto' : 'pointer-events-none'} absolute rounded-xl md:hidden  bg-[#0C1A2B] shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] p-5  top-20 right-0`}>
        
            {
         user?.role==='user'?<div className='flex flex-col'>

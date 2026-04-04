@@ -31,7 +31,10 @@ const Tasklist = ({ tasks, members }) => {
         title: isupdate.title || '',
         description: isupdate.description || '',
         priority: isupdate.priority || '',
-        status: isupdate.status || ''
+        status: isupdate.status || '',
+        dueDate:isupdate.dueDate
+        ? new Date(isupdate.dueDate).toISOString().split("T")[0]
+        : ''
       })
     }
   }, [isupdate])
@@ -46,10 +49,11 @@ const Tasklist = ({ tasks, members }) => {
     dispatch(updatetask({ task: form, taskId: isupdate?._id }))
     setIsupdate(null)
     setForm({
-      title: isupdate.title || '',
-      description: isupdate.description || '',
-      priority: isupdate.priority || '',
-      status: isupdate.status || ''
+      title: '',
+      description:  '',
+      priority:  '',
+      status: '',
+      dueDate:''
     })
   }
   const dispatch = useDispatch()
@@ -128,8 +132,8 @@ const Tasklist = ({ tasks, members }) => {
                               <label>Deadline :</label>
                               <input
                                 type="date"
-                                name="deadline"
-                                value={form.startDate}
+                                name="dueDate"
+                                value={form.dueDate}
                                 onChange={handleChange}
                                 className='rounded-md border border-white p-2'
                               />
