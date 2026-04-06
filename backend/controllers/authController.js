@@ -81,7 +81,7 @@ export const inviteMember =asyncHandler(async(req,res)=>{
     await invitaionModel.findOneAndUpdate(
        {email:email.toLowerCase()},{role:role||'user',token,organizationId:orgId,expiration}
     ,{upsert:true,new:true})
-    const invitelink=`org-sync-saas-tenant-app.vercel.app/acceptinvite?token=${token}`
+    const invitelink=`https://org-sync-saas-tenant-app.vercel.app/acceptinvite?token=${token}`
 
     await sendEmail({
         to:email,
