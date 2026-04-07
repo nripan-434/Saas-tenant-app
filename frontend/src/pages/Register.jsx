@@ -24,6 +24,9 @@ const Register = () => {
     const handlesubmit = (e) => {
         e.preventDefault()
         dispatch(registeruser(form))
+        .unwrap()
+        .then(()=>{navigate('/login')})
+
 
     }
     return (
