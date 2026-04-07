@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api=axios.create({
-    baseURL: "https://org-sync-saas-tenant-app.vercel.app/"
+    baseURL: "http://org-sync-saas-tenant-app.vercel.app"
 })
 api.interceptors.request.use((config)=>{
     const token = JSON.parse(sessionStorage.getItem('token'))
