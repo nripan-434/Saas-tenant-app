@@ -44,7 +44,7 @@ const Login = () => {
                 
                 {/* text */}
                 <motion.p
-                    initial={{ x: 20 }}
+                    initial={{ x: 50 }}
                     animate={{ x: 0 }}
 
                     transition={{ duration: 0.6 }}
@@ -68,12 +68,16 @@ const Login = () => {
 
   {/* actual border */}
   <div className="absolute inset-0 
-    border-r-6 rounded-2xl border-[#B6FF3B]/80" />
+      " />
 
   {/* fake shadow only on top-left */}
-  <div className="absolute inset-0 
-    bg-[radial-gradient(circle_at_top_left,_#B6FF3B40,_transparent_60%)] 
-    blur-xl opacity-60" />
+  <motion.div
+                       initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8 }}
+                       className="absolute inset-0 
+      bg-[radial-gradient(circle_at_top_left,_#B6FF3B40,_transparent_60%)] 
+      blur-xl opacity-100" />
 
 </div>
 
@@ -88,7 +92,7 @@ const Login = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, y: [0, 10, 0], rotate: [0, 2, 0] }}
                     transition={{ opacity: 1, repeat: Infinity, duration: 2.8 }}
-                    className='md:text-[#B6FF3B] text-transparent  lg:top-10 lg:left-22 shadow-[0_0_10px_rgba(0,0,0,1)] flex items-center justify-center top-10 left-8 -z-20 h-6  w-6 md:h-30 md:w-30 border lg:border-80 border-60    bg-transparent absolute bottom-4 rounded-xl  '>
+                    className=' text-transparent  lg:top-10 lg:left-22 backdrop-blur-xl shadow-[0_0_10px_rgba(0,0,0,1)] flex items-center justify-center top-10 left-8 -z-20 h-6  w-6 md:h-30 md:w-30 border lg:border-80 border-60    bg-transparent absolute bottom-4 rounded-xl  '>
 
                 </motion.div>
 
@@ -96,7 +100,7 @@ const Login = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, y: [0, 10, 0], rotate: [0, 6, 0] }}
                     transition={{ opacity: 1, repeat: Infinity, duration: 3.8 }}
-                    className='md:text-[#B6FF3B]  text-transparent   lg:top-45 lg:left-16 shadow-[0_0_10px_rgba(0,0,0,1)] top-3 left-5  -z-10  h-10 w-10 md:h-14 md:w-14 md:top-0  lg:border-30  border-30   bg-transparent absolute bottom-4 rounded-xl'>
+                    className='  text-transparent   lg:top-45 lg:left-16 backdrop-blur-xl shadow-[0_0_10px_rgba(0,0,0,1)] top-3 left-5  -z-10  h-10 w-10 md:h-14 md:w-14 md:top-0  lg:border-30  border-30   bg-transparent absolute bottom-4 rounded-xl'>
 
 
                 </motion.div>
@@ -104,7 +108,7 @@ const Login = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, y: [0, 10, 0], rotate: [0, 2, 0] }}
                     transition={{ opacity: 1, repeat: Infinity, duration: 3.8 }}
-                    className='md:text-[#B6FF3B]  text-transparent  lg:bottom-15 lg:right-14 shadow-[0_0_10px_rgba(0,0,0,1)] bottom-10 right-8 -z-20 h-10 w-10 border lg:border-80 border-55    bg-transparent rounded-xl absolute '>
+                    className='  text-transparent  lg:bottom-15 lg:right-14 backdrop-blur-xl shadow-[0_0_10px_rgba(0,0,0,1)] bottom-10 right-8 -z-20 h-10 w-10 border lg:border-80 border-55    bg-transparent rounded-xl absolute '>
 
 
                 </motion.div>
@@ -113,7 +117,7 @@ const Login = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, y: [0, 10, 0], rotate: [0, 6, 0] }}
                     transition={{ opacity: 1, repeat: Infinity, duration: 3.8 }}
-                    className=' md:text-[#B6FF3B] text-transparent lg:bottom-10 lg:right-6 shadow-[0_0_10px_rgba(0,0,0,1)] bottom-4 right-5  -z-10  h-10 w-10 border md:h-14 md:w-14 lg:border-30 border-30 rounded-xl  bg-transparent absolute '>
+                    className=' text-transparent lg:bottom-10 lg:right-6 backdrop-blur-xl    shadow-[0_0_10px_rgba(0,0,0,1)] bottom-4 right-5  -z-10  h-10 w-10 border md:h-14 md:w-14 lg:border-30 border-30 rounded-xl  bg-transparent absolute '>
 
 
                 </motion.div>
@@ -136,7 +140,7 @@ opacity-60 blur-[1px]" />
                         initial={{ y: 50 }}
                         animate={{ y: 0 }}
                         transition={{ duration: 1 }}
-                        action="" onSubmit={handlesubmit} className='border-[#B6FF3B]/40 border-7 bg-[#0C1A2B]   text-white shadow-xl p-10 w-100 rounded-md flex flex-col gap-3 items-center justify-center  '>
+                        action="" onSubmit={handlesubmit} className='shadow-[0_0_10px_#B6FF3B]/20 bg-[#0C1A2B]   text-white  p-10 w-100 rounded-md flex flex-col gap-3 items-center justify-center  '>
                         <motion.div
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
