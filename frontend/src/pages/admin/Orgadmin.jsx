@@ -90,8 +90,8 @@ const Orgadmin = () => {
                   
                   key={prj._id} className=" h-50  hover:scale-104 max-w-80 min-w-70 overflow-hidden  duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl shadow-sm bg-[#0C1A2B]">
                   <div className="flex justify-between items-center mb-2 text-[#B6FF3B]">
-                    <span className="text-xs uppercase font-bold ">Active</span>
-                    <span className={`${prj.status=='overdue'?'bg-red-500':prj.status=='overdue'?'bg-yellow-500':'bg-[#B6FF3B] '} px-1 text-[#0C1A2B] rounded-xl`}>Deadline: {new Date(prj.deadline).toLocaleDateString()}</span>
+                    <span className="text-xs uppercase font-bold ">{prj.prjstatus}</span>
+                    <span className={`${prj.status=='overdue'?'bg-red-500 text-white':prj.status=='overdue'?'bg-yellow-500':'bg-[#B6FF3B] '} px-1 text-[#0C1A2B] rounded-sm`}>Deadline: {new Date(prj.deadline).toLocaleDateString()}</span>
                   </div>
                   <h3 className="text-xl text-[#B6FF3B] font-semibold border-b">{prj.name}</h3>
                   <div className='overflow-y-auto no-scrollbar  h-14 '>

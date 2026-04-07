@@ -1,57 +1,54 @@
-  import React from "react";
-  import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-  } from "recharts";
+import React from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell
+} from "recharts";
 
-  export default function ProjectEfficiencyGraph({ projects = [] }) {
+export default function ProjectEfficiencyGraph({ projects = [] }) {
 
-    const data = projects.map((p) => {
-      const deadline = new Date(p.deadline);
-      const today = new Date();
+  const data = projects.map((p) => ({
+    project: p.name,
+    progress: p.progress || 0,
+    status: p.prjstatus
+  }));
 
-      const diffDays = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
+  const getColor = (p) => {
+    if (p.status === "completed") return "#22c55e"; // green
+    if (p.progress < 30) return "#ef4444"; // red
+    if (p.progress < 70) return "#facc15"; // yellow
+    return "#B6FF3B"; // your theme
+  };
 
-      let efficiency;
+  return (
+    <div className="p-6 bg-[#0C1A2B] text-[#B6FF3B] rounded-xl h-full">
+      <h3 className="mb-4 font-semibold">Project Progress</h3>
 
-      if (p.status === "completed") {
-        efficiency = 100;
-      } else if (p.status === "overdue") {
-        efficiency = 10;
-      } else {
-        // active → based on remaining days
-        efficiency = Math.max(20, Math.min(100, diffDays * 5));
-      }
-
-      return {
-        project: p.name,
-        efficiency,
-      };
-    });
-
-    return (
-      <div className="p-6 bg-[#0C1A2B] text-[#B6FF3B] rounded-xl h-full">
-        <h3 className="mb-4 font-semibold">Project Health Overview</h3>
-
-        <ResponsiveContainer width="100%" height="90%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#363d47" />
-            <XAxis dataKey="project" stroke="#B6FF3B" />
-            <YAxis stroke="#B6FF3B" />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="efficiency"
-              stroke="#B6FF3B"
-              strokeWidth={2}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    );
+      <ResponsiveContainer width="100%" height="90%">
+        <BarChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#363d47" />
+          <XAxis
+  dataKey="project"
+  stroke="#B6FF3B"
+  tickFormatter={(value) =>
+    value.length > 10 ? value.slice(0, 10) + "..." : value
   }
+/>
+          <YAxis stroke="#B6FF3B" domain={[0, 100]} />
+          <Tooltip />
+
+          <Bar dataKey="progress">
+            {data.map((entry, index) => (
+              <Cell key={index} fill={getColor(entry)} />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}

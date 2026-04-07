@@ -5,14 +5,14 @@ import { PieChart, Pie, Cell, ResponsiveContainer, RadialBarChart, RadialBar } f
 export const ProjectStatsRadial = ({ projects = [] }) => {
   const total = projects.length;
 
-  const completed = projects.filter(p => p.status === "completed").length;
-  const overdue = projects.filter(p => p.status === "overdue").length;
-  const active = total - completed - overdue;
+  const completed = projects.filter(p => p.prjstatus === "completed").length;
+  const onhold = projects.filter(p => p.prjstatus === "on-hold").length;
+  const active = total - completed - onhold;
 
   const data = [
     { name: "Completed", value: completed, fill: "#22c55e" },
     { name: "Active", value: active, fill: "#3b82f6" },
-    { name: "Overdue", value: overdue, fill: "#ef4444" }
+    { name: "On-hold", value: onhold, fill: "#ef4444" }
   ];
 
   return (
@@ -35,7 +35,7 @@ export const ProjectStatsRadial = ({ projects = [] }) => {
       <div className="flex absolute bottom-0 right-0 gap-1 bg-[#0C1A2B] p-4 rounded-md outline-0 justify-center items-center mt-2 text-xs">
         <span className="text-green-400">Completed {completed}</span>
         <span className="text-blue-400">Active {active}</span>
-        <span className="text-red-400">Pending {overdue}</span>
+        <span className="text-red-600">On-Hold {onhold}</span>
       </div>
     </div>
   );

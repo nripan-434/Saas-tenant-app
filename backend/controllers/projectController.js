@@ -153,8 +153,8 @@ export const deallocatemember = asyncHandler(async (req, res) => {
 
 export const updateProject = asyncHandler(async (req, res) => {
     const { projectId } = req.params
-    const { name, description, deadline, startDate } = req.body
-    console.log(name)
+    const { name, description, deadline, startDate,status } = req.body
+    console.log(status)
     if (!projectId || !mongoose.Types.ObjectId.isValid(projectId)) {
         return res.status(400).json({ message: "Invalid Project Id" })
     }
@@ -176,6 +176,7 @@ export const updateProject = asyncHandler(async (req, res) => {
     project.description = description || project.description
     project.deadline = deadline || project.deadline
     project.startDate = startDate || project.startDate
+    project.prjstatus = status || project.status
 
     const updatedProject = await project.save()
 

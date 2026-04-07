@@ -168,8 +168,10 @@ export const ProjectSlice = createSlice({
             .addCase(updateProject.fulfilled, (state, action) => {
                 state.status = "fulfilled"
                 const updated = action.payload.project
+                console.log(action.payload.project)
                 state.projects = state.projects.map(p =>
                     p._id === updated._id ? updated : p
+                    
                 )
                  localStorage.setItem('projects', JSON.stringify(state.projects))
                 toast.success(action.payload.message)

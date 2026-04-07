@@ -137,7 +137,7 @@ Example Output:
     try {
       const data = await dispatch(
         projectmember({ userId, projectId, isConfirm: force })
-      ).unwrap();
+      ).unwrap()
 
       if (data.needsConfirmation && !force) {
         setPending({
@@ -159,14 +159,14 @@ Example Output:
     title: '',
     description: '',
     priority: 'medium',
-    dueDate:''
+    dueDate: ''
   })
   const handledata = (e) => {
     const { name, value } = e.target
-   setTask((prev) => {
-  const updated = { ...prev, [name]: value }
-  return updated
-})
+    setTask((prev) => {
+      const updated = { ...prev, [name]: value }
+      return updated
+    })
 
 
   }
@@ -178,9 +178,29 @@ Example Output:
       title: '',
       description: '',
       priority: 'medium',
-      dueDate:''
+      dueDate: ''
     })
   }
+  const [projectStatus, setProjectStatus] = useState('');
+  useEffect(() => {
+    if (project?.prjstatus ) {
+      setProjectStatus(project.prjstatus);
+    }
+  }, [project]);
+
+  const handleStatusChange = (e) => {
+    const value = e.target.value;
+    setProjectStatus(value);
+
+    dispatch(updateProject({
+      projectId: project._id,
+      updatedData: { status: value }
+    }));
+  };
+
+
+
+
 
 
   return (
@@ -202,6 +222,19 @@ Example Output:
           </div>
           <div className="flex gap-2">
             <button onClick={() => setEditOpen(true)} className="px-4 py-2 border bg-[#B6FF3B] text-[#0C1A2B] rounded-full text-sm">Edit</button>
+            <div className='flex text-sm justify-center items-center'>
+              <label htmlFor="">Status :</label>
+              <select
+                value={projectStatus}
+                onChange={handleStatusChange}
+                className='custom-scrollbar bg-[#0C1A2B] text-[#B6FF3B] px-2 outline-0 rounded-xl'
+              >
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="on-hold">On-hold</option>
+              </select>
+            </div>
+
             {
               editOpen && (
                 <div
@@ -255,9 +288,9 @@ Example Output:
                       <label>Deadline</label>
                       <input
                         type="date"
-                        
+
                         name="deadline"
-                         min={new Date().toISOString().split("T")[0]}
+                        min={new Date().toISOString().split("T")[0]}
                         value={editData.deadline}
                         onChange={handleEditChange}
                         className="outline-0 bg-transparent border rounded-xl p-3"
@@ -307,95 +340,95 @@ Example Output:
         </button>
         <div className=''>
           <section
-          ref={prjtaskcurrent}
-          className={`p-5 custom-scrollbar   duration-300 mb-10 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] rounded-xl  overflow-y-auto`}>
-          {/* {showTasks && ( */}
-          <div className="p-4 ">
-            <div className='flex gap-4 flex-col mb-8'>
-              <h1 className='flex justify-between'>Tasks:   </h1>
-              <Tasklist tasks={tasks} members={projectmemebers} />
-            </div>
-            <div className='flex justify-center'>
-              <div className='flex flex-col lg:w-2/4 w-full  mt-6 gap-3'>
-                {/* create a task */}
-                <form onSubmit={handletaskAddsubmit} action="" className='flex flex-col shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,2.9)]  p-4 rounded-xl gap-4'>
-                  <h1 className='flex justify-center text-2xl font-bold'>Create a Task</h1>
-                  <div className='flex flex-col'>
-                    <label htmlFor="">Task :</label>
-                    <input onChange={handledata} ref={current} name='title' value={task.title} className='outline-0' type="text" placeholder='create authentication' />
-                  </div>
-                  <div className='flex flex-col'>
-                    <label htmlFor="">Description :</label>
-                    <textarea onChange={handledata} name='description' value={task.description} className='outline-0' type="text" placeholder='add auth and jwt for authentication' />
-                  </div>
-                  <div className='flex'>
-                    <label htmlFor="">Priority :</label>
-                    <select onChange={handledata} name='priority' className='custom-scrollbar bg-[#0C1A2B] text-[#B6FF3B] px-2 outline-0 rounded-xl' id="">
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                    </select>
-                  </div>
-                  <div className='flex gap-3 flex-col'>
-                    <label>Deadline :</label>
-                    <input
-                      type="date"
-                      name="dueDate"
-                      min={new Date().toISOString().split("T")[0]}
-                      value={task.dueDate || ""}
-                      onChange={handledata}
-                      className='border p-1 rounded-xl '
-                    />
-                  </div>
-                  <button className='p-2 bg-[#B6FF3B] text-[#0C1A2B] rounded-xl'>Add</button>
-                </form>
+            ref={prjtaskcurrent}
+            className={`p-5 custom-scrollbar   duration-300 mb-10 shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] rounded-xl  overflow-y-auto`}>
+            {/* {showTasks && ( */}
+            <div className="p-4 ">
+              <div className='flex gap-4 flex-col mb-8'>
+                <h1 className='flex justify-between'>Tasks:   </h1>
+                <Tasklist tasks={tasks} members={projectmemebers} />
               </div>
-            </div>
-            <div className=" flex flex-col gap-2    ">
-              <div className='flex items-center gap-2 '>
-                {
-                  isopen ?
-                    <div className=' fixed   bg-black/40 backdrop-blur-2xl  inset-0 z-999 flex justify-center items-center  ' onClick={() => { setIsopen(false) }}>
-                      <motion.form
-                        initial={{ y: 40, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                        onSubmit={(e) => {
-                          handlesubmit(e)
-                          scrolltoaitasks()
-                          setIsopen(false)
-                        }} onClick={(e) => e.stopPropagation()} action="" className='text-[#B6FF3B] border  flex flex-col gap-2   bg-[#0C1A2B] rounded-xl p-6'>
-                        <div className='flex border-b justify-between p-2 items-center'>
-                          <h1 className='text-xl  p-1 '>Prompt:</h1>
-                          <button className='text-red-500 font-medium' onClick={() => { setIsopen(false) }}>X</button>
-
-                        </div>
-                        <textarea onChange={handleinput} type="text" className='h-80 mt-4 w-100 break-all outline-0 no-scrollbar overflow-x-auto' value={prompt} />
-                        <button className='bg-[#B6FF3B]/70 hover:bg-[#B6FF3B] text-[#0C1A2B] font-medium duration-200 rounded-md p-1 text-' type='submit' > Submit</button>
-                      </motion.form>
+              <div className='flex justify-center'>
+                <div className='flex flex-col lg:w-2/4 w-full  mt-6 gap-3'>
+                  {/* create a task */}
+                  <form onSubmit={handletaskAddsubmit} action="" className='flex flex-col shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,2.9)]  p-4 rounded-xl gap-4'>
+                    <h1 className='flex justify-center text-2xl font-bold'>Create a Task</h1>
+                    <div className='flex flex-col'>
+                      <label htmlFor="">Task :</label>
+                      <input onChange={handledata} ref={current} name='title' value={task.title} className='outline-0' type="text" placeholder='create authentication' />
                     </div>
-                    : ''
-                }
-              </div>
-              <div className='flex justify-center  items-center mt-4  gap-4'>
-                <div className=' flex flex-col md:flex-row gap-3 w-full md:w-2/4   items-center '>
-                  <button onClick={() => {
-                    dispatch(createAitask({ projectId: project._id, prompt }))
-                    scrolltoaitasks()
-                  }
-                  } className='hover:bg-[#B6FF3B] rounded-xl text-[#0C1A2B] p-3 font-bold bg-[#B6FF3B]/90 duration-200 w-full flex justify-center gap-1  items-center'>
-                    Generate Tasks <GrGenai />
-                  </button>
-                  <button className='flex items-center' onClick={() => { setIsopen(!isopen) }}> <FiEdit className='text-[15px]  ' />prompt</button>
+                    <div className='flex flex-col'>
+                      <label htmlFor="">Description :</label>
+                      <textarea onChange={handledata} name='description' value={task.description} className='outline-0' type="text" placeholder='add auth and jwt for authentication' />
+                    </div>
+                    <div className='flex'>
+                      <label htmlFor="">Priority :</label>
+                      <select onChange={handledata} name='priority' className='custom-scrollbar bg-[#0C1A2B] text-[#B6FF3B] px-2 outline-0 rounded-xl' id="">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                    </div>
+                    <div className='flex gap-3 flex-col'>
+                      <label>Deadline :</label>
+                      <input
+                        type="date"
+                        name="dueDate"
+                        min={new Date().toISOString().split("T")[0]}
+                        value={task.dueDate || ""}
+                        onChange={handledata}
+                        className='outline-0 p-1 rounded-xl '
+                      />
+                    </div>
+                    <button className='p-2 bg-[#B6FF3B] text-[#0C1A2B] rounded-xl'>Add</button>
+                  </form>
                 </div>
               </div>
-              <div ref={aitaskcurrent}>
-                <Aitasks aitasks={aigentasks} status={aistatus} projectId={project._id} />
+              <div className=" flex flex-col gap-2    ">
+                <div className='flex items-center gap-2 '>
+                  {
+                    isopen ?
+                      <div className=' fixed   bg-black/40 backdrop-blur-2xl  inset-0 z-999 flex justify-center items-center  ' onClick={() => { setIsopen(false) }}>
+                        <motion.form
+                          initial={{ y: 40, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                          onSubmit={(e) => {
+                            handlesubmit(e)
+                            scrolltoaitasks()
+                            setIsopen(false)
+                          }} onClick={(e) => e.stopPropagation()} action="" className='text-[#B6FF3B] border  flex flex-col gap-2   bg-[#0C1A2B] rounded-xl p-6'>
+                          <div className='flex border-b justify-between p-2 items-center'>
+                            <h1 className='text-xl  p-1 '>Prompt:</h1>
+                            <button className='text-red-500 font-medium' onClick={() => { setIsopen(false) }}>X</button>
+
+                          </div>
+                          <textarea onChange={handleinput} type="text" className='h-80 mt-4 w-100 break-all outline-0 no-scrollbar overflow-x-auto' value={prompt} />
+                          <button className='bg-[#B6FF3B]/70 hover:bg-[#B6FF3B] text-[#0C1A2B] font-medium duration-200 rounded-md p-1 text-' type='submit' > Submit</button>
+                        </motion.form>
+                      </div>
+                      : ''
+                  }
+                </div>
+                <div className='flex justify-center  items-center mt-4  gap-4'>
+                  <div className=' flex flex-col md:flex-row gap-3 w-full md:w-2/4   items-center '>
+                    <button onClick={() => {
+                      dispatch(createAitask({ projectId: project._id, prompt }))
+                      scrolltoaitasks()
+                    }
+                    } className='hover:bg-[#B6FF3B] rounded-xl text-[#0C1A2B] p-3 font-bold bg-[#B6FF3B]/90 duration-200 w-full flex justify-center gap-1  items-center'>
+                      Generate Tasks <GrGenai />
+                    </button>
+                    <button className='flex items-center' onClick={() => { setIsopen(!isopen) }}> <FiEdit className='text-[15px]  ' />prompt</button>
+                  </div>
+                </div>
+                <div ref={aitaskcurrent}>
+                  <Aitasks aitasks={aigentasks} status={aistatus} projectId={project._id} />
+                </div>
               </div>
             </div>
-          </div>
-          {/* )} */}
-        </section>
+            {/* )} */}
+          </section>
         </div>
         {/* member */}
         <div className="flex justify-between items-center mb-4">
@@ -440,13 +473,13 @@ Example Output:
                 return <div className='  bg-[#0C1A2B] text-[#B6FF3B] pt-3 hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] justify-center  items-center duration-300 hover:scale-105 flex flex-col  rounded-xl p-5  overflow-y-auto no-scrollbar w-50' key={x._id} onClick={() => { handleAssigmMember(x._id, project._id) }}>
                   <div className='flex flex-col items-center justify-center'>
                     <div className="rounded-full h-16 w-16 flex justify-center items-center font-bold text-2xl bg-[#B6FF3B] text-[#0C1A2B]">
-                  {x.name.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                    <h1 className=''>Name:{x.name}</h1>
+                      {x.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h1 className=''>Name:{x.name}</h1>
 
-                </div>
-                    
+                    </div>
+
                   </div>
 
                 </div>
@@ -462,7 +495,7 @@ Example Output:
           } mb-10 flex items-start gap-3 p-5 rounded-xl overflow-x-auto custom-scrollbar`}
       >
         {projectmemebers?.map((x) => {
-          return ( 
+          return (
             <div
               key={x._id}
               className="shadow-[inset_0_2px_4px_0_rgb(0,0,0,0.2),_0_6px_10px_0_rgb(0,0,0,0.9)] hover:rounded-none rounded-[25px] duration-300 hover:shadow-[5px_3px_30px_rgba(0,0,0,2.1)] min-w-60 max-w-60 p-4 flex flex-col"
