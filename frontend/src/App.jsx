@@ -29,7 +29,7 @@ const App = () => {
         <Route path='/addproject' element={<ProtectedRoutes role='admin'><AddProject/></ProtectedRoutes>}/>
         <Route path='/project/:id' element={<ProtectedRoutes role='admin'><Eachproject/></ProtectedRoutes>}/>
         <Route path='/acceptinvite' element={<MemberRegister/>}/>
-        <Route path='/members' element={<ProtectedRoutes role='admin'><Members/></ProtectedRoutes>}/>
+        <Route path='/members' element={<Members/>}/>
 
       </Routes>
       </div>

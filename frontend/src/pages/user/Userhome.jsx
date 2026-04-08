@@ -4,10 +4,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getmemberprjs } from '../../features/ProjectSlice'
 import { IoIosPeople } from "react-icons/io";
+import Loading from "../../components/Loading"
+import { getAllMembers } from '../../features/AuthSlice'
 
 const Userhome = () => {
   const { user } = useSelector(s => s.auth)
-  const { memberprjs } = useSelector(s => s.prj)
+  const { memberprjs, status } = useSelector(s => s.prj)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [menu, setMenu] = useState(false)
@@ -32,7 +34,9 @@ const Userhome = () => {
             <div className='flex  text-[#B6FF3B] hover:text-[#0C1A2B] items-center justify-center  gap-3'>
               <IoIosPeople className={`text-4xl ${menu ? 'translate-x-0' : 'translate-x-5'} duration-300  shrink-0`} />
 
-              <span
+              <span onClick={()=>{
+                navigate('/members')
+                }}
                 className={` overflow-hidden transition-all duration-300
       ${menu ? "opacity-100  translate-x-0" : "opacity-0  pointer-events-none -translate-x-9"}`}
               >
@@ -44,8 +48,14 @@ const Userhome = () => {
       </div>
       {/* section */}
       <div className=' flex-5 md:flex-15  flex flex-col'>
+
+
         {/* header */}
         <div className='flex items-center p-4 h-20 justify-between shadow-[0_0_20px_rgba(0,0,0,0.7)] rounded-xl m-3'>
+
+
+
+
           <Link className='text-xl md:text-2xl text-[#B6FF3B]'>Organization : <span className='font-medium'>{user.organizationId.name}</span></Link>
           <div className='m-3'>
             <h1 className='text-xl md:text-xl '><span className='bg-[#B6FF3B] rounded-full h-10 w-10 flex justify-center items-center text-[#0C1A2B] '>{user.name.charAt(0)}</span></h1>
@@ -66,35 +76,35 @@ const Userhome = () => {
         </div>
 
         {
-          search == '' ?'':
-          
+          search == '' ? '' :
+
             filteredProjects.length != 0 ?
-            <div className='border-b-2  '>
+              <div className='border-b-2  '>
                 <div className='ml-10  font-light'>Results on : <span className='underline font-medium text-[#B6FF3B]'> {search}</span></div>
 
-              <div className='grid grid-cols-1 gap-4 m-6   md:grid-cols-2 lg:grid-cols-4 '>
-                {
-                  filteredProjects?.map(x => {
-                    return <div
+                <div className='grid grid-cols-1 gap-4 m-6   md:grid-cols-2 lg:grid-cols-4 '>
+                  {
+                    filteredProjects?.map(x => {
+                      return <div
 
-                      key={x._id} className=" hover:scale-104  duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl  bg-[#0C1A2B]">
-                      <div className="flex justify-between mb-2">
-                        <span className="text-xs uppercase font-bold text-green-600">Active</span>
+                        key={x._id} className=" hover:scale-104  duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl  bg-[#0C1A2B]">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-xs uppercase font-bold text-green-600">Active</span>
+                        </div>
+                        <h3 className="text-md  font-semibold">{x.name}</h3>
+                        <p className="text-gray-300 text-sm my-2 h-15 custom-scrollbar overflow-y-auto">{x.description || "No description provided."}</p>
+                        <div className="mt-4 pt-4 border-t flex justify-between items-center text-xs">
+                          <span>By: {x.createdBy.name || ''}</span>
+                          <button className="cursor-pointer text-blue-600 font-medium" onClick={() => { navigate(`/memberprj/${x._id}`) }}>View →</button>
+                        </div>
                       </div>
-                      <h3 className="text-xl font-semibold">{x.name}</h3>
-                      <p className="text-gray-600 text-sm my-2">{x.description || "No description provided."}</p>
-                      <div className="mt-4 pt-4 border-t flex justify-between items-center text-xs">
-                        <span>By: {x.createdBy.name || ''}</span>
-                        <button className="cursor-pointer text-blue-600 font-medium" onClick={() => { navigate(`/memberprj/${x._id}`) }}>View →</button>
-                      </div>
-                    </div>
-                  })
+                    })
 
-                }
+                  }
+                </div>
               </div>
-            </div>
-              : <div className='ml-10 font-light'>No results found on :<span className='underline font-medium text-[#B6FF3B]'> {search}</span>!</div>
-}
+              : <div className='ml-10 font-bold '>No results found on :<span className='underline font-medium text-[#B6FF3B]'> {search}</span>!</div>
+        }
 
         <div className="px-6 mt-4 flex flex-col md:flex-row gap-3 justify-between">
 
@@ -103,34 +113,40 @@ const Userhome = () => {
 
         </div>
         {/* cards */}
-        <div className='h-full '>
-          {
-            memberprjs.length > 0 ?
+        {
+          status === 'pending' ?
+            <span className='text-[#B6FF3B]'><Loading /></span> :
+            
+            <div className='h-full '>
+              {
+                memberprjs.length > 0 ?
 
-              <div className='grid grid-cols-1 gap-4 m-6   md:grid-cols-2 lg:grid-cols-4 '>
-                {
-                  memberprjs?.map(x => {
-                    return <div
+                  <div className='grid grid-cols-1 gap-4 m-6   md:grid-cols-2 lg:grid-cols-4 '>
+                    {
+                      memberprjs?.map(x => {
+                        return <div
 
-                      key={x._id} className=" hover:scale-104  duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl shadow-sm bg-[#0C1A2B]">
-                      <div className="flex justify-between mb-2">
-                        <span className="text-xs uppercase font-bold text-green-600">Active</span>
-                      </div>
-                      <h3 className="text-xl font-semibold">{x.name}</h3>
-                      <p className="text-gray-600 text-sm my-2">{x.description || "No description provided."}</p>
-                      <div className="mt-4 pt-4 border-t flex justify-between items-center text-xs">
-                        <span>By: {x.createdBy.name || ''}</span>
-                        <button className="cursor-pointer text-blue-600 font-medium" onClick={() => { navigate(`/memberprj/${x._id}`) }}>View →</button>
-                      </div>
-                    </div>
-                  })
+                          key={x._id} className=" hover:scale-104  duration-300 shadow-black hover:shadow-[0_0_20px_rgba(0,0,0,0.3)] p-4 rounded-xl backdrop-blur-xl shadow-sm bg-[#0C1A2B]">
+                          <div className="flex justify-between mb-2">
+                            <span className={`text-xs uppercase font-bold ${x.prjstatus==='completed'?'bg-[#B6FF3B] p-1  text-black rounded-sm':''}`}>{x.prjstatus}</span>
+                          </div>
+                          <h3 className="text-md font-semibold">{x.name}</h3>
+                          <p className="text-gray-300 text-sm my-2 h-15 custom-scrollbar overflow-y-auto">{x.description || "No description provided."}</p>
+                          <div className="mt-4 pt-4 border-t flex justify-between items-center text-xs">
+                            <span>By: {x.createdBy.name || ''}</span>
+                            <button className="cursor-pointer text-blue-600 font-medium" onClick={() => { navigate(`/memberprj/${x._id}`) }}>View →</button>
+                          </div>
+                        </div>
+                      })
 
-                }
-              </div> : <h1 className='flex justify-center '>Not Assigned To Any Projects Yet!</h1>
-          }
-        </div>
+                    }
+                  </div> : <h1 className='flex justify-center '>Not Assigned To Any Projects Yet!</h1>
+              }
+            </div>
+      }
 
-      </div>
+          </div>
+
     </div>
   )
 }
