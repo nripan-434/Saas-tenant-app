@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api=axios.create({
-    baseURL: "http://localhost:5000"
+    baseURL: "https://orgsync-saas-tenant-app.onrender.com"
 })
 api.interceptors.request.use((config)=>{
     const token = JSON.parse(sessionStorage.getItem('token'))
