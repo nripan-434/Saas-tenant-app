@@ -41,7 +41,7 @@ const Login = () => {
         <div className='overflow-hidden min-h-[calc(100vh-113px)]  flex flex-col lg:flex-row  '>
             {/* dynamic div */}
             <div className='flex-3  z-10 relative  flex justify-end flex-col items-center border-b-9 lg:border-b-0 lg:border-r-9 border-[#0C1A2B]'>
-                
+
                 {/* text */}
                 <motion.p
                     initial={{ x: 50 }}
@@ -66,24 +66,24 @@ const Login = () => {
                 </div>
                 <div className="absolute h-full w-full rounded-t-full lg:rounded-none lg:rounded-tl-[860px] -z-20 overflow-hidden">
 
-  {/* actual border */}
-  <div className="absolute inset-0 
+                    {/* actual border */}
+                    <div className="absolute inset-0 
       " />
 
-  {/* fake shadow only on top-left */}
-  <motion.div
-                       initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.8 }}
-                       className="absolute inset-0 
-      bg-[radial-gradient(circle_at_top_left,_#B6FF3B40,_transparent_60%)] 
-      blur-xl opacity-100" />
+                    {/* fake shadow*/}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="absolute inset-0 
+                                    bg-[radial-gradient(circle_at_top_left,_#B6FF3B40,_transparent_60%)] 
+                                    blur-xl opacity-100" />
 
-</div>
+                </div>
 
                 <motion.div
-                   
-                  >
+
+                >
 
 
                 </motion.div>
@@ -121,7 +121,7 @@ const Login = () => {
 
 
                 </motion.div>
-            
+
             </div>
             {/* signin */}
             <div className="z-20 flex-3 relative ">

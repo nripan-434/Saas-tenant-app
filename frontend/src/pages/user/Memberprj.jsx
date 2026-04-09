@@ -87,14 +87,14 @@ const Memberprj = () => {
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2   md:grid-cols-4 gap-6 mb-8">
-          <StatCard icon={<IoIosPeople className="text-blue-500 " />} label="Team Members :" value={project.members?.length || 0} />
-          <StatCard icon={<IoIosTime className="text-green-500" />} label="Status :" value="Active" />
+        <div className="grid sm:grid-cols-2   md:grid-cols-3 gap-5 mb-8">
+          <StatCard icon={<IoIosTime className="text-green-500" />} label="Status :" value={project.prjstatus} />
           <StatCard icon={<IoIosTime className="text-green-500" />} label="Deadline :" value={new Date(project.deadline).toLocaleDateString()} />
           <StatCard icon={<IoIosRocket className="text-purple-500" />} label="Remaining Tasks :" value={remainingtask.length} />
         </div>
 
         {
+        
           membertasks.length == 0 ?
             <div className='flex justify-center m-3 text-[#B6FF3B] border-t-2 pt-7 '>No Task Assigned!</div> :
             <div >
@@ -136,7 +136,11 @@ const Memberprj = () => {
                                 {
                                   x.status == 'done' ? <div className='bg-[#B6FF3B] p-1 rounded-md text-[#0C1A2B] font-medium'>Completed</div> :
                                     <div className='flex  items-center gap-1 justify-center'>
-                                      <h1 className='pl-2'> Status : </h1>
+                                                 {
+                                            project.prjstatus==='completed'?'':
+                                            <div>
+                                                  <h1 className='pl-2'> Status : </h1>
+                           
                                       <form className='hover:bg-gray-800 duration-300 bg-[#0C1A2B] hover:text-[#B6FF3B] flex gap-2 items-center pr-2 justify-center p-1  rounded-xl' action="">
 
                                         <select onChange={(e) => { statushandle(e, x._id) }} name='status' value={statusform[x._id] || x.status} id="" className='outline-0 bg-[#0C1A2B] p-1 cursor-pointer   rounded-xl'>
@@ -144,12 +148,16 @@ const Memberprj = () => {
                                           <option value="in-progress">in progress</option>
                                           <option value="done">completed</option>
                                         </select>
+                                        
                                         <button type='submit' onClick={(e) => {
                                           e.preventDefault()
                                           console.log(statusform[x._id])
                                           dispatch(statusupdate({ taskId: x._id, form: statusform[x._id] }))
                                         }} className='hover:text-[#0C1A2B] px-2 duration-300 rounded-md cursor-pointer   hover:bg-[#B6FF3B] font-bold'>submit</button>
                                       </form>
+                                            </div>
+                                        }
+                                      
                                     </div>
 
                                 }

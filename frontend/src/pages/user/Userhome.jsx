@@ -29,14 +29,13 @@ const Userhome = () => {
         <div className='ml-2'>
           <Menu setMenu={setMenu} menu={menu} />
         </div>
-        <div className='flex flex-col   justify-center  w-full items-center mt-5 font-bold'>
-          <Link className='hover:bg-[#B6FF3B] duration-200 w-full h-15 flex items-center justify-center'>
+        <div  className='flex flex-col   justify-center  w-full items-center mt-5 font-bold'>
+          <Link to={'/members'}
+               className='hover:bg-[#B6FF3B] duration-200 w-full h-15 flex items-center justify-center'>
             <div className='flex  text-[#B6FF3B] hover:text-[#0C1A2B] items-center justify-center  gap-3'>
               <IoIosPeople className={`text-4xl ${menu ? 'translate-x-0' : 'translate-x-5'} duration-300  shrink-0`} />
 
-              <span onClick={()=>{
-                navigate('/members')
-                }}
+              <span 
                 className={` overflow-hidden transition-all duration-300
       ${menu ? "opacity-100  translate-x-0" : "opacity-0  pointer-events-none -translate-x-9"}`}
               >

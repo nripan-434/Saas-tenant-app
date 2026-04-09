@@ -8,10 +8,12 @@ const MembersCard = ({ members, orgId }) => {
   const [pending, setPending] = useState(null)
 
   return (
-    <div className='mt-5  grid  text-black sm:grid-cols-2 md:grid-cols-3 break-all lg:grid-cols-4 gap-3'>
+    <div>
+<div className='text-xl text-[#B6FF3B] p-3'>Organization Members:</div>
+ <div className='mt-5  grid  text-black sm:grid-cols-2 md:grid-cols-3 break-all lg:grid-cols-4 gap-3'>
 
       {
-        members?.length === '0' ? <div>No members</div> :
+        members?.length === '0' ? <div className='text-[#B6FF3B]'>No members</div> :
           members?.map(x => {
             return <motion.div
               initial={{ y: 40, opacity: 0 }}
@@ -69,6 +71,8 @@ const MembersCard = ({ members, orgId }) => {
 
       }
     </div>
+    </div>
+   
 
   )
 }

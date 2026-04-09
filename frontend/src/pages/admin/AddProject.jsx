@@ -102,6 +102,7 @@ const AddProject = () => {
           <input
             type="date"
             name="startDate"
+             min={new Date().toISOString().split("T")[0]}
             value={form.startDate}
             onChange={handleinput}
             className="rounded-md p-2 border "
@@ -114,6 +115,7 @@ const AddProject = () => {
           <input
             type="date"
             name="deadline"
+             min={new Date().toISOString().split("T")[0]}
             value={form.deadline}
             onChange={handleinput}
             className="rounded-md p-2 border"

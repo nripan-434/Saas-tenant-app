@@ -11,6 +11,8 @@ const Register = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [error, setError] = useState('')
+    const validpassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
     const [form, setForm] = useState({
         orgname: '',
         name: '',
@@ -23,9 +25,19 @@ const Register = () => {
     }
     const handlesubmit = (e) => {
         e.preventDefault()
+        if (!form.orgname || !form.name || !form.email || !form.password) {
+            setError("All fields are required")
+            return
+        }
+        if (!validpassword.test(form.password)) {
+            setError(
+                "Password must be at least 8 characters and include uppercase, lowercase, and a number"
+            );
+            return
+        }
         dispatch(registeruser(form))
-        .unwrap()
-        .then(()=>{navigate('/login')})
+            .unwrap()
+            .then(() => { navigate('/login') })
 
 
     }
@@ -63,10 +75,10 @@ const Register = () => {
 
                     {/* fake shadow only on top-left */}
                     <motion.div
-                     initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                     className="absolute inset-0 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="absolute inset-0 
     bg-[radial-gradient(circle_at_top_left,_#B6FF3B40,_transparent_60%)] 
     blur-xl opacity-100" />
 
@@ -138,12 +150,15 @@ opacity-60 blur-[1px]" />
                     </div>
                     <div className='flex flex-col gap-2 w-full'>
                         <label htmlFor="">Email</label>
-                        <input onChange={handleinput} name='email' value={form.email} className='outline-1 rounded-md p-2 outline-[#B6FF3B]' type="text" placeholder='abc@gmail.com' />
+                        <input onChange={handleinput} name='email' value={form.email} className='outline-1 rounded-md p-2 outline-[#B6FF3B]' type="email" placeholder='abc@gmail.com' />
 
                     </div>
                     <div className='flex flex-col gap-2 w-full'>
                         <label htmlFor="">Password</label>
                         <input onChange={handleinput} name='password' value={form.password} className='outline-1 rounded-md p-2 outline-[#B6FF3B]' type="password" placeholder='••••••••' />
+                        {error && (
+                            <p className="text-red-500 text-sm mt-1">{error}</p>
+                        )}
 
                     </div>
                     <div className='w-full flex  justify-center mt-4'>

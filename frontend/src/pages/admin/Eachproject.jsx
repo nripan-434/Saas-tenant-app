@@ -468,7 +468,7 @@ Example Output:
         <div className={`${invitebox ? ' flex mb-3 gap-2 p-3 h-40 custom-scrollbar overflow-x-auto bg-[#B6FF3B]/90 text-[#0C1A2B] rounded-xl' : 'h-0'} duration-300 `}>
           {
             invitebox ?
-
+             members.length===0?<div className='flex justify-center w-full'>No members in the Organization yet!</div>:
               members?.map(x => {
                 return <div className='  bg-[#0C1A2B] text-[#B6FF3B] pt-3 hover:shadow-[0_3px_5px_rgba(0,0,0,2.1)] justify-center  items-center duration-300 hover:scale-105 flex flex-col  rounded-xl p-5  overflow-y-auto no-scrollbar w-50' key={x._id} onClick={() => { handleAssigmMember(x._id, project._id) }}>
                   <div className='flex flex-col items-center justify-center'>

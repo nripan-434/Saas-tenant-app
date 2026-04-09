@@ -149,10 +149,13 @@ const LandingPage = () => {
             </motion.div>
           ))}
         </div>
+        
       </div>
 
     </div>
+    
     </div >
+    
   );
 };
 

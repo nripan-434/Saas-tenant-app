@@ -9,6 +9,8 @@ const MemberRegister = () => {
     const navigate=useNavigate()
     const [searchparams] =useSearchParams()
     const token = searchparams.get('token')
+    const [error, setError] = useState('');
+    const validpassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
     const [form,setForm]=useState({
         name:'',
         password:'',
@@ -19,6 +21,17 @@ const MemberRegister = () => {
     }
     const handlesubmit =(e)=>{
         e.preventDefault()
+         if (!form.name || !form.password) {
+        setError("All fields are required");
+        return;
+    }
+
+    if (!validpassword.test(form.password)) {
+        setError(
+            "Password must be at least 8 characters and include uppercase, lowercase, and a number"
+        );
+        return;
+    }
         dispatch(acceptinvite({...form,token}))
        .then((res) => { if (res.type === acceptinvite.fulfilled.type)
          { navigate('/login'); }
@@ -35,7 +48,10 @@ const MemberRegister = () => {
             </div>
             <div className='flex flex-col w-full '>
               <label className=' text-[22px]' >Member Password:</label>
-            <input type="text" onChange={handleinput} name='password' value={form.password} className='outline-0 font-[bold] text-[20px]  '  placeholder='••••••••' />
+            <input type="password" onChange={handleinput} name='password' value={form.password} className='outline-0 font-[bold] text-[20px]  '  placeholder='••••••••' />
+             {error && (
+                            <p className="text-red-500 text-sm mt-1">{error}</p>
+                        )}
             </div>
             <div className='w-full'>
                 <button className='p-2 bg-[#B6FF3B] text-[#0C1A2B] active:scale-95 duration-300 w-full text-xl rounded-sm'>register</button>
