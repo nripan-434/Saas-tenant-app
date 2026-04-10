@@ -80,7 +80,7 @@ const Login = () => {
                                     blur-xl opacity-100" />
 
                 </div>
-
+ 
                 <motion.div
 
                 >

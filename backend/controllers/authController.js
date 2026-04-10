@@ -81,7 +81,7 @@ export const inviteMember =asyncHandler(async(req,res)=>{
     await invitaionModel.findOneAndUpdate(
        {email:email.toLowerCase()},{role:role||'user',token,organizationId:orgId,expiration}
     ,{upsert:true,new:true})
-    const invitelink=`https://orgsync-saas-tenant-app.onrender.com/acceptinvite?token=${token}`
+    const invitelink=`http://localhost:5173/acceptinvite?token=${token}`
 
     await sendEmail({
         to:email,
